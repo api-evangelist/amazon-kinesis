@@ -1,0 +1,2565 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams API
+  description: >-
+    Amazon Kinesis Data Streams is a massively scalable and durable real-time
+    data streaming service. It can continuously capture gigabytes of data per
+    second from hundreds of thousands of sources such as website clickstreams,
+    database event streams, financial transactions, social media feeds, IT logs,
+    and location-tracking events. The Kinesis Data Streams API uses a JSON
+    protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+servers:
+  - url: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams regional endpoint
+    variables:
+      region:
+        default: us-east-1
+        description: AWS region
+        enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
+security:
+  - aws_sigv4: []
+tags:
+  - name: Streams
+    description: Operations for creating, describing, listing, and managing Kinesis data streams.
+  - name: Shards
+    description: Operations for listing, splitting, merging, and managing shards within a stream.
+  - name: Records
+    description: Operations for putting and getting data records to and from a stream.
+  - name: Consumers
+    description: >-
+      Operations for registering, describing, listing, and deregistering
+      enhanced fan-out consumers.
+  - name: Monitoring
+    description: Operations for enabling and disabling enhanced shard-level monitoring.
+  - name: Encryption
+    description: Operations for starting and stopping server-side encryption on a stream.
+  - name: Tags
+    description: Operations for adding, listing, and removing tags on streams and resources.
+  - name: Policies
+    description: Operations for managing resource-based policies on streams.
+  - name: Account
+    description: Operations for describing and updating account-level settings and limits.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.CreateStream:
+    post:
+      operationId: CreateStream
+      summary: Create a Kinesis data stream
+      description: >-
+        Creates a Kinesis data stream. A stream captures and transports data
+        records that are continuously emitted from different data sources or
+        producers. Stream creation is an asynchronous operation. Upon receiving a
+        CreateStream request, Kinesis Data Streams immediately returns and sets
+        the stream status to CREATING. After the stream is created, Kinesis Data
+        Streams sets the stream status to ACTIVE.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-CreateStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/CreateStreamInput'
+      responses:
+        '200':
+          description: Stream creation initiated successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Resource already in use.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DeleteStream:
+    post:
+      operationId: DeleteStream
+      summary: Delete a Kinesis data stream
+      description: >-
+        Deletes a Kinesis data stream and all its shards and data. You must shut
+        down any applications that are operating on the stream before you delete
+        the stream. Stream deletion is an asynchronous operation. After you
+        delete a stream, data previously written to the stream is no longer
+        accessible.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DeleteStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DeleteStreamInput'
+      responses:
+        '200':
+          description: Stream deletion initiated successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DescribeStream:
+    post:
+      operationId: DescribeStream
+      summary: Describe a Kinesis data stream
+      description: >-
+        Describes the specified Kinesis data stream. The information returned
+        includes the stream name, Amazon Resource Name (ARN), creation time,
+        enhanced metric configuration, and shard map. DescribeStream has a limit
+        of 10 transactions per second per account.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DescribeStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DescribeStreamInput'
+      responses:
+        '200':
+          description: Stream description returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/DescribeStreamOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DescribeStreamSummary:
+    post:
+      operationId: DescribeStreamSummary
+      summary: Get a summary description of a stream
+      description: >-
+        Provides a summarized description of the specified Kinesis data stream
+        without the shard list. The information returned includes the stream
+        name, Amazon Resource Name (ARN), status, stream mode, retention period,
+        creation time, and encryption details.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DescribeStreamSummary'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DescribeStreamSummaryInput'
+      responses:
+        '200':
+          description: Stream summary returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/DescribeStreamSummaryOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.ListStreams:
+    post:
+      operationId: ListStreams
+      summary: List Kinesis data streams
+      description: >-
+        Lists your Kinesis data streams. The number of streams may be too large
+        to return from a single call to ListStreams. You can limit the number of
+        returned streams using the Limit parameter. If you do not specify a
+        value for the Limit parameter, Kinesis Data Streams uses the default
+        limit, which is currently 100.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-ListStreams'
+      requestBody:
+        required: false
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/ListStreamsInput'
+      responses:
+        '200':
+          description: Stream list returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ListStreamsOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.UpdateStreamMode:
+    post:
+      operationId: UpdateStreamMode
+      summary: Update the capacity mode of a stream
+      description: >-
+        Updates the capacity mode of the data stream. Currently, in Kinesis Data
+        Streams, you can choose between an on-demand capacity mode and a
+        provisioned capacity mode for your data streams.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-UpdateStreamMode'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/UpdateStreamModeInput'
+      responses:
+        '200':
+          description: Stream mode updated successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.ListShards:
+    post:
+      operationId: ListShards
+      summary: List shards in a stream
+      description: >-
+        Lists the shards in a stream and provides information about each shard.
+        This operation has a limit of 100 transactions per second per data
+        stream.
+      tags:
+        - Shards
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-ListShards'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/ListShardsInput'
+      responses:
+        '200':
+          description: Shard list returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ListShardsOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.SplitShard:
+    post:
+      operationId: SplitShard
+      summary: Split a shard into two shards
+      description: >-
+        Splits a shard into two new shards in the Kinesis data stream, to
+        increase the stream's capacity to ingest and transport data.
+        SplitShard is called when there is a need to increase the overall
+        capacity of a stream because of an expected increase in the volume
+        of data records being ingested.
+      tags:
+        - Shards
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-SplitShard'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/SplitShardInput'
+      responses:
+        '200':
+          description: Shard split initiated successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.MergeShards:
+    post:
+      operationId: MergeShards
+      summary: Merge two adjacent shards
+      description: >-
+        Merges two adjacent shards in a Kinesis data stream and combines them
+        into a single shard to reduce the stream's capacity to ingest and
+        transport data. Two shards are considered adjacent if the union of the
+        hash key ranges for the two shards form a contiguous set with no gaps.
+      tags:
+        - Shards
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-MergeShards'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/MergeShardsInput'
+      responses:
+        '200':
+          description: Shard merge initiated successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.UpdateShardCount:
+    post:
+      operationId: UpdateShardCount
+      summary: Update the shard count for a stream
+      description: >-
+        Updates the shard count of the specified stream to the specified number
+        of shards. This API is only supported for the streams with the
+        provisioned capacity mode.
+      tags:
+        - Shards
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-UpdateShardCount'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/UpdateShardCountInput'
+      responses:
+        '200':
+          description: Shard count update initiated successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/UpdateShardCountOutput'
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.PutRecord:
+    post:
+      operationId: PutRecord
+      summary: Write a single data record to a stream
+      description: >-
+        Writes a single data record into an Amazon Kinesis data stream. You must
+        specify the name or ARN of the stream that captures, stores, and
+        transports the data, a partition key, and the data blob itself. The
+        partition key is used by Kinesis Data Streams to distribute data across
+        shards. Kinesis Data Streams segregates the data records that belong to a
+        stream into multiple shards, using the partition key associated with each
+        data record to determine the shard to which a given data record belongs.
+      tags:
+        - Records
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-PutRecord'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutRecordInput'
+      responses:
+        '200':
+          description: Record written successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/PutRecordOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.PutRecords:
+    post:
+      operationId: PutRecords
+      summary: Write multiple data records to a stream in a single call
+      description: >-
+        Writes multiple data records into a Kinesis data stream in a single call
+        (also referred to as a PutRecords request). Use this operation to send
+        data into the stream for data ingestion and processing. Each PutRecords
+        request can support up to 500 records. Each record in the request can be
+        as large as 1 MiB, up to a limit of 5 MiB for the entire request,
+        including partition keys.
+      tags:
+        - Records
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-PutRecords'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutRecordsInput'
+      responses:
+        '200':
+          description: Records written (check individual FailedRecordCount).
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/PutRecordsOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetShardIterator:
+    post:
+      operationId: GetShardIterator
+      summary: Get an iterator for reading records from a shard
+      description: >-
+        Gets an Amazon Kinesis shard iterator. A shard iterator expires 5
+        minutes after it is returned to the requester. A shard iterator
+        specifies the shard position from which to start reading data records
+        sequentially. The position is specified using the sequence number of a
+        data record in a shard.
+      tags:
+        - Records
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-GetShardIterator'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetShardIteratorInput'
+      responses:
+        '200':
+          description: Shard iterator returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetShardIteratorOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetRecords:
+    post:
+      operationId: GetRecords
+      summary: Get data records from a shard
+      description: >-
+        Gets data records from a Kinesis data stream's shard. Specify a shard
+        iterator using the ShardIterator parameter. The shard iterator specifies
+        the position in the shard from which you want to start reading data
+        records sequentially. Each call to GetRecords can return up to 10 MiB of
+        data and up to 10,000 records. Each shard can support up to 5
+        transactions per second for reads, up to a maximum total data read rate
+        of 2 MiB per second.
+      tags:
+        - Records
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-GetRecords'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetRecordsInput'
+      responses:
+        '200':
+          description: Records returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetRecordsOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.RegisterStreamConsumer:
+    post:
+      operationId: RegisterStreamConsumer
+      summary: Register a stream consumer for enhanced fan-out
+      description: >-
+        Registers a consumer with a Kinesis data stream. When you use this
+        operation, the consumer you register can then call SubscribeToShard to
+        receive data from the stream using enhanced fan-out, at a rate of up to
+        2 MiB per second for every shard you subscribe to.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-RegisterStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/RegisterStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer registered successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/RegisterStreamConsumerOutput'
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DeregisterStreamConsumer:
+    post:
+      operationId: DeregisterStreamConsumer
+      summary: Deregister a stream consumer
+      description: >-
+        To deregister a consumer, provide its ARN. Alternatively, you can
+        provide the ARN of the data stream and the name you gave the consumer
+        when you registered it. You may also provide all three parameters, as
+        long as they don't conflict with each other.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DeregisterStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DeregisterStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer deregistered successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DescribeStreamConsumer:
+    post:
+      operationId: DescribeStreamConsumer
+      summary: Describe a stream consumer
+      description: >-
+        To get the description of a registered consumer, provide its ARN.
+        Alternatively, you can provide the ARN of the data stream and the name
+        you gave the consumer when you registered it.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DescribeStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DescribeStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer description returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/DescribeStreamConsumerOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.ListStreamConsumers:
+    post:
+      operationId: ListStreamConsumers
+      summary: List stream consumers
+      description: >-
+        Lists the consumers registered to receive data from a stream using
+        enhanced fan-out, and provides information about each consumer.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-ListStreamConsumers'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/ListStreamConsumersInput'
+      responses:
+        '200':
+          description: Consumer list returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ListStreamConsumersOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.SubscribeToShard:
+    post:
+      operationId: SubscribeToShard
+      summary: Subscribe to a shard for enhanced fan-out
+      description: >-
+        This operation establishes an HTTP/2 connection between the consumer you
+        specify in the ConsumerARN parameter and the shard you specify in the
+        ShardId parameter. After the connection is successfully established,
+        Kinesis Data Streams pushes records from the shard to the consumer over
+        this connection. Before you call this operation, call
+        RegisterStreamConsumer to register the consumer with the data stream.
+        The connection persists for up to 5 minutes.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-SubscribeToShard'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/SubscribeToShardInput'
+      responses:
+        '200':
+          description: Subscription established, event stream opened.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/SubscribeToShardOutput'
+        '400':
+          description: Invalid argument or resource in use.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring:
+    post:
+      operationId: EnableEnhancedMonitoring
+      summary: Enable enhanced shard-level monitoring
+      description: >-
+        Enables enhanced Kinesis data stream monitoring for shard-level metrics.
+      tags:
+        - Monitoring
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-EnableEnhancedMonitoring'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/EnableEnhancedMonitoringInput'
+      responses:
+        '200':
+          description: Enhanced monitoring enabled.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/EnhancedMonitoringOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring:
+    post:
+      operationId: DisableEnhancedMonitoring
+      summary: Disable enhanced shard-level monitoring
+      description: >-
+        Disables enhanced Kinesis data stream monitoring for shard-level metrics.
+      tags:
+        - Monitoring
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DisableEnhancedMonitoring'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DisableEnhancedMonitoringInput'
+      responses:
+        '200':
+          description: Enhanced monitoring disabled.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/EnhancedMonitoringOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.StartStreamEncryption:
+    post:
+      operationId: StartStreamEncryption
+      summary: Enable server-side encryption for a stream
+      description: >-
+        Enables or updates server-side encryption using an AWS KMS key for a
+        specified stream. When invoking this API, you must use either the
+        StreamARN or the StreamName parameter, or both.
+      tags:
+        - Encryption
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-StartStreamEncryption'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/StartStreamEncryptionInput'
+      responses:
+        '200':
+          description: Stream encryption initiated.
+        '400':
+          description: Invalid argument or KMS error.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.StopStreamEncryption:
+    post:
+      operationId: StopStreamEncryption
+      summary: Disable server-side encryption for a stream
+      description: >-
+        Disables server-side encryption for a specified stream. When invoking
+        this API, you must use either the StreamARN or the StreamName parameter,
+        or both.
+      tags:
+        - Encryption
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-StopStreamEncryption'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/StopStreamEncryptionInput'
+      responses:
+        '200':
+          description: Stream encryption stopped.
+        '400':
+          description: Invalid argument or KMS error.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod:
+    post:
+      operationId: IncreaseStreamRetentionPeriod
+      summary: Increase the data retention period of a stream
+      description: >-
+        Increases the Kinesis data stream's retention period, which is the
+        length of time data records are accessible after they are added to the
+        stream. The maximum value of a stream's retention period is 8760 hours
+        (365 days).
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-IncreaseStreamRetentionPeriod'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/IncreaseStreamRetentionPeriodInput'
+      responses:
+        '200':
+          description: Retention period increased.
+        '400':
+          description: Invalid argument or resource in use.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod:
+    post:
+      operationId: DecreaseStreamRetentionPeriod
+      summary: Decrease the data retention period of a stream
+      description: >-
+        Decreases the Kinesis data stream's retention period, which is the
+        length of time data records are accessible after they are added to the
+        stream. The minimum value of a stream's retention period is 24 hours.
+      tags:
+        - Streams
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DecreaseStreamRetentionPeriod'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DecreaseStreamRetentionPeriodInput'
+      responses:
+        '200':
+          description: Retention period decreased.
+        '400':
+          description: Invalid argument or resource in use.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.AddTagsToStream:
+    post:
+      operationId: AddTagsToStream
+      summary: Add or update tags for a stream
+      description: >-
+        Adds or updates tags for the specified Kinesis data stream. You can
+        assign up to 50 tags to a data stream.
+      tags:
+        - Tags
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-AddTagsToStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/AddTagsToStreamInput'
+      responses:
+        '200':
+          description: Tags added successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.ListTagsForStream:
+    post:
+      operationId: ListTagsForStream
+      summary: List tags for a stream
+      description: >-
+        Lists the tags for the specified Kinesis data stream.
+      tags:
+        - Tags
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-ListTagsForStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/ListTagsForStreamInput'
+      responses:
+        '200':
+          description: Tags returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ListTagsForStreamOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.RemoveTagsFromStream:
+    post:
+      operationId: RemoveTagsFromStream
+      summary: Remove tags from a stream
+      description: >-
+        Removes tags from the specified Kinesis data stream. Removed tags are
+        deleted and cannot be recovered after this operation successfully
+        completes.
+      tags:
+        - Tags
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-RemoveTagsFromStream'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/RemoveTagsFromStreamInput'
+      responses:
+        '200':
+          description: Tags removed successfully.
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.PutResourcePolicy:
+    post:
+      operationId: PutResourcePolicy
+      summary: Attach a resource policy to a stream
+      description: >-
+        Attaches a resource-based policy to a data stream or registered
+        consumer. If you are using an identity other than the root user of the
+        AWS account that owns the resource, the calling identity must have the
+        PutResourcePolicy permissions on the specified Kinesis Data Streams
+        resource and belong to the owner's account in order to use this API.
+      tags:
+        - Policies
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-PutResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy attached successfully.
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetResourcePolicy:
+    post:
+      operationId: GetResourcePolicy
+      summary: Retrieve a resource policy
+      description: >-
+        Returns a policy attached to the specified data stream or consumer.
+      tags:
+        - Policies
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-GetResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetResourcePolicyOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DeleteResourcePolicy:
+    post:
+      operationId: DeleteResourcePolicy
+      summary: Delete a resource policy
+      description: >-
+        Deletes a resource policy attached to the specified data stream or
+        consumer. Deleting a resource policy reverts the resource to the default
+        policy of the account owner.
+      tags:
+        - Policies
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DeleteResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DeleteResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy deleted successfully.
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DescribeLimits:
+    post:
+      operationId: DescribeLimits
+      summary: Describe account shard limits
+      description: >-
+        Describes the shard limits and usage for the account. This operation
+        has a limit of one transaction per second per account.
+      tags:
+        - Account
+      parameters:
+        - $ref: '#/components/parameters/X-Amz-Target-DescribeLimits'
+      requestBody:
+        required: false
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Limits returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/DescribeLimitsOutput'
+        '400':
+          description: Limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: >-
+        AWS Signature Version 4 authentication. Requests must be signed with
+        the access key ID and secret access key of an IAM principal.
+  parameters:
+    X-Amz-Target-CreateStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.CreateStream
+    X-Amz-Target-DeleteStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DeleteStream
+    X-Amz-Target-DescribeStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DescribeStream
+    X-Amz-Target-DescribeStreamSummary:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DescribeStreamSummary
+    X-Amz-Target-ListStreams:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.ListStreams
+    X-Amz-Target-UpdateStreamMode:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.UpdateStreamMode
+    X-Amz-Target-ListShards:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.ListShards
+    X-Amz-Target-SplitShard:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.SplitShard
+    X-Amz-Target-MergeShards:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.MergeShards
+    X-Amz-Target-UpdateShardCount:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.UpdateShardCount
+    X-Amz-Target-PutRecord:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.PutRecord
+    X-Amz-Target-PutRecords:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.PutRecords
+    X-Amz-Target-GetShardIterator:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.GetShardIterator
+    X-Amz-Target-GetRecords:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.GetRecords
+    X-Amz-Target-RegisterStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.RegisterStreamConsumer
+    X-Amz-Target-DeregisterStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DeregisterStreamConsumer
+    X-Amz-Target-DescribeStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DescribeStreamConsumer
+    X-Amz-Target-ListStreamConsumers:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.ListStreamConsumers
+    X-Amz-Target-SubscribeToShard:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.SubscribeToShard
+    X-Amz-Target-EnableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.EnableEnhancedMonitoring
+    X-Amz-Target-DisableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DisableEnhancedMonitoring
+    X-Amz-Target-StartStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.StartStreamEncryption
+    X-Amz-Target-StopStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.StopStreamEncryption
+    X-Amz-Target-IncreaseStreamRetentionPeriod:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.IncreaseStreamRetentionPeriod
+    X-Amz-Target-DecreaseStreamRetentionPeriod:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DecreaseStreamRetentionPeriod
+    X-Amz-Target-AddTagsToStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.AddTagsToStream
+    X-Amz-Target-ListTagsForStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.ListTagsForStream
+    X-Amz-Target-RemoveTagsFromStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.RemoveTagsFromStream
+    X-Amz-Target-PutResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.PutResourcePolicy
+    X-Amz-Target-GetResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.GetResourcePolicy
+    X-Amz-Target-DeleteResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DeleteResourcePolicy
+    X-Amz-Target-DescribeLimits:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+          - Kinesis_20131202.DescribeLimits
+  schemas:
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: 'arn:aws.*:kinesis:.*:\d{12}:stream/\S+'
+      description: The ARN of the Kinesis data stream.
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+    SequenceNumber:
+      type: string
+      pattern: '0|([1-9]\d{0,128})'
+      description: >-
+        The sequence number assigned to a data record. Sequence numbers increase
+        over time within a shard.
+    PartitionKey:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: >-
+        Determines which shard in the stream the data record is assigned to.
+        Unicode string with a maximum length of 256 characters.
+    ConsumerARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: '^(arn):aws.*:kinesis:.*:\d{12}:.*stream\/[a-zA-Z0-9_.-]+\/consumer\/[a-zA-Z0-9_.-]+:[0-9]+'
+      description: The ARN of the registered stream consumer.
+    EncryptionType:
+      type: string
+      enum:
+        - NONE
+        - KMS
+      description: The encryption type used on the record or stream.
+    StreamMode:
+      type: string
+      enum:
+        - PROVISIONED
+        - ON_DEMAND
+      description: >-
+        Specifies the capacity mode to which you want to set your data stream.
+        PROVISIONED requires you to set ShardCount; ON_DEMAND automatically
+        manages the number of shards.
+    StreamStatus:
+      type: string
+      enum:
+        - CREATING
+        - DELETING
+        - ACTIVE
+        - UPDATING
+      description: The current status of the data stream.
+    ConsumerStatus:
+      type: string
+      enum:
+        - CREATING
+        - DELETING
+        - ACTIVE
+      description: The current status of the registered stream consumer.
+    ShardIteratorType:
+      type: string
+      enum:
+        - AT_SEQUENCE_NUMBER
+        - AFTER_SEQUENCE_NUMBER
+        - TRIM_HORIZON
+        - LATEST
+        - AT_TIMESTAMP
+      description: >-
+        Determines how the shard iterator is used to start reading data
+        records from the shard.
+    ScalingType:
+      type: string
+      enum:
+        - UNIFORM_SCALING
+      description: The scaling type for the UpdateShardCount operation.
+    MetricsName:
+      type: string
+      enum:
+        - IncomingBytes
+        - IncomingRecords
+        - OutgoingBytes
+        - OutgoingRecords
+        - WriteProvisionedThroughputExceeded
+        - ReadProvisionedThroughputExceeded
+        - IteratorAgeMilliseconds
+        - ALL
+      description: The name of the shard-level metric.
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+        - StartingHashKey
+        - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    SequenceNumberRange:
+      type: object
+      description: The range of possible sequence numbers for the shard.
+      required:
+        - StartingSequenceNumber
+      properties:
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EndingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+    Shard:
+      type: object
+      description: A uniquely identified group of data records in a Kinesis data stream.
+      required:
+        - ShardId
+        - HashKeyRange
+        - SequenceNumberRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        AdjacentParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+        SequenceNumberRange:
+          $ref: '#/components/schemas/SequenceNumberRange'
+    ChildShard:
+      type: object
+      description: A child shard resulting from a shard split or merge.
+      required:
+        - ShardId
+        - ParentShards
+        - HashKeyRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardId'
+          description: The list of parent shard IDs.
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+    Record:
+      type: object
+      description: The unit of data of the Kinesis data stream.
+      required:
+        - SequenceNumber
+        - Data
+        - PartitionKey
+      properties:
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        ApproximateArrivalTimestamp:
+          type: number
+          format: double
+          description: >-
+            The approximate time that the record was inserted into the stream.
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: >-
+            The data blob. The data in the blob is both opaque and immutable to
+            Kinesis Data Streams, which does not inspect, interpret, or change
+            the data in the blob in any way. Base64-encoded when serialized.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    StreamModeDetails:
+      type: object
+      description: The capacity mode details for the data stream.
+      required:
+        - StreamMode
+      properties:
+        StreamMode:
+          $ref: '#/components/schemas/StreamMode'
+    StreamDescription:
+      type: object
+      description: Detailed information about a Kinesis data stream.
+      required:
+        - StreamName
+        - StreamARN
+        - StreamStatus
+        - Shards
+        - HasMoreShards
+        - RetentionPeriodHours
+        - StreamCreationTimestamp
+        - EnhancedMonitoring
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        StreamStatus:
+          $ref: '#/components/schemas/StreamStatus'
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+        Shards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shard'
+          description: The shards that comprise the stream.
+        HasMoreShards:
+          type: boolean
+          description: >-
+            If true, there are more shards in the stream available to describe.
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The current retention period, in hours.
+        StreamCreationTimestamp:
+          type: number
+          format: double
+          description: The approximate time that the stream was created.
+        EnhancedMonitoring:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnhancedMetrics'
+          description: Enhanced shard-level metric settings.
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          description: The GUID for the customer-managed AWS KMS key.
+    StreamDescriptionSummary:
+      type: object
+      description: Summary information about a Kinesis data stream.
+      required:
+        - StreamName
+        - StreamARN
+        - StreamStatus
+        - RetentionPeriodHours
+        - StreamCreationTimestamp
+        - EnhancedMonitoring
+        - OpenShardCount
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        StreamStatus:
+          $ref: '#/components/schemas/StreamStatus'
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+        StreamCreationTimestamp:
+          type: number
+          format: double
+        EnhancedMonitoring:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnhancedMetrics'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+        OpenShardCount:
+          type: integer
+          minimum: 0
+          description: The number of open shards in the stream.
+        ConsumerCount:
+          type: integer
+          minimum: 0
+          description: >-
+            The number of enhanced fan-out consumers registered with the stream.
+    EnhancedMetrics:
+      type: object
+      description: Enhanced shard-level metric details.
+      properties:
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+          description: List of shard-level metrics currently enabled.
+    Consumer:
+      type: object
+      description: An object that represents the details of the consumer you registered.
+      required:
+        - ConsumerName
+        - ConsumerARN
+        - ConsumerStatus
+        - ConsumerCreationTimestamp
+      properties:
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+          pattern: '[a-zA-Z0-9_.-]+'
+          description: The name of the consumer.
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ConsumerStatus:
+          $ref: '#/components/schemas/ConsumerStatus'
+        ConsumerCreationTimestamp:
+          type: number
+          format: double
+          description: Timestamp when the consumer was created.
+    ConsumerDescription:
+      type: object
+      description: Full description of a registered stream consumer.
+      required:
+        - ConsumerName
+        - ConsumerARN
+        - ConsumerStatus
+        - ConsumerCreationTimestamp
+        - StreamARN
+      properties:
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ConsumerStatus:
+          $ref: '#/components/schemas/ConsumerStatus'
+        ConsumerCreationTimestamp:
+          type: number
+          format: double
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    Tag:
+      type: object
+      description: Metadata assigned to the stream or resource.
+      required:
+        - Key
+      properties:
+        Key:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: A unique identifier for the tag.
+        Value:
+          type: string
+          minLength: 0
+          maxLength: 256
+          description: An optional string value for the tag.
+    StartingPosition:
+      type: object
+      description: The starting position in the data stream from which to start streaming.
+      required:
+        - Type
+      properties:
+        Type:
+          $ref: '#/components/schemas/ShardIteratorType'
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        Timestamp:
+          type: number
+          format: double
+          description: >-
+            The timestamp of the data record from which to start reading. Used
+            with shard iterator type AT_TIMESTAMP.
+    SubscribeToShardEvent:
+      type: object
+      description: >-
+        An event pushed over the HTTP/2 connection to the consumer. Contains the
+        data records from the shard along with metadata.
+      required:
+        - Records
+        - ContinuationSequenceNumber
+        - MillisBehindLatest
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+          description: The data records from the shard.
+        ContinuationSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: >-
+            The number of milliseconds the read records are from the tip of the
+            stream, indicating how far behind current time the consumer is.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: >-
+            The list of the child shards of the current shard, returned only at
+            the end of the current shard.
+    PutRecordRequestEntry:
+      type: object
+      description: >-
+        Represents a record entry for a PutRecords request.
+      required:
+        - Data
+        - PartitionKey
+      properties:
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob to put into the record.
+        ExplicitHashKey:
+          type: string
+          pattern: '0|([1-9]\d{0,38})'
+          description: The hash value used to explicitly determine the shard.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+    PutRecordsResultEntry:
+      type: object
+      description: >-
+        Represents the result of an individual record in a PutRecords response.
+      properties:
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ErrorCode:
+          type: string
+          description: The error code for an individual record result.
+        ErrorMessage:
+          type: string
+          description: The error message for an individual record result.
+    CreateStreamInput:
+      type: object
+      required:
+        - StreamName
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        ShardCount:
+          type: integer
+          minimum: 1
+          description: >-
+            The number of shards that the stream will use. Required for
+            PROVISIONED mode.
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+        Tags:
+          type: object
+          additionalProperties:
+            type: string
+            maxLength: 256
+          description: A set of up to 50 key-value pairs for tagging the stream.
+    DeleteStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EnforceConsumerDeletion:
+          type: boolean
+          description: >-
+            If true, deletes the stream even if consumers are registered.
+    DescribeStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of shards to return.
+        ExclusiveStartShardId:
+          $ref: '#/components/schemas/ShardId'
+    DescribeStreamOutput:
+      type: object
+      required:
+        - StreamDescription
+      properties:
+        StreamDescription:
+          $ref: '#/components/schemas/StreamDescription'
+    DescribeStreamSummaryInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    DescribeStreamSummaryOutput:
+      type: object
+      required:
+        - StreamDescriptionSummary
+      properties:
+        StreamDescriptionSummary:
+          $ref: '#/components/schemas/StreamDescriptionSummary'
+    ListStreamsInput:
+      type: object
+      properties:
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of streams to list.
+        ExclusiveStartStreamName:
+          $ref: '#/components/schemas/StreamName'
+        NextToken:
+          type: string
+          description: Pagination token.
+    ListStreamsOutput:
+      type: object
+      required:
+        - StreamNames
+        - HasMoreStreams
+      properties:
+        StreamNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/StreamName'
+          description: The names of the streams.
+        HasMoreStreams:
+          type: boolean
+          description: If true, there are more streams available to list.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+        StreamSummaries:
+          type: array
+          items:
+            type: object
+            properties:
+              StreamName:
+                $ref: '#/components/schemas/StreamName'
+              StreamARN:
+                $ref: '#/components/schemas/StreamARN'
+              StreamStatus:
+                $ref: '#/components/schemas/StreamStatus'
+              StreamModeDetails:
+                $ref: '#/components/schemas/StreamModeDetails'
+              StreamCreationTimestamp:
+                type: number
+                format: double
+          description: Summary information about the streams.
+    UpdateStreamModeInput:
+      type: object
+      required:
+        - StreamARN
+        - StreamModeDetails
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+    ListShardsInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        NextToken:
+          type: string
+        ExclusiveStartShardId:
+          $ref: '#/components/schemas/ShardId'
+        MaxResults:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        StreamCreationTimestamp:
+          type: number
+          format: double
+        ShardFilter:
+          type: object
+          properties:
+            Type:
+              type: string
+              enum:
+                - AFTER_SHARD_ID
+                - AT_TRIM_HORIZON
+                - FROM_TRIM_HORIZON
+                - AT_LATEST
+                - AT_TIMESTAMP
+                - FROM_TIMESTAMP
+            ShardId:
+              $ref: '#/components/schemas/ShardId'
+            Timestamp:
+              type: number
+              format: double
+    ListShardsOutput:
+      type: object
+      properties:
+        Shards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shard'
+          description: An array of JSON objects representing shards.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+    SplitShardInput:
+      type: object
+      required:
+        - ShardToSplit
+        - NewStartingHashKey
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardToSplit:
+          $ref: '#/components/schemas/ShardId'
+        NewStartingHashKey:
+          type: string
+          description: >-
+            A hash key value for the starting hash key of one of the child
+            shards created by the split.
+    MergeShardsInput:
+      type: object
+      required:
+        - ShardToMerge
+        - AdjacentShardToMerge
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardToMerge:
+          $ref: '#/components/schemas/ShardId'
+        AdjacentShardToMerge:
+          $ref: '#/components/schemas/ShardId'
+    UpdateShardCountInput:
+      type: object
+      required:
+        - TargetShardCount
+        - ScalingType
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        TargetShardCount:
+          type: integer
+          minimum: 1
+          description: The new number of shards.
+        ScalingType:
+          $ref: '#/components/schemas/ScalingType'
+    UpdateShardCountOutput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        CurrentShardCount:
+          type: integer
+          description: The current number of shards.
+        TargetShardCount:
+          type: integer
+          description: The updated number of shards.
+    PutRecordInput:
+      type: object
+      required:
+        - Data
+        - PartitionKey
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob to put into the record. Base64-encoded.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+        ExplicitHashKey:
+          type: string
+          pattern: '0|([1-9]\d{0,38})'
+          description: The hash value used to explicitly determine the shard.
+        SequenceNumberForOrdering:
+          $ref: '#/components/schemas/SequenceNumber'
+    PutRecordOutput:
+      type: object
+      required:
+        - ShardId
+        - SequenceNumber
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    PutRecordsInput:
+      type: object
+      required:
+        - Records
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Records:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: '#/components/schemas/PutRecordRequestEntry'
+          description: The records to write to the stream.
+    PutRecordsOutput:
+      type: object
+      required:
+        - Records
+      properties:
+        FailedRecordCount:
+          type: integer
+          minimum: 0
+          description: The number of records that failed.
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PutRecordsResultEntry'
+          description: Result for each record in the request.
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    GetShardIteratorInput:
+      type: object
+      required:
+        - ShardId
+        - ShardIteratorType
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ShardIteratorType:
+          $ref: '#/components/schemas/ShardIteratorType'
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        Timestamp:
+          type: number
+          format: double
+          description: >-
+            The timestamp of the data record from which to start reading. Used
+            with shard iterator type AT_TIMESTAMP.
+    GetShardIteratorOutput:
+      type: object
+      properties:
+        ShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: >-
+            The position in the shard from which to start reading data records
+            sequentially. Expires after 5 minutes.
+    GetRecordsInput:
+      type: object
+      required:
+        - ShardIterator
+      properties:
+        ShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: >-
+            The position in the shard from which to start reading data records.
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: >-
+            The maximum number of records to return. Default is 10,000.
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    GetRecordsOutput:
+      type: object
+      required:
+        - Records
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+          description: The data records retrieved from the shard.
+        NextShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: >-
+            The next position in the shard to start reading. Null if the shard
+            has been closed.
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: >-
+            The number of milliseconds the GetRecords response is from the tip
+            of the stream. 0 indicates the consumer is caught up.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: >-
+            The list of the current shard's child shards, returned when the end
+            of the current shard is reached.
+    RegisterStreamConsumerInput:
+      type: object
+      required:
+        - StreamARN
+        - ConsumerName
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+          pattern: '[a-zA-Z0-9_.-]+'
+          description: >-
+            For a given Kinesis data stream, each consumer must have a unique
+            name. However, consumer names do not have to be unique across data
+            streams.
+    RegisterStreamConsumerOutput:
+      type: object
+      required:
+        - Consumer
+      properties:
+        Consumer:
+          $ref: '#/components/schemas/Consumer'
+    DeregisterStreamConsumerInput:
+      type: object
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+    DescribeStreamConsumerInput:
+      type: object
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+    DescribeStreamConsumerOutput:
+      type: object
+      required:
+        - ConsumerDescription
+      properties:
+        ConsumerDescription:
+          $ref: '#/components/schemas/ConsumerDescription'
+    ListStreamConsumersInput:
+      type: object
+      required:
+        - StreamARN
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        NextToken:
+          type: string
+        MaxResults:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        StreamCreationTimestamp:
+          type: number
+          format: double
+    ListStreamConsumersOutput:
+      type: object
+      properties:
+        Consumers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consumer'
+          description: The consumers registered to the data stream.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+    SubscribeToShardInput:
+      type: object
+      required:
+        - ConsumerARN
+        - ShardId
+        - StartingPosition
+      properties:
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        StartingPosition:
+          $ref: '#/components/schemas/StartingPosition'
+    SubscribeToShardOutput:
+      type: object
+      required:
+        - EventStream
+      properties:
+        EventStream:
+          type: object
+          description: The event stream that the consumer receives from the shard.
+          properties:
+            SubscribeToShardEvent:
+              $ref: '#/components/schemas/SubscribeToShardEvent'
+    EnableEnhancedMonitoringInput:
+      type: object
+      required:
+        - ShardLevelMetrics
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    DisableEnhancedMonitoringInput:
+      type: object
+      required:
+        - ShardLevelMetrics
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    EnhancedMonitoringOutput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        CurrentShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+        DesiredShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    StartStreamEncryptionInput:
+      type: object
+      required:
+        - EncryptionType
+        - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: >-
+            The GUID for the customer-managed AWS KMS key to use for
+            encryption. You can specify the key ID, key ARN, alias name, or
+            alias ARN.
+    StopStreamEncryptionInput:
+      type: object
+      required:
+        - EncryptionType
+        - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+    IncreaseStreamRetentionPeriodInput:
+      type: object
+      required:
+        - RetentionPeriodHours
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The new retention period of the stream, in hours. Max 8760 (365 days).
+    DecreaseStreamRetentionPeriodInput:
+      type: object
+      required:
+        - RetentionPeriodHours
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The new retention period of the stream, in hours. Min 24.
+    AddTagsToStreamInput:
+      type: object
+      required:
+        - Tags
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Tags:
+          type: object
+          additionalProperties:
+            type: string
+            maxLength: 256
+          description: A set of up to 50 key-value pairs.
+    ListTagsForStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ExclusiveStartTagKey:
+          type: string
+          minLength: 1
+          maxLength: 128
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 50
+    ListTagsForStreamOutput:
+      type: object
+      required:
+        - Tags
+        - HasMoreTags
+      properties:
+        Tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags associated with the stream.
+        HasMoreTags:
+          type: boolean
+          description: If true, more tags are available.
+    RemoveTagsFromStreamInput:
+      type: object
+      required:
+        - TagKeys
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        TagKeys:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+          description: A list of tag keys to remove.
+    PutResourcePolicyInput:
+      type: object
+      required:
+        - ResourceARN
+        - Policy
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The Amazon Resource Name (ARN) of the data stream or consumer.
+        Policy:
+          type: string
+          description: >-
+            Details of the resource policy as a JSON string. The resource policy
+            must include both the identity policy and the resource policy.
+    GetResourcePolicyInput:
+      type: object
+      required:
+        - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
+    GetResourcePolicyOutput:
+      type: object
+      required:
+        - Policy
+      properties:
+        Policy:
+          type: string
+          description: Details of the resource policy as a JSON string.
+    DeleteResourcePolicyInput:
+      type: object
+      required:
+        - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
+    DescribeLimitsOutput:
+      type: object
+      required:
+        - ShardLimit
+        - OpenShardCount
+        - OnDemandStreamCount
+        - OnDemandStreamCountLimit
+      properties:
+        ShardLimit:
+          type: integer
+          minimum: 0
+          description: The maximum number of shards.
+        OpenShardCount:
+          type: integer
+          minimum: 0
+          description: The number of open shards.
+        OnDemandStreamCount:
+          type: integer
+          minimum: 0
+          description: The number of on-demand streams.
+        OnDemandStreamCountLimit:
+          type: integer
+          minimum: 0
+          description: The maximum number of on-demand streams.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.

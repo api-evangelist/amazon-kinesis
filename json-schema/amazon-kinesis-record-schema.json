@@ -1,0 +1,632 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/api-search/amazon-web-services/blob/main/amazon-kinesis/json-schema/amazon-kinesis-record-schema.json",
+  "title": "Amazon Kinesis Data Streams Record Schema",
+  "description": "JSON Schema for Amazon Kinesis Data Streams data records, request/response structures, and related objects. Based on the Kinesis Data Streams API Reference (API version 2013-12-02).",
+  "type": "object",
+  "$defs": {
+    "StreamName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_.-]+$",
+      "description": "The name of the Kinesis data stream. Stream names are scoped to the AWS account and region."
+    },
+    "StreamARN": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^arn:aws.*:kinesis:.*:\\d{12}:stream/\\S+$",
+      "description": "The Amazon Resource Name (ARN) of the Kinesis data stream."
+    },
+    "ShardId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_.-]+$",
+      "description": "The unique identifier of the shard within the stream.",
+      "examples": [
+        "shardId-000000000001"
+      ]
+    },
+    "SequenceNumber": {
+      "type": "string",
+      "pattern": "^0|([1-9]\\d{0,128})$",
+      "description": "The unique identifier of the record within its shard. Sequence numbers increase over time."
+    },
+    "PartitionKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Determines which shard in the stream the data record is assigned to. This is a Unicode string with a maximum length of 256 characters."
+    },
+    "ExplicitHashKey": {
+      "type": "string",
+      "pattern": "^0|([1-9]\\d{0,38})$",
+      "description": "The hash value used to explicitly determine the shard the data record is assigned to by overriding the partition key hash."
+    },
+    "EncryptionType": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "KMS"
+      ],
+      "description": "The encryption type used on the record. NONE indicates no encryption. KMS indicates server-side encryption with an AWS KMS key."
+    },
+    "DataBlob": {
+      "type": "string",
+      "contentEncoding": "base64",
+      "maxLength": 1048576,
+      "description": "The data blob to put into the record. The data in the blob is both opaque and immutable to Kinesis Data Streams. When serialized to JSON, the data is Base64-encoded. Maximum unencoded size is 1 MiB."
+    },
+    "HashKeyRange": {
+      "type": "object",
+      "description": "The range of possible hash key values for a shard, which is a set of ordered contiguous positive integers.",
+      "required": [
+        "StartingHashKey",
+        "EndingHashKey"
+      ],
+      "properties": {
+        "StartingHashKey": {
+          "type": "string",
+          "description": "The starting hash key of the hash key range."
+        },
+        "EndingHashKey": {
+          "type": "string",
+          "description": "The ending hash key of the hash key range."
+        }
+      },
+      "additionalProperties": false
+    },
+    "SequenceNumberRange": {
+      "type": "object",
+      "description": "The range of possible sequence numbers for a shard.",
+      "required": [
+        "StartingSequenceNumber"
+      ],
+      "properties": {
+        "StartingSequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber",
+          "description": "The starting sequence number for the range."
+        },
+        "EndingSequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber",
+          "description": "The ending sequence number for the range. Set only if the shard is closed."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Record": {
+      "type": "object",
+      "description": "The unit of data of the Kinesis data stream, which is composed of a sequence number, a partition key, and a data blob.",
+      "required": [
+        "SequenceNumber",
+        "Data",
+        "PartitionKey"
+      ],
+      "properties": {
+        "SequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber"
+        },
+        "ApproximateArrivalTimestamp": {
+          "type": "number",
+          "format": "double",
+          "description": "The approximate time that the record was inserted into the stream. Set when a stream successfully receives and stores a record. Represented as a Unix epoch timestamp in seconds with millisecond precision."
+        },
+        "Data": {
+          "$ref": "#/$defs/DataBlob"
+        },
+        "PartitionKey": {
+          "$ref": "#/$defs/PartitionKey"
+        },
+        "EncryptionType": {
+          "$ref": "#/$defs/EncryptionType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Shard": {
+      "type": "object",
+      "description": "A uniquely identified group of data records in a Kinesis data stream. A stream is composed of one or more shards, each of which provides a fixed unit of capacity.",
+      "required": [
+        "ShardId",
+        "HashKeyRange",
+        "SequenceNumberRange"
+      ],
+      "properties": {
+        "ShardId": {
+          "$ref": "#/$defs/ShardId"
+        },
+        "ParentShardId": {
+          "$ref": "#/$defs/ShardId",
+          "description": "The shard ID of the shard's parent."
+        },
+        "AdjacentParentShardId": {
+          "$ref": "#/$defs/ShardId",
+          "description": "The shard ID of the shard adjacent to the shard's parent."
+        },
+        "HashKeyRange": {
+          "$ref": "#/$defs/HashKeyRange"
+        },
+        "SequenceNumberRange": {
+          "$ref": "#/$defs/SequenceNumberRange"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChildShard": {
+      "type": "object",
+      "description": "A child shard resulting from a shard split or merge.",
+      "required": [
+        "ShardId",
+        "ParentShards",
+        "HashKeyRange"
+      ],
+      "properties": {
+        "ShardId": {
+          "$ref": "#/$defs/ShardId"
+        },
+        "ParentShards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ShardId"
+          },
+          "description": "The list of parent shard IDs."
+        },
+        "HashKeyRange": {
+          "$ref": "#/$defs/HashKeyRange"
+        }
+      },
+      "additionalProperties": false
+    },
+    "StreamModeDetails": {
+      "type": "object",
+      "description": "Specifies the capacity mode to which you want to set your data stream.",
+      "required": [
+        "StreamMode"
+      ],
+      "properties": {
+        "StreamMode": {
+          "type": "string",
+          "enum": [
+            "PROVISIONED",
+            "ON_DEMAND"
+          ],
+          "description": "Specifies the capacity mode. PROVISIONED requires you to specify ShardCount. ON_DEMAND automatically manages the number of shards."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Consumer": {
+      "type": "object",
+      "description": "An object that represents the details of a registered stream consumer for enhanced fan-out.",
+      "required": [
+        "ConsumerName",
+        "ConsumerARN",
+        "ConsumerStatus",
+        "ConsumerCreationTimestamp"
+      ],
+      "properties": {
+        "ConsumerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_.-]+$",
+          "description": "The name of the consumer that you registered."
+        },
+        "ConsumerARN": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^(arn):aws.*:kinesis:.*:\\d{12}:.*stream/[a-zA-Z0-9_.-]+/consumer/[a-zA-Z0-9_.-]+:[0-9]+$",
+          "description": "The ARN returned when the consumer was registered."
+        },
+        "ConsumerStatus": {
+          "type": "string",
+          "enum": [
+            "CREATING",
+            "DELETING",
+            "ACTIVE"
+          ],
+          "description": "The current status of the consumer."
+        },
+        "ConsumerCreationTimestamp": {
+          "type": "number",
+          "format": "double",
+          "description": "The timestamp when the consumer was created."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Tag": {
+      "type": "object",
+      "description": "Metadata assigned to the stream, consisting of a key-value pair.",
+      "required": [
+        "Key"
+      ],
+      "properties": {
+        "Key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "A unique identifier for the tag. Tag keys are case-sensitive."
+        },
+        "Value": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 256,
+          "description": "An optional string mapped to the tag key."
+        }
+      },
+      "additionalProperties": false
+    },
+    "PutRecordRequest": {
+      "type": "object",
+      "description": "Request body for the PutRecord API action, which writes a single data record into a stream.",
+      "required": [
+        "Data",
+        "PartitionKey"
+      ],
+      "properties": {
+        "StreamName": {
+          "$ref": "#/$defs/StreamName"
+        },
+        "StreamARN": {
+          "$ref": "#/$defs/StreamARN"
+        },
+        "Data": {
+          "$ref": "#/$defs/DataBlob"
+        },
+        "PartitionKey": {
+          "$ref": "#/$defs/PartitionKey"
+        },
+        "ExplicitHashKey": {
+          "$ref": "#/$defs/ExplicitHashKey"
+        },
+        "SequenceNumberForOrdering": {
+          "$ref": "#/$defs/SequenceNumber",
+          "description": "Guarantees strictly increasing sequence numbers for the same client and partition key within the same shard."
+        }
+      },
+      "additionalProperties": false
+    },
+    "PutRecordResponse": {
+      "type": "object",
+      "description": "Response body for the PutRecord API action.",
+      "required": [
+        "ShardId",
+        "SequenceNumber"
+      ],
+      "properties": {
+        "ShardId": {
+          "$ref": "#/$defs/ShardId",
+          "description": "The shard ID of the shard where the data record was placed."
+        },
+        "SequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber",
+          "description": "The sequence number identifier that was assigned to the put data record."
+        },
+        "EncryptionType": {
+          "$ref": "#/$defs/EncryptionType"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PutRecordsRequestEntry": {
+      "type": "object",
+      "description": "Represents the output for a single record in a PutRecords request.",
+      "required": [
+        "Data",
+        "PartitionKey"
+      ],
+      "properties": {
+        "Data": {
+          "$ref": "#/$defs/DataBlob"
+        },
+        "ExplicitHashKey": {
+          "$ref": "#/$defs/ExplicitHashKey"
+        },
+        "PartitionKey": {
+          "$ref": "#/$defs/PartitionKey"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PutRecordsResultEntry": {
+      "type": "object",
+      "description": "Represents the result of an individual record from a PutRecords request.",
+      "properties": {
+        "SequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber"
+        },
+        "ShardId": {
+          "$ref": "#/$defs/ShardId"
+        },
+        "ErrorCode": {
+          "type": "string",
+          "description": "The error code for an individual record result. An error code of null indicates success."
+        },
+        "ErrorMessage": {
+          "type": "string",
+          "description": "The error message for an individual record result."
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetRecordsResponse": {
+      "type": "object",
+      "description": "Response body for the GetRecords API action.",
+      "required": [
+        "Records"
+      ],
+      "properties": {
+        "Records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Record"
+          },
+          "description": "The data records retrieved from the shard."
+        },
+        "NextShardIterator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "description": "The next position in the shard from which to start sequentially reading data records. If set to null, the shard has been closed and the requested iterator does not return any more data."
+        },
+        "MillisBehindLatest": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The number of milliseconds the GetRecords response is from the tip of the stream. A value of zero indicates record processing is caught up."
+        },
+        "ChildShards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChildShard"
+          },
+          "description": "The list of the current shard's child shards, returned only when the end of the current shard is reached."
+        }
+      },
+      "additionalProperties": false
+    },
+    "SubscribeToShardEvent": {
+      "type": "object",
+      "description": "After you call SubscribeToShard, Kinesis Data Streams sends events of this type over the HTTP/2 connection to your consumer.",
+      "required": [
+        "Records",
+        "ContinuationSequenceNumber",
+        "MillisBehindLatest"
+      ],
+      "properties": {
+        "Records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Record"
+          },
+          "description": "The data records from the shard."
+        },
+        "ContinuationSequenceNumber": {
+          "$ref": "#/$defs/SequenceNumber",
+          "description": "Use this as the sequence number in the next SubscribeToShard call."
+        },
+        "MillisBehindLatest": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The number of milliseconds the read records are from the tip of the stream."
+        },
+        "ChildShards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChildShard"
+          },
+          "description": "The list of the current shard's child shards."
+        }
+      },
+      "additionalProperties": false
+    },
+    "StreamDescription": {
+      "type": "object",
+      "description": "Represents the output for DescribeStream, containing detailed information about the stream.",
+      "required": [
+        "StreamName",
+        "StreamARN",
+        "StreamStatus",
+        "Shards",
+        "HasMoreShards",
+        "RetentionPeriodHours",
+        "StreamCreationTimestamp",
+        "EnhancedMonitoring"
+      ],
+      "properties": {
+        "StreamName": {
+          "$ref": "#/$defs/StreamName"
+        },
+        "StreamARN": {
+          "$ref": "#/$defs/StreamARN"
+        },
+        "StreamStatus": {
+          "type": "string",
+          "enum": [
+            "CREATING",
+            "DELETING",
+            "ACTIVE",
+            "UPDATING"
+          ],
+          "description": "The current status of the stream."
+        },
+        "StreamModeDetails": {
+          "$ref": "#/$defs/StreamModeDetails"
+        },
+        "Shards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Shard"
+          },
+          "description": "The shards that comprise the stream."
+        },
+        "HasMoreShards": {
+          "type": "boolean",
+          "description": "If set to true, more shards in the stream are available to describe."
+        },
+        "RetentionPeriodHours": {
+          "type": "integer",
+          "minimum": 24,
+          "maximum": 8760,
+          "description": "The current retention period, in hours. Minimum value of 24. Maximum value of 8760 (365 days)."
+        },
+        "StreamCreationTimestamp": {
+          "type": "number",
+          "format": "double",
+          "description": "The approximate time that the stream was created."
+        },
+        "EnhancedMonitoring": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ShardLevelMetrics": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "IncomingBytes",
+                    "IncomingRecords",
+                    "OutgoingBytes",
+                    "OutgoingRecords",
+                    "WriteProvisionedThroughputExceeded",
+                    "ReadProvisionedThroughputExceeded",
+                    "IteratorAgeMilliseconds",
+                    "ALL"
+                  ]
+                },
+                "description": "List of shard-level metrics."
+              }
+            }
+          },
+          "description": "Represents the current enhanced monitoring settings of the stream."
+        },
+        "EncryptionType": {
+          "$ref": "#/$defs/EncryptionType"
+        },
+        "KeyId": {
+          "type": "string",
+          "description": "The GUID for the customer-managed AWS KMS key to use for encryption."
+        }
+      },
+      "additionalProperties": false
+    },
+    "LambdaKinesisEvent": {
+      "type": "object",
+      "description": "The event payload delivered to an AWS Lambda function when a Kinesis data stream is configured as an event source.",
+      "required": [
+        "Records"
+      ],
+      "properties": {
+        "Records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LambdaKinesisEventRecord"
+          },
+          "description": "An array of Kinesis event records."
+        }
+      },
+      "additionalProperties": false
+    },
+    "LambdaKinesisEventRecord": {
+      "type": "object",
+      "description": "A single Kinesis event record within a Lambda invocation payload.",
+      "required": [
+        "kinesis",
+        "eventSource",
+        "eventSourceARN",
+        "eventID",
+        "eventName",
+        "eventVersion",
+        "invokeIdentityArn",
+        "awsRegion"
+      ],
+      "properties": {
+        "kinesis": {
+          "type": "object",
+          "required": [
+            "kinesisSchemaVersion",
+            "partitionKey",
+            "sequenceNumber",
+            "data"
+          ],
+          "properties": {
+            "kinesisSchemaVersion": {
+              "type": "string",
+              "description": "The schema version for this record.",
+              "examples": [
+                "1.0"
+              ]
+            },
+            "partitionKey": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "Identifies which shard in the stream the data record is assigned to."
+            },
+            "sequenceNumber": {
+              "type": "string",
+              "description": "The unique identifier of the record within its shard."
+            },
+            "data": {
+              "type": "string",
+              "contentEncoding": "base64",
+              "description": "The data blob, Base64-encoded."
+            },
+            "approximateArrivalTimestamp": {
+              "type": "number",
+              "format": "double",
+              "description": "The approximate time that the record was inserted into the stream."
+            }
+          },
+          "additionalProperties": false,
+          "description": "The Kinesis-specific data for this event record."
+        },
+        "eventSource": {
+          "type": "string",
+          "const": "aws:kinesis",
+          "description": "The AWS service that is the source of the event."
+        },
+        "eventSourceARN": {
+          "type": "string",
+          "pattern": "^arn:aws.*:kinesis:.*:\\d{12}:stream/\\S+$",
+          "description": "The ARN of the event source (the Kinesis data stream)."
+        },
+        "eventID": {
+          "type": "string",
+          "description": "A unique identifier for this event, composed of shardId:sequenceNumber.",
+          "examples": [
+            "shardId-000000000001:21269319989652663814458848515492872193"
+          ]
+        },
+        "eventName": {
+          "type": "string",
+          "const": "aws:kinesis:record",
+          "description": "The event type."
+        },
+        "eventVersion": {
+          "type": "string",
+          "description": "The event version.",
+          "examples": [
+            "1.0"
+          ]
+        },
+        "invokeIdentityArn": {
+          "type": "string",
+          "description": "The ARN of the IAM role used for the Lambda invocation."
+        },
+        "awsRegion": {
+          "type": "string",
+          "description": "The AWS region where the event originated.",
+          "examples": [
+            "us-east-1"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

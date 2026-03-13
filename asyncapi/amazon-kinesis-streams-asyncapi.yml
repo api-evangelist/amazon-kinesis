@@ -1,0 +1,485 @@
+asyncapi: 3.0.0
+info:
+  title: Amazon Kinesis Data Streams
+  version: '2013-12-02'
+  description: >-
+    Amazon Kinesis Data Streams is a massively scalable and durable real-time
+    data streaming service. This AsyncAPI specification describes the
+    event-driven consumer patterns for Kinesis Data Streams, including enhanced
+    fan-out via SubscribeToShard (HTTP/2 push), polling via GetRecords, and
+    integration with AWS Lambda as an event source.
+
+
+    Kinesis Data Streams captures data from producers and makes it available to
+    consumers in real time. Data records are organized into shards, and
+    consumers read records sequentially from shards using shard iterators or
+    enhanced fan-out subscriptions.
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  externalDocs:
+    description: Amazon Kinesis Data Streams Developer Guide
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  tags:
+    - name: streaming
+      description: Real-time data streaming operations.
+    - name: enhanced-fan-out
+      description: Dedicated throughput consumer via SubscribeToShard.
+    - name: polling
+      description: Pull-based consumption using GetRecords.
+    - name: event-source
+      description: AWS Lambda event source mapping for Kinesis.
+
+defaultContentType: application/json
+
+servers:
+  production:
+    host: kinesis.{region}.amazonaws.com
+    protocol: https
+    description: >-
+      Amazon Kinesis Data Streams regional endpoint. Enhanced fan-out uses
+      HTTP/2 server push over this endpoint. Polling consumers use standard
+      HTTPS POST requests.
+    variables:
+      region:
+        default: us-east-1
+        description: AWS region identifier
+        enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
+    security:
+      - $ref: '#/components/securitySchemes/awsSigV4'
+
+channels:
+  kinesisStreamShard:
+    address: 'kinesis/{streamName}/{shardId}'
+    title: Kinesis Stream Shard
+    description: >-
+      A shard within a Kinesis data stream. Each shard is an append-only,
+      ordered sequence of data records. Producers write records to shards via
+      partition keys, and consumers read records sequentially. Each shard
+      provides 1 MiB/sec write capacity and 2 MiB/sec read capacity (shared
+      among polling consumers), or 2 MiB/sec dedicated throughput per enhanced
+      fan-out consumer.
+    parameters:
+      streamName:
+        description: >-
+          The name of the Kinesis data stream. Must be between 1 and 128
+          characters, matching the pattern [a-zA-Z0-9_.-]+.
+      shardId:
+        description: >-
+          The unique identifier of the shard within the stream, for example
+          shardId-000000000001.
+    messages:
+      kinesisRecord:
+        $ref: '#/components/messages/KinesisRecord'
+      subscribeToShardEvent:
+        $ref: '#/components/messages/SubscribeToShardEvent'
+
+  enhancedFanOutSubscription:
+    address: 'kinesis/{streamName}/{shardId}/consumer/{consumerName}'
+    title: Enhanced Fan-Out Subscription
+    description: >-
+      A dedicated HTTP/2 push channel between a registered consumer and a
+      specific shard. Established via the SubscribeToShard API, this channel
+      pushes SubscribeToShardEvent messages containing data records at up to
+      2 MiB/sec per shard per consumer. Each subscription lasts up to 5
+      minutes before requiring renewal.
+    parameters:
+      streamName:
+        description: The name of the Kinesis data stream.
+      shardId:
+        description: The shard ID to subscribe to.
+      consumerName:
+        description: >-
+          The name of the registered consumer (from RegisterStreamConsumer).
+    messages:
+      subscribeToShardEvent:
+        $ref: '#/components/messages/SubscribeToShardEvent'
+
+  lambdaEventSource:
+    address: 'kinesis/{streamName}/lambda-event-source'
+    title: Lambda Event Source Mapping
+    description: >-
+      When configured as an AWS Lambda event source, Kinesis Data Streams
+      automatically invokes a Lambda function with batches of records from
+      each shard. The Lambda service manages shard iterator lifecycle,
+      checkpointing, and retry logic. Each shard is processed by one Lambda
+      invocation at a time (unless parallelization is configured).
+    parameters:
+      streamName:
+        description: The name of the Kinesis data stream.
+    messages:
+      lambdaKinesisEvent:
+        $ref: '#/components/messages/LambdaKinesisEvent'
+
+operations:
+  publishRecord:
+    action: send
+    channel:
+      $ref: '#/channels/kinesisStreamShard'
+    title: Publish Record to Stream
+    summary: >-
+      A producer writes a data record to a Kinesis data stream shard. Each
+      record includes a data blob (up to 1 MiB), a partition key, and
+      optionally an explicit hash key. The partition key determines which shard
+      receives the record.
+    description: >-
+      Producers publish records using the PutRecord or PutRecords API. Kinesis
+      assigns each record a unique sequence number and distributes records
+      across shards based on the partition key hash. Each shard supports up to
+      1,000 records/sec or 1 MiB/sec of write throughput.
+    messages:
+      - $ref: '#/channels/kinesisStreamShard/messages/kinesisRecord'
+    tags:
+      - name: streaming
+
+  consumeRecordsByPolling:
+    action: receive
+    channel:
+      $ref: '#/channels/kinesisStreamShard'
+    title: Consume Records by Polling (GetRecords)
+    summary: >-
+      A consumer polls for data records from a shard using GetRecords with a
+      shard iterator obtained from GetShardIterator. Each call returns up to
+      10,000 records or 10 MiB.
+    description: >-
+      Polling consumers use the GetShardIterator API to obtain a starting
+      position, then repeatedly call GetRecords to retrieve batches of
+      records. The shard iterator advances automatically. Each shard supports
+      up to 5 GetRecords calls per second, sharing 2 MiB/sec of read
+      throughput among all polling consumers. The consumer must handle
+      checkpointing and iterator management.
+    messages:
+      - $ref: '#/channels/kinesisStreamShard/messages/kinesisRecord'
+    tags:
+      - name: polling
+
+  consumeRecordsByEnhancedFanOut:
+    action: receive
+    channel:
+      $ref: '#/channels/enhancedFanOutSubscription'
+    title: Consume Records via Enhanced Fan-Out (SubscribeToShard)
+    summary: >-
+      A registered consumer receives data records pushed over an HTTP/2
+      connection at a dedicated rate of 2 MiB/sec per shard.
+    description: >-
+      Enhanced fan-out consumers register using RegisterStreamConsumer, then
+      call SubscribeToShard to establish an HTTP/2 connection to a specific
+      shard. Kinesis pushes SubscribeToShardEvent messages containing batches
+      of records over the connection. Each subscription lasts up to 5 minutes.
+      Unlike polling, each enhanced fan-out consumer gets its own dedicated
+      2 MiB/sec read throughput per shard, enabling multiple consumers to read
+      from the same shard simultaneously without contention. Up to 20
+      consumers can be registered per stream.
+    messages:
+      - $ref: '#/channels/enhancedFanOutSubscription/messages/subscribeToShardEvent'
+    tags:
+      - name: enhanced-fan-out
+
+  consumeRecordsByLambda:
+    action: receive
+    channel:
+      $ref: '#/channels/lambdaEventSource'
+    title: Consume Records via AWS Lambda Event Source
+    summary: >-
+      AWS Lambda automatically polls the stream and invokes a function with
+      batches of records from each shard.
+    description: >-
+      When a Kinesis data stream is configured as a Lambda event source, the
+      Lambda service polls each shard and invokes the target function with
+      batches of records. Configurable settings include batch size (up to
+      10,000 records), batch window (up to 5 minutes), starting position,
+      bisect-on-error behavior, retry attempts, and parallelization factor
+      (up to 10 concurrent invocations per shard). Lambda manages
+      checkpointing automatically.
+    messages:
+      - $ref: '#/channels/lambdaEventSource/messages/lambdaKinesisEvent'
+    tags:
+      - name: event-source
+
+components:
+  securitySchemes:
+    awsSigV4:
+      type: httpApiKey
+      name: Authorization
+      in: header
+      description: >-
+        AWS Signature Version 4 authentication. All requests to the Kinesis
+        Data Streams API must be signed with IAM credentials.
+
+  messages:
+    KinesisRecord:
+      name: KinesisRecord
+      title: Kinesis Data Record
+      summary: >-
+        A single data record in a Kinesis data stream. Each record contains a
+        data blob, partition key, and is assigned a unique sequence number and
+        approximate arrival timestamp by the service.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KinesisRecord'
+
+    SubscribeToShardEvent:
+      name: SubscribeToShardEvent
+      title: Subscribe to Shard Event
+      summary: >-
+        An event pushed to an enhanced fan-out consumer over an HTTP/2
+        connection. Contains a batch of data records along with a continuation
+        sequence number and lag metrics.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/SubscribeToShardEvent'
+
+    LambdaKinesisEvent:
+      name: LambdaKinesisEvent
+      title: Lambda Kinesis Event
+      summary: >-
+        The event payload delivered to an AWS Lambda function when a Kinesis
+        data stream is configured as an event source. Contains an array of
+        Kinesis event records with metadata including the event source ARN,
+        region, and event name.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/LambdaKinesisEvent'
+
+  schemas:
+    KinesisRecord:
+      type: object
+      description: >-
+        The unit of data stored in a Kinesis data stream. A record includes a
+        sequence number, approximate arrival timestamp, data blob, partition
+        key, and optionally the encryption type.
+      required:
+        - SequenceNumber
+        - Data
+        - PartitionKey
+      properties:
+        SequenceNumber:
+          type: string
+          pattern: '0|([1-9]\d{0,128})'
+          description: >-
+            The unique identifier of the record within its shard. Sequence
+            numbers increase over time, and each record has a unique sequence
+            number within its shard.
+        ApproximateArrivalTimestamp:
+          type: number
+          format: double
+          description: >-
+            The approximate time that the record was inserted into the stream,
+            as a Unix epoch timestamp in seconds with millisecond precision.
+        Data:
+          type: string
+          format: byte
+          maxLength: 1048576
+          description: >-
+            The data blob. The data is opaque to Kinesis Data Streams, which
+            does not inspect, interpret, or change the data. Base64-encoded
+            when serialized to JSON. Maximum size is 1 MiB.
+        PartitionKey:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: >-
+            Identifies which shard in the stream the data record is assigned
+            to. Partition key is a Unicode string with a maximum length limit
+            of 256 characters.
+        EncryptionType:
+          type: string
+          enum:
+            - NONE
+            - KMS
+          description: >-
+            The encryption type used on the record. If the stream uses
+            server-side encryption, this is set to KMS.
+
+    SubscribeToShardEvent:
+      type: object
+      description: >-
+        After you call SubscribeToShard, Kinesis Data Streams sends events of
+        this type over the HTTP/2 connection to the registered consumer.
+      required:
+        - Records
+        - ContinuationSequenceNumber
+        - MillisBehindLatest
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/KinesisRecord'
+          description: The data records from the shard.
+        ContinuationSequenceNumber:
+          type: string
+          pattern: '0|([1-9]\d{0,128})'
+          description: >-
+            Use this value as the StartingSequenceNumber in the next
+            SubscribeToShard call to continue reading from where you left off.
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: >-
+            The number of milliseconds the read records are from the tip of
+            the stream, indicating how far behind current time the consumer
+            is. A value of 0 indicates the consumer is caught up.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: >-
+            The list of the current shard's child shards, returned only at the
+            end of the current shard after a shard split or merge.
+
+    ChildShard:
+      type: object
+      description: A child shard resulting from a shard split or merge operation.
+      required:
+        - ShardId
+        - ParentShards
+        - HashKeyRange
+      properties:
+        ShardId:
+          type: string
+          minLength: 1
+          maxLength: 128
+          pattern: '[a-zA-Z0-9_.-]+'
+          description: The shard ID of the child shard.
+        ParentShards:
+          type: array
+          items:
+            type: string
+          description: The list of parent shard IDs.
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+        - StartingHashKey
+        - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+
+    LambdaKinesisEvent:
+      type: object
+      description: >-
+        The event payload delivered to a Lambda function by a Kinesis event
+        source mapping. Contains an array of event records with Kinesis data
+        and metadata.
+      required:
+        - Records
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/LambdaKinesisEventRecord'
+          description: An array of Kinesis event records.
+
+    LambdaKinesisEventRecord:
+      type: object
+      description: >-
+        A single Kinesis event record within a Lambda invocation payload.
+        Wraps the Kinesis data record with event source metadata.
+      required:
+        - kinesis
+        - eventSource
+        - eventSourceARN
+        - eventID
+        - eventName
+        - eventVersion
+        - invokeIdentityArn
+        - awsRegion
+      properties:
+        kinesis:
+          $ref: '#/components/schemas/LambdaKinesisData'
+        eventSource:
+          type: string
+          const: 'aws:kinesis'
+          description: The AWS service that is the source of the event.
+        eventSourceARN:
+          type: string
+          pattern: 'arn:aws.*:kinesis:.*:\d{12}:stream/\S+'
+          description: The ARN of the Kinesis data stream.
+        eventID:
+          type: string
+          description: >-
+            A unique identifier for the event, composed of the shard ID and
+            sequence number.
+          examples:
+            - 'shardId-000000000001:21269319989652663814458848515492872193'
+        eventName:
+          type: string
+          const: 'aws:kinesis:record'
+          description: The event type identifier.
+        eventVersion:
+          type: string
+          description: The version of the event structure.
+          examples:
+            - '1.0'
+        invokeIdentityArn:
+          type: string
+          description: The ARN of the IAM role used to invoke the Lambda function.
+        awsRegion:
+          type: string
+          description: The AWS region where the event originated.
+          examples:
+            - us-east-1
+
+    LambdaKinesisData:
+      type: object
+      description: >-
+        The Kinesis-specific data within a Lambda event record, containing the
+        data blob, partition key, sequence information, and arrival timestamp.
+      required:
+        - data
+        - partitionKey
+        - sequenceNumber
+        - kinesisSchemaVersion
+      properties:
+        kinesisSchemaVersion:
+          type: string
+          description: The Kinesis schema version for this record.
+          examples:
+            - '1.0'
+        partitionKey:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: The partition key for the record.
+        sequenceNumber:
+          type: string
+          description: The unique sequence number for the record within the shard.
+        data:
+          type: string
+          format: byte
+          description: >-
+            The data blob, Base64-encoded. Your Lambda function must decode
+            this value to access the original data.
+        approximateArrivalTimestamp:
+          type: number
+          format: double
+          description: >-
+            The approximate time that the record was inserted into the stream,
+            as a Unix epoch timestamp.
