@@ -3,7 +3,7 @@ description: Amazon Kinesis makes it easy to collect, process, and analyze real-
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-search/amazon-web-services/main/apis/kinesis.yml
 created: 2024-01-01 00:00:00+00:00
-modified: 2026-03-04 00:00:00+00:00
+modified: '2026-03-16'
 specificationVersion: '0.18'
 tags:
 - Streaming
