@@ -71,7 +71,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.CreateStream:
     post:
       operationId: CreateStream
-      summary: Create a Kinesis data stream
+      summary: Amazon Kinesis Create a Kinesis data stream
       description: >-
         Creates a Kinesis data stream. A stream captures and transports data
         records that are continuously emitted from different data sources or
@@ -107,7 +107,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DeleteStream:
     post:
       operationId: DeleteStream
-      summary: Delete a Kinesis data stream
+      summary: Amazon Kinesis Delete a Kinesis data stream
       description: >-
         Deletes a Kinesis data stream and all its shards and data. You must shut
         down any applications that are operating on the stream before you delete
@@ -142,7 +142,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DescribeStream:
     post:
       operationId: DescribeStream
-      summary: Describe a Kinesis data stream
+      summary: Amazon Kinesis Describe a Kinesis data stream
       description: >-
         Describes the specified Kinesis data stream. The information returned
         includes the stream name, Amazon Resource Name (ARN), creation time,
@@ -180,7 +180,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DescribeStreamSummary:
     post:
       operationId: DescribeStreamSummary
-      summary: Get a summary description of a stream
+      summary: Amazon Kinesis Get a summary description of a stream
       description: >-
         Provides a summarized description of the specified Kinesis data stream
         without the shard list. The information returned includes the stream
@@ -218,7 +218,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.ListStreams:
     post:
       operationId: ListStreams
-      summary: List Kinesis data streams
+      summary: Amazon Kinesis List Kinesis data streams
       description: >-
         Lists your Kinesis data streams. The number of streams may be too large
         to return from a single call to ListStreams. You can limit the number of
@@ -251,7 +251,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.UpdateStreamMode:
     post:
       operationId: UpdateStreamMode
-      summary: Update the capacity mode of a stream
+      summary: Amazon Kinesis Update the capacity mode of a stream
       description: >-
         Updates the capacity mode of the data stream. Currently, in Kinesis Data
         Streams, you can choose between an on-demand capacity mode and a
@@ -284,7 +284,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.ListShards:
     post:
       operationId: ListShards
-      summary: List shards in a stream
+      summary: Amazon Kinesis List shards in a stream
       description: >-
         Lists the shards in a stream and provides information about each shard.
         This operation has a limit of 100 transactions per second per data
@@ -321,7 +321,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.SplitShard:
     post:
       operationId: SplitShard
-      summary: Split a shard into two shards
+      summary: Amazon Kinesis Split a shard into two shards
       description: >-
         Splits a shard into two new shards in the Kinesis data stream, to
         increase the stream's capacity to ingest and transport data.
@@ -356,7 +356,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.MergeShards:
     post:
       operationId: MergeShards
-      summary: Merge two adjacent shards
+      summary: Amazon Kinesis Merge two adjacent shards
       description: >-
         Merges two adjacent shards in a Kinesis data stream and combines them
         into a single shard to reduce the stream's capacity to ingest and
@@ -390,7 +390,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.UpdateShardCount:
     post:
       operationId: UpdateShardCount
-      summary: Update the shard count for a stream
+      summary: Amazon Kinesis Update the shard count for a stream
       description: >-
         Updates the shard count of the specified stream to the specified number
         of shards. This API is only supported for the streams with the
@@ -427,7 +427,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.PutRecord:
     post:
       operationId: PutRecord
-      summary: Write a single data record to a stream
+      summary: Amazon Kinesis Write a single data record to a stream
       description: >-
         Writes a single data record into an Amazon Kinesis data stream. You must
         specify the name or ARN of the stream that captures, stores, and
@@ -468,7 +468,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.PutRecords:
     post:
       operationId: PutRecords
-      summary: Write multiple data records to a stream in a single call
+      summary: Amazon Kinesis Write multiple data records to a stream in a single call
       description: >-
         Writes multiple data records into a Kinesis data stream in a single call
         (also referred to as a PutRecords request). Use this operation to send
@@ -508,7 +508,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.GetShardIterator:
     post:
       operationId: GetShardIterator
-      summary: Get an iterator for reading records from a shard
+      summary: Amazon Kinesis Get an iterator for reading records from a shard
       description: >-
         Gets an Amazon Kinesis shard iterator. A shard iterator expires 5
         minutes after it is returned to the requester. A shard iterator
@@ -547,7 +547,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.GetRecords:
     post:
       operationId: GetRecords
-      summary: Get data records from a shard
+      summary: Amazon Kinesis Get data records from a shard
       description: >-
         Gets data records from a Kinesis data stream's shard. Specify a shard
         iterator using the ShardIterator parameter. The shard iterator specifies
@@ -588,7 +588,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.RegisterStreamConsumer:
     post:
       operationId: RegisterStreamConsumer
-      summary: Register a stream consumer for enhanced fan-out
+      summary: Amazon Kinesis Register a stream consumer for enhanced fan-out
       description: >-
         Registers a consumer with a Kinesis data stream. When you use this
         operation, the consumer you register can then call SubscribeToShard to
@@ -626,7 +626,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DeregisterStreamConsumer:
     post:
       operationId: DeregisterStreamConsumer
-      summary: Deregister a stream consumer
+      summary: Amazon Kinesis Deregister a stream consumer
       description: >-
         To deregister a consumer, provide its ARN. Alternatively, you can
         provide the ARN of the data stream and the name you gave the consumer
@@ -660,7 +660,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DescribeStreamConsumer:
     post:
       operationId: DescribeStreamConsumer
-      summary: Describe a stream consumer
+      summary: Amazon Kinesis Describe a stream consumer
       description: >-
         To get the description of a registered consumer, provide its ARN.
         Alternatively, you can provide the ARN of the data stream and the name
@@ -697,7 +697,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.ListStreamConsumers:
     post:
       operationId: ListStreamConsumers
-      summary: List stream consumers
+      summary: Amazon Kinesis List stream consumers
       description: >-
         Lists the consumers registered to receive data from a stream using
         enhanced fan-out, and provides information about each consumer.
@@ -733,7 +733,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.SubscribeToShard:
     post:
       operationId: SubscribeToShard
-      summary: Subscribe to a shard for enhanced fan-out
+      summary: Amazon Kinesis Subscribe to a shard for enhanced fan-out
       description: >-
         This operation establishes an HTTP/2 connection between the consumer you
         specify in the ConsumerARN parameter and the shard you specify in the
@@ -774,7 +774,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring:
     post:
       operationId: EnableEnhancedMonitoring
-      summary: Enable enhanced shard-level monitoring
+      summary: Amazon Kinesis Enable enhanced shard-level monitoring
       description: >-
         Enables enhanced Kinesis data stream monitoring for shard-level metrics.
       tags:
@@ -803,7 +803,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring:
     post:
       operationId: DisableEnhancedMonitoring
-      summary: Disable enhanced shard-level monitoring
+      summary: Amazon Kinesis Disable enhanced shard-level monitoring
       description: >-
         Disables enhanced Kinesis data stream monitoring for shard-level metrics.
       tags:
@@ -832,7 +832,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.StartStreamEncryption:
     post:
       operationId: StartStreamEncryption
-      summary: Enable server-side encryption for a stream
+      summary: Amazon Kinesis Enable server-side encryption for a stream
       description: >-
         Enables or updates server-side encryption using an AWS KMS key for a
         specified stream. When invoking this API, you must use either the
@@ -859,7 +859,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.StopStreamEncryption:
     post:
       operationId: StopStreamEncryption
-      summary: Disable server-side encryption for a stream
+      summary: Amazon Kinesis Disable server-side encryption for a stream
       description: >-
         Disables server-side encryption for a specified stream. When invoking
         this API, you must use either the StreamARN or the StreamName parameter,
@@ -886,7 +886,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod:
     post:
       operationId: IncreaseStreamRetentionPeriod
-      summary: Increase the data retention period of a stream
+      summary: Amazon Kinesis Increase the data retention period of a stream
       description: >-
         Increases the Kinesis data stream's retention period, which is the
         length of time data records are accessible after they are added to the
@@ -914,7 +914,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod:
     post:
       operationId: DecreaseStreamRetentionPeriod
-      summary: Decrease the data retention period of a stream
+      summary: Amazon Kinesis Decrease the data retention period of a stream
       description: >-
         Decreases the Kinesis data stream's retention period, which is the
         length of time data records are accessible after they are added to the
@@ -941,7 +941,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.AddTagsToStream:
     post:
       operationId: AddTagsToStream
-      summary: Add or update tags for a stream
+      summary: Amazon Kinesis Add or update tags for a stream
       description: >-
         Adds or updates tags for the specified Kinesis data stream. You can
         assign up to 50 tags to a data stream.
@@ -967,7 +967,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.ListTagsForStream:
     post:
       operationId: ListTagsForStream
-      summary: List tags for a stream
+      summary: Amazon Kinesis List tags for a stream
       description: >-
         Lists the tags for the specified Kinesis data stream.
       tags:
@@ -996,7 +996,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.RemoveTagsFromStream:
     post:
       operationId: RemoveTagsFromStream
-      summary: Remove tags from a stream
+      summary: Amazon Kinesis Remove tags from a stream
       description: >-
         Removes tags from the specified Kinesis data stream. Removed tags are
         deleted and cannot be recovered after this operation successfully
@@ -1023,7 +1023,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.PutResourcePolicy:
     post:
       operationId: PutResourcePolicy
-      summary: Attach a resource policy to a stream
+      summary: Amazon Kinesis Attach a resource policy to a stream
       description: >-
         Attaches a resource-based policy to a data stream or registered
         consumer. If you are using an identity other than the root user of the
@@ -1052,7 +1052,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.GetResourcePolicy:
     post:
       operationId: GetResourcePolicy
-      summary: Retrieve a resource policy
+      summary: Amazon Kinesis Retrieve a resource policy
       description: >-
         Returns a policy attached to the specified data stream or consumer.
       tags:
@@ -1081,7 +1081,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DeleteResourcePolicy:
     post:
       operationId: DeleteResourcePolicy
-      summary: Delete a resource policy
+      summary: Amazon Kinesis Delete a resource policy
       description: >-
         Deletes a resource policy attached to the specified data stream or
         consumer. Deleting a resource policy reverts the resource to the default
@@ -1108,7 +1108,7 @@ paths:
   /#X-Amz-Target=Kinesis_20131202.DescribeLimits:
     post:
       operationId: DescribeLimits
-      summary: Describe account shard limits
+      summary: Amazon Kinesis Describe account shard limits
       description: >-
         Describes the shard limits and usage for the account. This operation
         has a limit of one transaction per second per account.
