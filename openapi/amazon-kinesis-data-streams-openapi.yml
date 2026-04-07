@@ -47,26 +47,24 @@ servers:
 security:
   - aws_sigv4: []
 tags:
-  - name: Streams
-    description: Operations for creating, describing, listing, and managing Kinesis data streams.
-  - name: Shards
-    description: Operations for listing, splitting, merging, and managing shards within a stream.
-  - name: Records
-    description: Operations for putting and getting data records to and from a stream.
+  - name: Account
+    description: Operations for describing and updating account-level settings and limits.
   - name: Consumers
     description: >-
       Operations for registering, describing, listing, and deregistering
       enhanced fan-out consumers.
-  - name: Monitoring
-    description: Operations for enabling and disabling enhanced shard-level monitoring.
   - name: Encryption
     description: Operations for starting and stopping server-side encryption on a stream.
-  - name: Tags
-    description: Operations for adding, listing, and removing tags on streams and resources.
+  - name: Monitoring
+    description: Operations for enabling and disabling enhanced shard-level monitoring.
   - name: Policies
     description: Operations for managing resource-based policies on streams.
-  - name: Account
-    description: Operations for describing and updating account-level settings and limits.
+  - name: Records
+    description: Operations for putting and getting data records to and from a stream.
+  - name: Shards
+    description: Operations for listing, splitting, merging, and managing shards within a stream.
+  - name: Streams
+    description: Operations for creating, describing, listing, and managing Kinesis data streams.
 paths:
   /#X-Amz-Target=Kinesis_20131202.CreateStream:
     post:
@@ -945,8 +943,7 @@ paths:
       description: >-
         Adds or updates tags for the specified Kinesis data stream. You can
         assign up to 50 tags to a data stream.
-      tags:
-        - Tags
+      tags: []
       parameters:
         - $ref: '#/components/parameters/X-Amz-Target-AddTagsToStream'
       requestBody:
@@ -970,8 +967,7 @@ paths:
       summary: Amazon Kinesis List tags for a stream
       description: >-
         Lists the tags for the specified Kinesis data stream.
-      tags:
-        - Tags
+      tags: []
       parameters:
         - $ref: '#/components/parameters/X-Amz-Target-ListTagsForStream'
       requestBody:
@@ -1001,8 +997,7 @@ paths:
         Removes tags from the specified Kinesis data stream. Removed tags are
         deleted and cannot be recovered after this operation successfully
         completes.
-      tags:
-        - Tags
+      tags: []
       parameters:
         - $ref: '#/components/parameters/X-Amz-Target-RemoveTagsFromStream'
       requestBody:
