@@ -1,0 +1,6 @@
+{
+  "SequenceNumber": "seq-000000000000",
+  "ApproximateArrivalTimestamp": "2025-03-15T14:30:00Z",
+  "Data": "example-value",
+  "PartitionKey": "partition-1"
+}

@@ -1,0 +1,7 @@
+{
+  "StreamName": "my-data-stream",
+  "StreamARN": "arn:aws:service:us-east-1:123456789012:resource/example",
+  "StreamStatus": "ACTIVE",
+  "RetentionPeriodHours": 24,
+  "StreamCreationTimestamp": "2025-03-15T14:30:00Z"
+}

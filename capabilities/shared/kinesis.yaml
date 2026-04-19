@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha1
+info:
+  label: Amazon Kinesis
+  description: Amazon Kinesis API for managing kinesis resources.
+  tags:
+  - Amazon Kinesis
+  - AWS
+  created: '2026-04-19'
+  modified: '2026-04-19'
+binds:
+- namespace: env
+  keys:
+    AWS_ACCESS_KEY_ID: AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: kinesis
+    baseUri: https://kinesis.us-east-1.amazonaws.com
+    description: Amazon Kinesis service.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{AWS_ACCESS_KEY_ID}}'
+      placement: header
+    resources:
+    - name: streams
+      path: /streams
+      description: Kinesis data stream management
+      operations:
+      - name: createstream
+        method: POST
+        description: Creates a Kinesis data stream.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: liststreams
+        method: GET
+        description: Lists your Kinesis data streams.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: describestreamsummary
+        method: GET
+        description: Provides a summarized description of the specified Kinesis data stream.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8101
+    namespace: kinesis-rest
+    resources: []
+  - type: mcp
+    port: 9101
+    namespace: kinesis-mcp
+    transport: http
+    tools:
+    - name: createstream
+      description: Creates a Kinesis data stream.
+      hints:
+        readOnly: false
+        idempotent: false
+      call: kinesis.createstream
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: liststreams
+      description: Lists your Kinesis data streams.
+      hints:
+        readOnly: true
+        idempotent: true
+      call: kinesis.liststreams
+      outputParameters:
+      - type: object
+        mapping: $.

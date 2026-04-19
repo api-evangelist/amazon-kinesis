@@ -1,297 +1,16 @@
 {
   "@context": {
     "@version": 1.1,
-    "@vocab": "https://docs.aws.amazon.com/kinesis/latest/APIReference/",
-    "kinesis": "https://docs.aws.amazon.com/kinesis/latest/APIReference/",
-    "aws": "https://aws.amazon.com/",
+    "kinesis": "https://kinesis.amazonaws.com/schema/",
     "schema": "https://schema.org/",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
     "dcterms": "http://purl.org/dc/terms/",
-
-    "KinesisDataStream": {
-      "@id": "kinesis:API_CreateStream.html",
-      "@context": {
-        "streamName": {
-          "@id": "kinesis:StreamName",
-          "@type": "xsd:string"
-        },
-        "streamARN": {
-          "@id": "kinesis:StreamARN",
-          "@type": "xsd:string"
-        },
-        "streamStatus": {
-          "@id": "kinesis:StreamStatus",
-          "@type": "xsd:string"
-        },
-        "streamMode": {
-          "@id": "kinesis:StreamMode",
-          "@type": "xsd:string"
-        },
-        "retentionPeriodHours": {
-          "@id": "kinesis:RetentionPeriodHours",
-          "@type": "xsd:integer"
-        },
-        "streamCreationTimestamp": {
-          "@id": "kinesis:StreamCreationTimestamp",
-          "@type": "xsd:double"
-        },
-        "encryptionType": {
-          "@id": "kinesis:EncryptionType",
-          "@type": "xsd:string"
-        },
-        "keyId": {
-          "@id": "kinesis:KeyId",
-          "@type": "xsd:string"
-        },
-        "openShardCount": {
-          "@id": "kinesis:OpenShardCount",
-          "@type": "xsd:integer"
-        },
-        "consumerCount": {
-          "@id": "kinesis:ConsumerCount",
-          "@type": "xsd:integer"
-        },
-        "shards": {
-          "@id": "kinesis:Shards",
-          "@type": "@id",
-          "@container": "@set"
-        },
-        "hasMoreShards": {
-          "@id": "kinesis:HasMoreShards",
-          "@type": "xsd:boolean"
-        },
-        "enhancedMonitoring": {
-          "@id": "kinesis:EnhancedMonitoring",
-          "@type": "@id",
-          "@container": "@set"
-        }
-      }
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "Stream": "kinesis:Stream",
+    "Record": "kinesis:Record",
+    "id": {
+      "@id": "schema:identifier",
+      "@type": "xsd:string"
     },
-
-    "Shard": {
-      "@id": "kinesis:API_ListShards.html",
-      "@context": {
-        "shardId": {
-          "@id": "kinesis:ShardId",
-          "@type": "xsd:string"
-        },
-        "parentShardId": {
-          "@id": "kinesis:ParentShardId",
-          "@type": "xsd:string"
-        },
-        "adjacentParentShardId": {
-          "@id": "kinesis:AdjacentParentShardId",
-          "@type": "xsd:string"
-        },
-        "hashKeyRange": {
-          "@id": "kinesis:HashKeyRange",
-          "@type": "@id"
-        },
-        "sequenceNumberRange": {
-          "@id": "kinesis:SequenceNumberRange",
-          "@type": "@id"
-        }
-      }
-    },
-
-    "HashKeyRange": {
-      "@id": "kinesis:HashKeyRange",
-      "@context": {
-        "startingHashKey": {
-          "@id": "kinesis:StartingHashKey",
-          "@type": "xsd:string"
-        },
-        "endingHashKey": {
-          "@id": "kinesis:EndingHashKey",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "SequenceNumberRange": {
-      "@id": "kinesis:SequenceNumberRange",
-      "@context": {
-        "startingSequenceNumber": {
-          "@id": "kinesis:StartingSequenceNumber",
-          "@type": "xsd:string"
-        },
-        "endingSequenceNumber": {
-          "@id": "kinesis:EndingSequenceNumber",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "Record": {
-      "@id": "kinesis:API_PutRecord.html",
-      "@context": {
-        "sequenceNumber": {
-          "@id": "kinesis:SequenceNumber",
-          "@type": "xsd:string"
-        },
-        "approximateArrivalTimestamp": {
-          "@id": "kinesis:ApproximateArrivalTimestamp",
-          "@type": "xsd:double"
-        },
-        "data": {
-          "@id": "kinesis:Data",
-          "@type": "xsd:base64Binary"
-        },
-        "partitionKey": {
-          "@id": "kinesis:PartitionKey",
-          "@type": "xsd:string"
-        },
-        "explicitHashKey": {
-          "@id": "kinesis:ExplicitHashKey",
-          "@type": "xsd:string"
-        },
-        "encryptionType": {
-          "@id": "kinesis:EncryptionType",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "ChildShard": {
-      "@id": "kinesis:ChildShard",
-      "@context": {
-        "shardId": {
-          "@id": "kinesis:ShardId",
-          "@type": "xsd:string"
-        },
-        "parentShards": {
-          "@id": "kinesis:ParentShards",
-          "@type": "xsd:string",
-          "@container": "@set"
-        },
-        "hashKeyRange": {
-          "@id": "kinesis:HashKeyRange",
-          "@type": "@id"
-        }
-      }
-    },
-
-    "StreamConsumer": {
-      "@id": "kinesis:API_RegisterStreamConsumer.html",
-      "@context": {
-        "consumerName": {
-          "@id": "kinesis:ConsumerName",
-          "@type": "xsd:string"
-        },
-        "consumerARN": {
-          "@id": "kinesis:ConsumerARN",
-          "@type": "xsd:string"
-        },
-        "consumerStatus": {
-          "@id": "kinesis:ConsumerStatus",
-          "@type": "xsd:string"
-        },
-        "consumerCreationTimestamp": {
-          "@id": "kinesis:ConsumerCreationTimestamp",
-          "@type": "xsd:double"
-        },
-        "streamARN": {
-          "@id": "kinesis:StreamARN",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "SubscribeToShardEvent": {
-      "@id": "kinesis:API_SubscribeToShard.html",
-      "@context": {
-        "records": {
-          "@id": "kinesis:Records",
-          "@type": "@id",
-          "@container": "@set"
-        },
-        "continuationSequenceNumber": {
-          "@id": "kinesis:ContinuationSequenceNumber",
-          "@type": "xsd:string"
-        },
-        "millisBehindLatest": {
-          "@id": "kinesis:MillisBehindLatest",
-          "@type": "xsd:integer"
-        },
-        "childShards": {
-          "@id": "kinesis:ChildShards",
-          "@type": "@id",
-          "@container": "@set"
-        }
-      }
-    },
-
-    "StreamModeDetails": {
-      "@id": "kinesis:StreamModeDetails",
-      "@context": {
-        "streamMode": {
-          "@id": "kinesis:StreamMode",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "EnhancedMetrics": {
-      "@id": "kinesis:EnhancedMonitoring",
-      "@context": {
-        "shardLevelMetrics": {
-          "@id": "kinesis:ShardLevelMetrics",
-          "@type": "xsd:string",
-          "@container": "@set"
-        }
-      }
-    },
-
-    "Tag": {
-      "@id": "kinesis:API_AddTagsToStream.html",
-      "@context": {
-        "key": {
-          "@id": "kinesis:TagKey",
-          "@type": "xsd:string"
-        },
-        "value": {
-          "@id": "kinesis:TagValue",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "ResourcePolicy": {
-      "@id": "kinesis:API_PutResourcePolicy.html",
-      "@context": {
-        "resourceARN": {
-          "@id": "kinesis:ResourceARN",
-          "@type": "xsd:string"
-        },
-        "policy": {
-          "@id": "kinesis:Policy",
-          "@type": "xsd:string"
-        }
-      }
-    },
-
-    "AccountLimits": {
-      "@id": "kinesis:API_DescribeLimits.html",
-      "@context": {
-        "shardLimit": {
-          "@id": "kinesis:ShardLimit",
-          "@type": "xsd:integer"
-        },
-        "openShardCount": {
-          "@id": "kinesis:OpenShardCount",
-          "@type": "xsd:integer"
-        },
-        "onDemandStreamCount": {
-          "@id": "kinesis:OnDemandStreamCount",
-          "@type": "xsd:integer"
-        },
-        "onDemandStreamCountLimit": {
-          "@id": "kinesis:OnDemandStreamCountLimit",
-          "@type": "xsd:integer"
-        }
-      }
-    },
-
     "name": {
       "@id": "schema:name",
       "@type": "xsd:string"
@@ -300,21 +19,21 @@
       "@id": "schema:description",
       "@type": "xsd:string"
     },
-    "identifier": {
-      "@id": "schema:identifier",
+    "status": {
+      "@id": "kinesis:status",
       "@type": "xsd:string"
     },
-    "dateCreated": {
+    "arn": {
+      "@id": "kinesis:arn",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
       "@id": "schema:dateCreated",
       "@type": "xsd:dateTime"
     },
-    "provider": {
-      "@id": "schema:provider",
-      "@type": "@id"
-    },
-    "url": {
-      "@id": "schema:url",
-      "@type": "@id"
+    "updatedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
     }
   }
 }

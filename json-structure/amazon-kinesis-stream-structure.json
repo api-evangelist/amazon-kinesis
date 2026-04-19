@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/amazon-kinesis/refs/heads/main/json-structure/amazon-kinesis-stream-structure.json",
+  "name": "Stream",
+  "description": "An Amazon Kinesis data stream.",
+  "type": "object",
+  "properties": {
+    "StreamName": {
+      "type": "string",
+      "description": "The name of the stream.",
+      "example": "my-data-stream"
+    },
+    "StreamARN": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for the stream."
+    },
+    "StreamStatus": {
+      "type": "string",
+      "description": "The current status.",
+      "example": "ACTIVE",
+      "enum": [
+        "CREATING",
+        "DELETING",
+        "ACTIVE",
+        "UPDATING"
+      ]
+    },
+    "RetentionPeriodHours": {
+      "type": "int32",
+      "description": "The current retention period, in hours.",
+      "example": 24
+    },
+    "StreamCreationTimestamp": {
+      "type": "datetime",
+      "description": "The approximate time the stream was created."
+    }
+  }
+}

@@ -1,0 +1,58 @@
+naftiko: 1.0.0-alpha1
+info:
+  label: Amazon Kinesis Workflow
+  description: Unified workflow capability for Amazon Kinesis combining resource management and operations.
+  tags:
+  - Amazon Kinesis
+  - AWS
+  - Workflow
+  created: '2026-04-19'
+  modified: '2026-04-19'
+binds:
+- namespace: env
+  keys:
+    AWS_ACCESS_KEY_ID: AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY
+capability:
+  consumes:
+  - import: kinesis
+    location: ./shared/kinesis.yaml
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: kinesis-api
+    description: REST API for Amazon Kinesis workflow.
+    resources: []
+  - type: mcp
+    port: 9090
+    namespace: kinesis-mcp
+    transport: http
+    description: MCP server for Amazon Kinesis.
+    tools:
+    - name: streams-create-stream
+      description: Creates a Kinesis data stream.
+      hints:
+        readOnly: false
+        idempotent: false
+      call: kinesis.createstream
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: streams-list-streams
+      description: Lists your Kinesis data streams.
+      hints:
+        readOnly: true
+        idempotent: true
+      call: kinesis.liststreams
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: streams-describe-stream-summary
+      description: Provides a summarized description of the specified Kinesis data stream.
+      hints:
+        readOnly: true
+        idempotent: true
+      call: kinesis.describestreamsummary
+      outputParameters:
+      - type: object
+        mapping: $.

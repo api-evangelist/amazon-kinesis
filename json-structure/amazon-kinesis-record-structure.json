@@ -1,7 +1,7 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/api-evangelist/amazon-kinesis/refs/heads/main/json-schema/amazon-kinesis-record-schema.json",
-  "title": "Record",
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/amazon-kinesis/refs/heads/main/json-structure/amazon-kinesis-record-structure.json",
+  "name": "Record",
   "description": "A data record in an Amazon Kinesis data stream.",
   "type": "object",
   "properties": {
@@ -11,9 +11,8 @@
       "example": "seq-000000000000"
     },
     "ApproximateArrivalTimestamp": {
-      "type": "string",
-      "description": "The approximate time the record was inserted.",
-      "format": "date-time"
+      "type": "datetime",
+      "description": "The approximate time the record was inserted."
     },
     "Data": {
       "type": "string",
