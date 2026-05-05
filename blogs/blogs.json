@@ -1,0 +1,19 @@
+{
+  "repo": "amazon-kinesis",
+  "feeds": [
+    {
+      "source": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/",
+      "feed_url": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/feed/",
+      "saved": 10,
+      "title": "Amazon Kinesis \u2013 AWS Big Data Blog"
+    },
+    {
+      "source": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/kinesis-data-firehose/",
+      "feed_url": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/kinesis-data-firehose/feed/",
+      "saved": 10,
+      "title": "Kinesis Data Firehose \u2013 AWS Big Data Blog"
+    }
+  ],
+  "post_count": 20,
+  "fetched": "2026-05-03T23:21:37Z"
+}
