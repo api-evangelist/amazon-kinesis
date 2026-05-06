@@ -4,117 +4,75 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Amazon Kinesis
 providerId: amazon-kinesis
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
 tags:
-  - Analytics
-  - Big Data
-  - Data Processing
-  - Real-Time
-  - Streaming
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Amazon Kinesis API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+  - AWS
+  - Streaming
+  - Kinesis
+description: Amazon Kinesis Data Streams enforces shard-level limits (1 MB/s or 1000 records/s ingest;
+  2 MB/s retrieval) and account/region service-quota limits on the control-plane API. ProvisionedThroughputExceededException
+  signals shard saturation; LimitExceededException signals stream-count quotas. AWS recommends exponential
+  backoff with jitter and the SDK standard retry mode.
+sources:
+  - https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - https://docs.aws.amazon.com/general/latest/gr/api-retries.html
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
+  requestId: x-amzn-RequestId
   retryAfter: Retry-After
-  policy: RateLimit-Policy
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
+  throttled: 400
+  quotaExceeded: 400
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Amazon Kinesis Data Streams
-      - Amazon Data Firehose
-      - Amazon Managed Service for Apache Flink
-      - Amazon Kinesis Video Streams
-      - Amazon Kinesis Video Streams Media
-      - Amazon Kinesis Video Streams Archived Media
-      - Amazon Kinesis Video Signaling Channels
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Amazon Kinesis Data Streams
-      - Amazon Data Firehose
-      - Amazon Managed Service for Apache Flink
-      - Amazon Kinesis Video Streams
-      - Amazon Kinesis Video Streams Media
-      - Amazon Kinesis Video Streams Archived Media
-      - Amazon Kinesis Video Signaling Channels
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Amazon Kinesis Data Streams
-      - Amazon Data Firehose
-      - Amazon Managed Service for Apache Flink
-      - Amazon Kinesis Video Streams
-      - Amazon Kinesis Video Streams Media
-      - Amazon Kinesis Video Streams Archived Media
-      - Amazon Kinesis Video Signaling Channels
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Amazon Kinesis Data Streams
-      - Amazon Data Firehose
-      - Amazon Managed Service for Apache Flink
-      - Amazon Kinesis Video Streams
-      - Amazon Kinesis Video Streams Media
-      - Amazon Kinesis Video Streams Archived Media
-      - Amazon Kinesis Video Signaling Channels
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Amazon Kinesis Data Streams
-      - Amazon Data Firehose
-      - Amazon Managed Service for Apache Flink
-      - Amazon Kinesis Video Streams
-      - Amazon Kinesis Video Streams Media
-      - Amazon Kinesis Video Streams Archived Media
-      - Amazon Kinesis Video Signaling Channels
+  - name: Shard ingest throughput
+    scope: shard
+    metric: bytes_per_second
+    limit: 1048576
+    timeFrame: second
+    notes: Each shard accepts 1 MB/s or 1000 records/s, whichever comes first. PutRecord/PutRecords return
+      ProvisionedThroughputExceededException when exceeded.
+  - name: Shard egress throughput (standard consumer)
+    scope: shard
+    metric: bytes_per_second
+    limit: 2097152
+    timeFrame: second
+    notes: Standard consumers share 2 MB/s per shard total. GetRecords throttles when exceeded.
+  - name: Shard egress throughput (Enhanced Fan-Out consumer)
+    scope: shard/consumer
+    metric: bytes_per_second
+    limit: 2097152
+    timeFrame: second
+    notes: Each EFO consumer gets a dedicated 2 MB/s pipe per shard.
+  - name: GetRecords calls per shard
+    scope: shard
+    metric: requests_per_second
+    limit: 5
+    timeFrame: second
+    notes: Standard consumer GetRecords cap. EFO consumers use SubscribeToShard instead.
+  - name: Streams per account/region
+    scope: account/region
+    metric: varies
+    limit: see Service Quotas console for Kinesis Data Streams
+    notes: Default soft limit; raisable via Service Quotas.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Backoff with jitter
+    description: Use truncated exponential backoff with jitter on ProvisionedThroughputExceededException;
+      AWS SDKs default to standard retry mode.
+  - name: Resharding
+    description: Increase capacity by splitting shards (UpdateShardCount or SplitShard); for unpredictable
+      workloads, switch to On-demand mode.
+  - name: Aggregation via KPL
+    description: Use the Kinesis Producer Library to aggregate records into 1 MB payloads and reduce PUT
+      payload-unit count.
+  - name: Quota increases
+    description: Stream count, shard count, and other soft limits can be raised via Service Quotas or AWS
+      Support.
 maintainers:
-  - FN: Kin Lane
-    url: http://apievangelist.com
+  - name: Kin Lane
     email: kin@apievangelist.com
+    url: https://apievangelist.com
+  - name: Amazon Web Services
+    email: support@aws.amazon.com
+    url: https://aws.amazon.com
