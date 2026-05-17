@@ -248,7 +248,7 @@ common:
   url: https://aws.amazon.com/kinesis/data-streams/pricing/
 - type: Authentication
   url: https://docs.aws.amazon.com/streams/latest/dev/tutorial-stock-data-kplkcl-iam.html
-- type: Status
+- type: StatusPage
   url: https://health.aws.amazon.com/health/status
 - type: TermsOfService
   url: https://aws.amazon.com/service-terms/
@@ -258,7 +258,7 @@ common:
   url: https://portal.aws.amazon.com/billing/signup
 - type: GitHubOrganization
   url: https://github.com/aws
-- type: Stack Overflow
+- type: StackOverflow
   url: https://stackoverflow.com/questions/tagged/amazon-kinesis
 - type: UseCases
   data:
