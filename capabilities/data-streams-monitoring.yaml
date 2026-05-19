@@ -1,0 +1,124 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Monitoring
+  description: 'Amazon Kinesis Data Streams API — Monitoring. 2 operations. Lead operation: Amazon Kinesis Disable enhanced
+    shard-level monitoring. Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Monitoring
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-monitoring
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Monitoring business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring'
+      path: /#X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring
+      operations:
+      - name: disableenhancedmonitoring
+        method: POST
+        description: Amazon Kinesis Disable enhanced shard-level monitoring
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring'
+      path: /#X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring
+      operations:
+      - name: enableenhancedmonitoring
+        method: POST
+        description: Amazon Kinesis Enable enhanced shard-level monitoring
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-monitoring-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Monitoring. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-disableenhancedmonitoring
+      name: x-amz-target-kinesis-20131202-disableenhancedmonitoring
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring.'
+      operations:
+      - method: POST
+        name: disableenhancedmonitoring
+        description: Amazon Kinesis Disable enhanced shard-level monitoring
+        call: data-streams-monitoring.disableenhancedmonitoring
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-enableenhancedmonitoring
+      name: x-amz-target-kinesis-20131202-enableenhancedmonitoring
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring.'
+      operations:
+      - method: POST
+        name: enableenhancedmonitoring
+        description: Amazon Kinesis Enable enhanced shard-level monitoring
+        call: data-streams-monitoring.enableenhancedmonitoring
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-monitoring-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Monitoring. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-disable-enhanced-shard
+      description: Amazon Kinesis Disable enhanced shard-level monitoring
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-monitoring.disableenhancedmonitoring
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-enable-enhanced-shard
+      description: Amazon Kinesis Enable enhanced shard-level monitoring
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-monitoring.enableenhancedmonitoring
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

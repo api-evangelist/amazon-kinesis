@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Account
+  description: 'Amazon Kinesis Data Streams API — Account. 1 operations. Lead operation: Amazon Kinesis Describe account shard
+    limits. Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Account
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-account
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Account business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.DescribeLimits'
+      path: /#X-Amz-Target=Kinesis_20131202.DescribeLimits
+      operations:
+      - name: describelimits
+        method: POST
+        description: Amazon Kinesis Describe account shard limits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-account-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Account. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-describelimits
+      name: x-amz-target-kinesis-20131202-describelimits
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DescribeLimits.'
+      operations:
+      - method: POST
+        name: describelimits
+        description: Amazon Kinesis Describe account shard limits
+        call: data-streams-account.describelimits
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-account-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Account. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-describe-account-shard
+      description: Amazon Kinesis Describe account shard limits
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-account.describelimits
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

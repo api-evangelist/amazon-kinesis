@@ -1,0 +1,124 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Encryption
+  description: 'Amazon Kinesis Data Streams API — Encryption. 2 operations. Lead operation: Amazon Kinesis Enable server-side
+    encryption for a stream. Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Encryption
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-encryption
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Encryption business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.StartStreamEncryption'
+      path: /#X-Amz-Target=Kinesis_20131202.StartStreamEncryption
+      operations:
+      - name: startstreamencryption
+        method: POST
+        description: Amazon Kinesis Enable server-side encryption for a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.StopStreamEncryption'
+      path: /#X-Amz-Target=Kinesis_20131202.StopStreamEncryption
+      operations:
+      - name: stopstreamencryption
+        method: POST
+        description: Amazon Kinesis Disable server-side encryption for a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-encryption-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Encryption. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-startstreamencryption
+      name: x-amz-target-kinesis-20131202-startstreamencryption
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.StartStreamEncryption.'
+      operations:
+      - method: POST
+        name: startstreamencryption
+        description: Amazon Kinesis Enable server-side encryption for a stream
+        call: data-streams-encryption.startstreamencryption
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-stopstreamencryption
+      name: x-amz-target-kinesis-20131202-stopstreamencryption
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.StopStreamEncryption.'
+      operations:
+      - method: POST
+        name: stopstreamencryption
+        description: Amazon Kinesis Disable server-side encryption for a stream
+        call: data-streams-encryption.stopstreamencryption
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-encryption-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Encryption. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-enable-server-side
+      description: Amazon Kinesis Enable server-side encryption for a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-encryption.startstreamencryption
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-disable-server-side
+      description: Amazon Kinesis Disable server-side encryption for a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-encryption.stopstreamencryption
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,208 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Records
+  description: 'Amazon Kinesis Data Streams API — Records. 4 operations. Lead operation: Amazon Kinesis Get data records from
+    a shard. Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Records
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-records
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Records business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.GetRecords'
+      path: /#X-Amz-Target=Kinesis_20131202.GetRecords
+      operations:
+      - name: getrecords
+        method: POST
+        description: Amazon Kinesis Get data records from a shard
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.GetShardIterator'
+      path: /#X-Amz-Target=Kinesis_20131202.GetShardIterator
+      operations:
+      - name: getsharditerator
+        method: POST
+        description: Amazon Kinesis Get an iterator for reading records from a shard
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.PutRecord'
+      path: /#X-Amz-Target=Kinesis_20131202.PutRecord
+      operations:
+      - name: putrecord
+        method: POST
+        description: Amazon Kinesis Write a single data record to a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.PutRecords'
+      path: /#X-Amz-Target=Kinesis_20131202.PutRecords
+      operations:
+      - name: putrecords
+        method: POST
+        description: Amazon Kinesis Write multiple data records to a stream in a single call
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-records-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Records. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-getrecords
+      name: x-amz-target-kinesis-20131202-getrecords
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.GetRecords.'
+      operations:
+      - method: POST
+        name: getrecords
+        description: Amazon Kinesis Get data records from a shard
+        call: data-streams-records.getrecords
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-getsharditerator
+      name: x-amz-target-kinesis-20131202-getsharditerator
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.GetShardIterator.'
+      operations:
+      - method: POST
+        name: getsharditerator
+        description: Amazon Kinesis Get an iterator for reading records from a shard
+        call: data-streams-records.getsharditerator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-putrecord
+      name: x-amz-target-kinesis-20131202-putrecord
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.PutRecord.'
+      operations:
+      - method: POST
+        name: putrecord
+        description: Amazon Kinesis Write a single data record to a stream
+        call: data-streams-records.putrecord
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-putrecords
+      name: x-amz-target-kinesis-20131202-putrecords
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.PutRecords.'
+      operations:
+      - method: POST
+        name: putrecords
+        description: Amazon Kinesis Write multiple data records to a stream in a single call
+        call: data-streams-records.putrecords
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-records-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Records. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-get-data-records
+      description: Amazon Kinesis Get data records from a shard
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: data-streams-records.getrecords
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-get-iterator-reading
+      description: Amazon Kinesis Get an iterator for reading records from a shard
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: data-streams-records.getsharditerator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-write-single-data
+      description: Amazon Kinesis Write a single data record to a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-records.putrecord
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-write-multiple-data
+      description: Amazon Kinesis Write multiple data records to a stream in a single call
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-records.putrecords
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

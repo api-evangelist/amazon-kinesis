@@ -1,0 +1,376 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Streams
+  description: 'Amazon Kinesis Data Streams API — Streams. 8 operations. Lead operation: Amazon Kinesis Create a Kinesis data
+    stream. Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Streams
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-streams
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Streams business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.CreateStream'
+      path: /#X-Amz-Target=Kinesis_20131202.CreateStream
+      operations:
+      - name: createstream
+        method: POST
+        description: Amazon Kinesis Create a Kinesis data stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod'
+      path: /#X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod
+      operations:
+      - name: decreasestreamretentionperiod
+        method: POST
+        description: Amazon Kinesis Decrease the data retention period of a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.DeleteStream'
+      path: /#X-Amz-Target=Kinesis_20131202.DeleteStream
+      operations:
+      - name: deletestream
+        method: POST
+        description: Amazon Kinesis Delete a Kinesis data stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.DescribeStream'
+      path: /#X-Amz-Target=Kinesis_20131202.DescribeStream
+      operations:
+      - name: describestream
+        method: POST
+        description: Amazon Kinesis Describe a Kinesis data stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.DescribeStreamSummary'
+      path: /#X-Amz-Target=Kinesis_20131202.DescribeStreamSummary
+      operations:
+      - name: describestreamsummary
+        method: POST
+        description: Amazon Kinesis Get a summary description of a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod'
+      path: /#X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod
+      operations:
+      - name: increasestreamretentionperiod
+        method: POST
+        description: Amazon Kinesis Increase the data retention period of a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.ListStreams'
+      path: /#X-Amz-Target=Kinesis_20131202.ListStreams
+      operations:
+      - name: liststreams
+        method: POST
+        description: Amazon Kinesis List Kinesis data streams
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: '#X-Amz-Target=Kinesis_20131202.UpdateStreamMode'
+      path: /#X-Amz-Target=Kinesis_20131202.UpdateStreamMode
+      operations:
+      - name: updatestreammode
+        method: POST
+        description: Amazon Kinesis Update the capacity mode of a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-streams-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Streams. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-createstream
+      name: x-amz-target-kinesis-20131202-createstream
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.CreateStream.'
+      operations:
+      - method: POST
+        name: createstream
+        description: Amazon Kinesis Create a Kinesis data stream
+        call: data-streams-streams.createstream
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-decreasestreamretentionperiod
+      name: x-amz-target-kinesis-20131202-decreasestreamretentionperiod
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod.'
+      operations:
+      - method: POST
+        name: decreasestreamretentionperiod
+        description: Amazon Kinesis Decrease the data retention period of a stream
+        call: data-streams-streams.decreasestreamretentionperiod
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-deletestream
+      name: x-amz-target-kinesis-20131202-deletestream
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DeleteStream.'
+      operations:
+      - method: POST
+        name: deletestream
+        description: Amazon Kinesis Delete a Kinesis data stream
+        call: data-streams-streams.deletestream
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-describestream
+      name: x-amz-target-kinesis-20131202-describestream
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DescribeStream.'
+      operations:
+      - method: POST
+        name: describestream
+        description: Amazon Kinesis Describe a Kinesis data stream
+        call: data-streams-streams.describestream
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-describestreamsummary
+      name: x-amz-target-kinesis-20131202-describestreamsummary
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.DescribeStreamSummary.'
+      operations:
+      - method: POST
+        name: describestreamsummary
+        description: Amazon Kinesis Get a summary description of a stream
+        call: data-streams-streams.describestreamsummary
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-increasestreamretentionperiod
+      name: x-amz-target-kinesis-20131202-increasestreamretentionperiod
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod.'
+      operations:
+      - method: POST
+        name: increasestreamretentionperiod
+        description: Amazon Kinesis Increase the data retention period of a stream
+        call: data-streams-streams.increasestreamretentionperiod
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-liststreams
+      name: x-amz-target-kinesis-20131202-liststreams
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.ListStreams.'
+      operations:
+      - method: POST
+        name: liststreams
+        description: Amazon Kinesis List Kinesis data streams
+        call: data-streams-streams.liststreams
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-updatestreammode
+      name: x-amz-target-kinesis-20131202-updatestreammode
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.UpdateStreamMode.'
+      operations:
+      - method: POST
+        name: updatestreammode
+        description: Amazon Kinesis Update the capacity mode of a stream
+        call: data-streams-streams.updatestreammode
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-streams-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Streams. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-create-kinesis-data
+      description: Amazon Kinesis Create a Kinesis data stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.createstream
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-decrease-data-retention
+      description: Amazon Kinesis Decrease the data retention period of a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.decreasestreamretentionperiod
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-delete-kinesis-data
+      description: Amazon Kinesis Delete a Kinesis data stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.deletestream
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-describe-kinesis-data
+      description: Amazon Kinesis Describe a Kinesis data stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.describestream
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-get-summary-description
+      description: Amazon Kinesis Get a summary description of a stream
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.describestreamsummary
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-increase-data-retention
+      description: Amazon Kinesis Increase the data retention period of a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.increasestreamretentionperiod
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-list-kinesis-data
+      description: Amazon Kinesis List Kinesis data streams
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.liststreams
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-update-capacity-mode
+      description: Amazon Kinesis Update the capacity mode of a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-streams.updatestreammode
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

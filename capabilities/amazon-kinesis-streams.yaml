@@ -1,0 +1,300 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis API — Streams
+  description: 'Amazon Kinesis API — Streams. 7 operations. Lead operation: Amazon Kinesis Create Stream. Self-contained Naftiko
+    capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Streams
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: amazon-kinesis-streams
+    baseUri: https://kinesis.us-east-1.amazonaws.com
+    description: Amazon Kinesis API — Streams business capability. Self-contained, no shared references.
+    resources:
+    - name: streams
+      path: /streams
+      operations:
+      - name: createstream
+        method: POST
+        description: Amazon Kinesis Create Stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: liststreams
+        method: GET
+        description: Amazon Kinesis List Streams
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: streams-StreamName
+      path: /streams/{StreamName}
+      operations:
+      - name: deletestream
+        method: DELETE
+        description: Amazon Kinesis Delete Stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: StreamName
+          in: path
+          type: string
+          description: The name of the stream.
+          required: true
+    - name: streams-StreamName-records
+      path: /streams/{StreamName}/records
+      operations:
+      - name: putrecord
+        method: POST
+        description: Amazon Kinesis Put Record
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: StreamName
+          in: path
+          type: string
+          description: The stream name.
+          required: true
+      - name: getrecords
+        method: GET
+        description: Amazon Kinesis Get Records
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: StreamName
+          in: path
+          type: string
+          description: The stream name.
+          required: true
+    - name: streams-StreamName-records-batch
+      path: /streams/{StreamName}/records/batch
+      operations:
+      - name: putrecords
+        method: POST
+        description: Amazon Kinesis Put Records
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: StreamName
+          in: path
+          type: string
+          description: The stream name.
+          required: true
+    - name: streams-StreamName-summary
+      path: /streams/{StreamName}/summary
+      operations:
+      - name: describestreamsummary
+        method: GET
+        description: Amazon Kinesis Describe Stream Summary
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: StreamName
+          in: path
+          type: string
+          description: The name of the stream.
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: amazon-kinesis-streams-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis API — Streams. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/streams
+      name: streams
+      description: REST surface for streams.
+      operations:
+      - method: POST
+        name: createstream
+        description: Amazon Kinesis Create Stream
+        call: amazon-kinesis-streams.createstream
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: liststreams
+        description: Amazon Kinesis List Streams
+        call: amazon-kinesis-streams.liststreams
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/streams/{streamname}
+      name: streams-streamname
+      description: REST surface for streams-StreamName.
+      operations:
+      - method: DELETE
+        name: deletestream
+        description: Amazon Kinesis Delete Stream
+        call: amazon-kinesis-streams.deletestream
+        with:
+          StreamName: rest.StreamName
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/streams/{streamname}/records
+      name: streams-streamname-records
+      description: REST surface for streams-StreamName-records.
+      operations:
+      - method: POST
+        name: putrecord
+        description: Amazon Kinesis Put Record
+        call: amazon-kinesis-streams.putrecord
+        with:
+          StreamName: rest.StreamName
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getrecords
+        description: Amazon Kinesis Get Records
+        call: amazon-kinesis-streams.getrecords
+        with:
+          StreamName: rest.StreamName
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/streams/{streamname}/records/batch
+      name: streams-streamname-records-batch
+      description: REST surface for streams-StreamName-records-batch.
+      operations:
+      - method: POST
+        name: putrecords
+        description: Amazon Kinesis Put Records
+        call: amazon-kinesis-streams.putrecords
+        with:
+          StreamName: rest.StreamName
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/streams/{streamname}/summary
+      name: streams-streamname-summary
+      description: REST surface for streams-StreamName-summary.
+      operations:
+      - method: GET
+        name: describestreamsummary
+        description: Amazon Kinesis Describe Stream Summary
+        call: amazon-kinesis-streams.describestreamsummary
+        with:
+          StreamName: rest.StreamName
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: amazon-kinesis-streams-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis API — Streams. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: amazon-kinesis-create-stream
+      description: Amazon Kinesis Create Stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: amazon-kinesis-streams.createstream
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-list-streams
+      description: Amazon Kinesis List Streams
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: amazon-kinesis-streams.liststreams
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-delete-stream
+      description: Amazon Kinesis Delete Stream
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: amazon-kinesis-streams.deletestream
+      with:
+        StreamName: tools.StreamName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-put-record
+      description: Amazon Kinesis Put Record
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: amazon-kinesis-streams.putrecord
+      with:
+        StreamName: tools.StreamName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-get-records
+      description: Amazon Kinesis Get Records
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: amazon-kinesis-streams.getrecords
+      with:
+        StreamName: tools.StreamName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-put-records
+      description: Amazon Kinesis Put Records
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: amazon-kinesis-streams.putrecords
+      with:
+        StreamName: tools.StreamName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-describe-stream-summary
+      description: Amazon Kinesis Describe Stream Summary
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: amazon-kinesis-streams.describestreamsummary
+      with:
+        StreamName: tools.StreamName
+      outputParameters:
+      - type: object
+        mapping: $.

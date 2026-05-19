@@ -1,0 +1,208 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Amazon Kinesis Data Streams API — Shards
+  description: 'Amazon Kinesis Data Streams API — Shards. 4 operations. Lead operation: Amazon Kinesis List shards in a stream.
+    Self-contained Naftiko capability covering one Amazon Kinesis business surface.'
+  tags:
+  - Amazon Kinesis
+  - Shards
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AMAZON_KINESIS_API_KEY: AMAZON_KINESIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: data-streams-shards
+    baseUri: https://kinesis.{region}.amazonaws.com
+    description: Amazon Kinesis Data Streams API — Shards business capability. Self-contained, no shared references.
+    resources:
+    - name: '#X-Amz-Target=Kinesis_20131202.ListShards'
+      path: /#X-Amz-Target=Kinesis_20131202.ListShards
+      operations:
+      - name: listshards
+        method: POST
+        description: Amazon Kinesis List shards in a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.MergeShards'
+      path: /#X-Amz-Target=Kinesis_20131202.MergeShards
+      operations:
+      - name: mergeshards
+        method: POST
+        description: Amazon Kinesis Merge two adjacent shards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.SplitShard'
+      path: /#X-Amz-Target=Kinesis_20131202.SplitShard
+      operations:
+      - name: splitshard
+        method: POST
+        description: Amazon Kinesis Split a shard into two shards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: '#X-Amz-Target=Kinesis_20131202.UpdateShardCount'
+      path: /#X-Amz-Target=Kinesis_20131202.UpdateShardCount
+      operations:
+      - name: updateshardcount
+        method: POST
+        description: Amazon Kinesis Update the shard count for a stream
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.AMAZON_KINESIS_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: data-streams-shards-rest
+    port: 8080
+    description: REST adapter for Amazon Kinesis Data Streams API — Shards. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/x-amz-target-kinesis-20131202-listshards
+      name: x-amz-target-kinesis-20131202-listshards
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.ListShards.'
+      operations:
+      - method: POST
+        name: listshards
+        description: Amazon Kinesis List shards in a stream
+        call: data-streams-shards.listshards
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-mergeshards
+      name: x-amz-target-kinesis-20131202-mergeshards
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.MergeShards.'
+      operations:
+      - method: POST
+        name: mergeshards
+        description: Amazon Kinesis Merge two adjacent shards
+        call: data-streams-shards.mergeshards
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-splitshard
+      name: x-amz-target-kinesis-20131202-splitshard
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.SplitShard.'
+      operations:
+      - method: POST
+        name: splitshard
+        description: Amazon Kinesis Split a shard into two shards
+        call: data-streams-shards.splitshard
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/x-amz-target-kinesis-20131202-updateshardcount
+      name: x-amz-target-kinesis-20131202-updateshardcount
+      description: 'REST surface for #X-Amz-Target=Kinesis_20131202.UpdateShardCount.'
+      operations:
+      - method: POST
+        name: updateshardcount
+        description: Amazon Kinesis Update the shard count for a stream
+        call: data-streams-shards.updateshardcount
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: data-streams-shards-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Amazon Kinesis Data Streams API — Shards. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: amazon-kinesis-list-shards-stream
+      description: Amazon Kinesis List shards in a stream
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: data-streams-shards.listshards
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-merge-two-adjacent
+      description: Amazon Kinesis Merge two adjacent shards
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-shards.mergeshards
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-split-shard-two
+      description: Amazon Kinesis Split a shard into two shards
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-shards.splitshard
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: amazon-kinesis-update-shard-count
+      description: Amazon Kinesis Update the shard count for a stream
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: data-streams-shards.updateshardcount
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
