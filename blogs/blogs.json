@@ -2,12 +2,20 @@
   "repo": "amazon-kinesis",
   "feeds": [
     {
-      "source": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/",
+      "source": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/feed/",
       "feed_url": "https://aws.amazon.com/blogs/big-data/category/analytics/amazon-kinesis/feed/",
-      "title": "Amazon Kinesis \u2013 AWS Big Data Blog",
-      "saved": 20
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://aws.amazon.com/kinesis/data-streams/faqs/",
+      "feed_url": "https://aws.amazon.com/kinesis/data-streams/faqs/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
   "post_count": 40,
-  "fetched": "2026-05-17T20:20:35Z"
+  "fetched": "2026-06-01T23:35:02Z"
 }
