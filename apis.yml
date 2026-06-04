@@ -241,6 +241,33 @@ apis:
   - type: JSONLD
     url: json-ld/amazon-kinesis-context.jsonld
 common:
+- type: ArazzoWorkflows
+  url: arazzo/
+  workflows:
+  - url: arazzo/amazon-kinesis-create-and-activate-stream-workflow.yml
+    name: Amazon Kinesis Create and Activate Stream
+    summary: Create a Kinesis data stream and poll until it reaches ACTIVE status.
+  - url: arazzo/amazon-kinesis-create-stream-and-put-record-workflow.yml
+    name: Amazon Kinesis Create Stream and Put First Record
+    summary: Create a stream, wait until it is ACTIVE, then write the first data record.
+  - url: arazzo/amazon-kinesis-deregister-consumer-and-delete-stream-workflow.yml
+    name: Amazon Kinesis Deregister Consumer and Delete Stream
+    summary: Deregister an enhanced fan-out consumer, confirm the stream, then delete it.
+  - url: arazzo/amazon-kinesis-list-shards-and-read-from-first-workflow.yml
+    name: Amazon Kinesis List Shards and Read From First
+    summary: List a stream's shards, then read from the first shard from the trim horizon.
+  - url: arazzo/amazon-kinesis-put-record-and-read-at-sequence-workflow.yml
+    name: Amazon Kinesis Put Record and Read At Sequence
+    summary: Write one record, then read it back starting at its exact sequence number.
+  - url: arazzo/amazon-kinesis-put-records-and-read-back-workflow.yml
+    name: Amazon Kinesis Put Records and Read Back
+    summary: Batch-write records, get a shard iterator, then read the records back.
+  - url: arazzo/amazon-kinesis-register-consumer-and-confirm-workflow.yml
+    name: Amazon Kinesis Register Consumer and Confirm
+    summary: Register an enhanced fan-out consumer and poll until it becomes ACTIVE.
+  - url: arazzo/amazon-kinesis-scale-stream-shard-count-workflow.yml
+    name: Amazon Kinesis Scale Stream Shard Count
+    summary: Resize a provisioned stream's shard count, wait for ACTIVE, then list shards.
 - type: Features
   url: https://aws.amazon.com/kinesis/features/
 - type: FAQ

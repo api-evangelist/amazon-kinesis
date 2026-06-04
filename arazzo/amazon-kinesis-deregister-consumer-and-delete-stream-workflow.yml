@@ -1,0 +1,93 @@
+arazzo: 1.0.1
+info:
+  title: Amazon Kinesis Deregister Consumer and Delete Stream
+  summary: Deregister an enhanced fan-out consumer, confirm the stream, then delete it.
+  description: >-
+    A clean teardown flow for a stream and its consumer. The workflow first
+    deregisters the named enhanced fan-out consumer with
+    DeregisterStreamConsumer, confirms the stream still exists and reads its ARN
+    with DescribeStreamSummary, and then deletes the stream and all its data
+    with DeleteStream. Each step inlines its AWS JSON protocol request,
+    including the required X-Amz-Target header, so the teardown can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: kinesisDataStreamsApi
+  url: ../openapi/amazon-kinesis-data-streams-openapi.yml
+  type: openapi
+workflows:
+- workflowId: deregister-consumer-and-delete-stream
+  summary: Deregister a consumer, confirm the stream, then delete the stream.
+  description: >-
+    Deregisters the consumer by stream ARN and name, reads the stream summary to
+    confirm it before deletion, and deletes the stream with consumer-deletion
+    enforced.
+  inputs:
+    type: object
+    required:
+    - streamName
+    - streamARN
+    - consumerName
+    properties:
+      streamName:
+        type: string
+        description: The name of the Kinesis data stream to delete.
+      streamARN:
+        type: string
+        description: The ARN of the data stream the consumer is registered against.
+      consumerName:
+        type: string
+        description: The name of the consumer to deregister.
+  steps:
+  - stepId: deregisterConsumer
+    description: >-
+      Deregister the enhanced fan-out consumer from the stream by stream ARN and
+      consumer name.
+    operationId: DeregisterStreamConsumer
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.DeregisterStreamConsumer
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamARN: $inputs.streamARN
+        ConsumerName: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: confirmStream
+    description: >-
+      Read the stream summary to confirm the stream exists and capture its
+      status before deleting it.
+    operationId: DescribeStreamSummary
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.DescribeStreamSummary
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      streamStatus: $response.body#/StreamDescriptionSummary/StreamStatus
+      streamARN: $response.body#/StreamDescriptionSummary/StreamARN
+  - stepId: deleteStream
+    description: >-
+      Delete the stream and all its shards and data, enforcing deletion even if
+      consumers remain registered.
+    operationId: DeleteStream
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.DeleteStream
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+        EnforceConsumerDeletion: true
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    deletedStreamARN: $steps.confirmStream.outputs.streamARN

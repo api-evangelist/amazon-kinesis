@@ -1,0 +1,110 @@
+arazzo: 1.0.1
+info:
+  title: Amazon Kinesis Scale Stream Shard Count
+  summary: Resize a provisioned stream's shard count, wait for ACTIVE, then list shards.
+  description: >-
+    Scales a provisioned-mode stream up or down. UpdateShardCount initiates a
+    uniform-scaling resize and the stream transitions to UPDATING; the workflow
+    polls DescribeStreamSummary, looping while UPDATING and proceeding once the
+    stream returns to ACTIVE, then lists the resulting shards with ListShards to
+    confirm the new topology. Each step inlines its AWS JSON protocol request,
+    including the required X-Amz-Target header, so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: kinesisDataStreamsApi
+  url: ../openapi/amazon-kinesis-data-streams-openapi.yml
+  type: openapi
+workflows:
+- workflowId: scale-stream-shard-count
+  summary: Update shard count, poll until ACTIVE, then list the new shards.
+  description: >-
+    Calls UpdateShardCount with UNIFORM_SCALING to the target count, polls
+    DescribeStreamSummary while UPDATING, and once ACTIVE lists the shards to
+    confirm the resize.
+  inputs:
+    type: object
+    required:
+    - streamName
+    - targetShardCount
+    properties:
+      streamName:
+        type: string
+        description: The name of the provisioned Kinesis data stream to resize.
+      targetShardCount:
+        type: integer
+        description: The new number of shards for the stream.
+  steps:
+  - stepId: updateShardCount
+    description: >-
+      Initiate a uniform-scaling resize to the target shard count. The stream
+      transitions to UPDATING.
+    operationId: UpdateShardCount
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.UpdateShardCount
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+        TargetShardCount: $inputs.targetShardCount
+        ScalingType: UNIFORM_SCALING
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      currentShardCount: $response.body#/CurrentShardCount
+      targetShardCount: $response.body#/TargetShardCount
+  - stepId: pollStatus
+    description: >-
+      Poll the stream summary, looping while UPDATING and advancing once the
+      stream is ACTIVE again.
+    operationId: DescribeStreamSummary
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.DescribeStreamSummary
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      streamStatus: $response.body#/StreamDescriptionSummary/StreamStatus
+      openShardCount: $response.body#/StreamDescriptionSummary/OpenShardCount
+    onSuccess:
+    - name: stillUpdating
+      type: goto
+      stepId: pollStatus
+      criteria:
+      - context: $response.body
+        condition: $.StreamDescriptionSummary.StreamStatus == "UPDATING"
+        type: jsonpath
+    - name: nowActive
+      type: goto
+      stepId: listShards
+      criteria:
+      - context: $response.body
+        condition: $.StreamDescriptionSummary.StreamStatus == "ACTIVE"
+        type: jsonpath
+  - stepId: listShards
+    description: >-
+      List the shards after the resize completes to confirm the new shard
+      topology.
+    operationId: ListShards
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.ListShards
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      shards: $response.body#/Shards
+  outputs:
+    openShardCount: $steps.pollStatus.outputs.openShardCount
+    shards: $steps.listShards.outputs.shards

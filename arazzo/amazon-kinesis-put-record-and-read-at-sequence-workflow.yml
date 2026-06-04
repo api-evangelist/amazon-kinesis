@@ -1,0 +1,103 @@
+arazzo: 1.0.1
+info:
+  title: Amazon Kinesis Put Record and Read At Sequence
+  summary: Write one record, then read it back starting at its exact sequence number.
+  description: >-
+    Writes a single record with PutRecord and reads precisely that record back
+    by requesting an AT_SEQUENCE_NUMBER shard iterator anchored to the sequence
+    number PutRecord returned, then calling GetRecords. This pattern is useful
+    for verifying durability of an individual write. Each step inlines its AWS
+    JSON protocol request, including the required X-Amz-Target header, so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: kinesisDataStreamsApi
+  url: ../openapi/amazon-kinesis-data-streams-openapi.yml
+  type: openapi
+workflows:
+- workflowId: put-record-and-read-at-sequence
+  summary: Put a single record, then read it back at its exact sequence number.
+  description: >-
+    Writes one record with PutRecord, gets an AT_SEQUENCE_NUMBER iterator
+    anchored to the returned shard and sequence number, and reads the record
+    back with GetRecords.
+  inputs:
+    type: object
+    required:
+    - streamName
+    - data
+    - partitionKey
+    properties:
+      streamName:
+        type: string
+        description: The name of the Kinesis data stream.
+      data:
+        type: string
+        description: The Base64-encoded data blob to write.
+      partitionKey:
+        type: string
+        description: The partition key used to assign the record to a shard.
+  steps:
+  - stepId: putRecord
+    description: >-
+      Write a single record and capture the shard id and sequence number it was
+      assigned.
+    operationId: PutRecord
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.PutRecord
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+        Data: $inputs.data
+        PartitionKey: $inputs.partitionKey
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      shardId: $response.body#/ShardId
+      sequenceNumber: $response.body#/SequenceNumber
+  - stepId: getShardIterator
+    description: >-
+      Obtain an AT_SEQUENCE_NUMBER iterator anchored exactly to the sequence
+      number of the record just written.
+    operationId: GetShardIterator
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.GetShardIterator
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        StreamName: $inputs.streamName
+        ShardId: $steps.putRecord.outputs.shardId
+        ShardIteratorType: AT_SEQUENCE_NUMBER
+        StartingSequenceNumber: $steps.putRecord.outputs.sequenceNumber
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      shardIterator: $response.body#/ShardIterator
+  - stepId: getRecords
+    description: >-
+      Read from the anchored iterator, returning the record at and after the
+      requested sequence number.
+    operationId: GetRecords
+    parameters:
+    - name: X-Amz-Target
+      in: header
+      value: Kinesis_20131202.GetRecords
+    requestBody:
+      contentType: application/x-amz-json-1.1
+      payload:
+        ShardIterator: $steps.getShardIterator.outputs.shardIterator
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      records: $response.body#/Records
+      nextShardIterator: $response.body#/NextShardIterator
+  outputs:
+    sequenceNumber: $steps.putRecord.outputs.sequenceNumber
+    records: $steps.getRecords.outputs.records
+    nextShardIterator: $steps.getRecords.outputs.nextShardIterator
