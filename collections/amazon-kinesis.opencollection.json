@@ -1,0 +1,143 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis API",
+    "version": "2024-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Streams",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis List Streams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams"
+          },
+          "docs": "Lists your Kinesis data streams."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Create Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams"
+          },
+          "docs": "Creates a Kinesis data stream."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Describe Stream Summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams/:StreamName/summary",
+            "params": [
+              {
+                "name": "StreamName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the stream."
+              }
+            ]
+          },
+          "docs": "Provides a summarized description of the specified Kinesis data stream."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Delete Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams/:StreamName",
+            "params": [
+              {
+                "name": "StreamName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the stream."
+              }
+            ]
+          },
+          "docs": "Deletes a Kinesis data stream and all its shards and data."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Get Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams/:StreamName/records",
+            "params": [
+              {
+                "name": "StreamName",
+                "value": "",
+                "type": "path",
+                "description": "The stream name."
+              }
+            ]
+          },
+          "docs": "Gets data records from a Kinesis data stream shard."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Put Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams/:StreamName/records",
+            "params": [
+              {
+                "name": "StreamName",
+                "value": "",
+                "type": "path",
+                "description": "The stream name."
+              }
+            ]
+          },
+          "docs": "Writes a single data record into an Amazon Kinesis data stream."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Put Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.us-east-1.amazonaws.com/streams/:StreamName/records/batch",
+            "params": [
+              {
+                "name": "StreamName",
+                "value": "",
+                "type": "path",
+                "description": "The stream name."
+              }
+            ]
+          },
+          "docs": "Writes multiple data records into a Kinesis data stream in a single call."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
