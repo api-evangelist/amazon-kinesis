@@ -234,6 +234,14 @@ apis:
       - type: JSONLD
         url: json-ld/amazon-kinesis-context.jsonld
 common:
+  - type: TrustCenter
+    url: security/amazon-kinesis-trust-center.yml
+  - type: VulnerabilityDisclosure
+    url: security/amazon-kinesis-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/amazon-kinesis-domain-security.yml
+  - type: Authentication
+    url: authentication/amazon-kinesis-authentication.yml
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/amazon-kinesis/overview
   - type: Arazzo

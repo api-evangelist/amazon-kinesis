@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/amazon-kinesis-data-streams-openapi.yml, openapi/amazon-kinesis-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: aws_sigv4
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: AWS Signature Version 4 authentication. Requests must be signed with the access
+    key ID and secret access key of an IAM principal.
+  sources:
+  - openapi/amazon-kinesis-data-streams-openapi.yml
+  - openapi/amazon-kinesis-openapi.yml
