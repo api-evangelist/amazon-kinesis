@@ -234,6 +234,8 @@ apis:
       - type: JSONLD
         url: json-ld/amazon-kinesis-context.jsonld
 common:
+  - type: AgenticAccess
+    url: agentic-access/amazon-kinesis-agentic-access.yml
   - type: TrustCenter
     url: security/amazon-kinesis-trust-center.yml
   - type: VulnerabilityDisclosure
