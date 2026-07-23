@@ -1,0 +1,558 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams Account Consumers API
+  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+servers:
+- url: https://kinesis.{region}.amazonaws.com
+  description: Amazon Kinesis Data Streams regional endpoint
+  variables:
+    region:
+      default: us-east-1
+      description: AWS region
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - eu-west-1
+      - eu-west-2
+      - eu-west-3
+      - eu-central-1
+      - eu-north-1
+      - ap-northeast-1
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-south-1
+      - sa-east-1
+      - ca-central-1
+security:
+- aws_sigv4: []
+tags:
+- name: Consumers
+  description: Operations for registering, describing, listing, and deregistering enhanced fan-out consumers.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.RegisterStreamConsumer:
+    post:
+      operationId: RegisterStreamConsumer
+      summary: Amazon Kinesis Register a stream consumer for enhanced fan-out
+      description: Registers a consumer with a Kinesis data stream. When you use this operation, the consumer you register can then call SubscribeToShard to receive data from the stream using enhanced fan-out, at a rate of up to 2 MiB per second for every shard you subscribe to.
+      tags:
+      - Consumers
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-RegisterStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/RegisterStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer registered successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/RegisterStreamConsumerOutput'
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DeregisterStreamConsumer:
+    post:
+      operationId: DeregisterStreamConsumer
+      summary: Amazon Kinesis Deregister a stream consumer
+      description: To deregister a consumer, provide its ARN. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other.
+      tags:
+      - Consumers
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-DeregisterStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DeregisterStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer deregistered successfully.
+        '400':
+          description: Invalid argument or resource limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DescribeStreamConsumer:
+    post:
+      operationId: DescribeStreamConsumer
+      summary: Amazon Kinesis Describe a stream consumer
+      description: To get the description of a registered consumer, provide its ARN. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it.
+      tags:
+      - Consumers
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-DescribeStreamConsumer'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DescribeStreamConsumerInput'
+      responses:
+        '200':
+          description: Consumer description returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/DescribeStreamConsumerOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.ListStreamConsumers:
+    post:
+      operationId: ListStreamConsumers
+      summary: Amazon Kinesis List stream consumers
+      description: Lists the consumers registered to receive data from a stream using enhanced fan-out, and provides information about each consumer.
+      tags:
+      - Consumers
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-ListStreamConsumers'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/ListStreamConsumersInput'
+      responses:
+        '200':
+          description: Consumer list returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ListStreamConsumersOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.SubscribeToShard:
+    post:
+      operationId: SubscribeToShard
+      summary: Amazon Kinesis Subscribe to a shard for enhanced fan-out
+      description: This operation establishes an HTTP/2 connection between the consumer you specify in the ConsumerARN parameter and the shard you specify in the ShardId parameter. After the connection is successfully established, Kinesis Data Streams pushes records from the shard to the consumer over this connection. Before you call this operation, call RegisterStreamConsumer to register the consumer with the data stream. The connection persists for up to 5 minutes.
+      tags:
+      - Consumers
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-SubscribeToShard'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/SubscribeToShardInput'
+      responses:
+        '200':
+          description: Subscription established, event stream opened.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/SubscribeToShardOutput'
+        '400':
+          description: Invalid argument or resource in use.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    SubscribeToShardOutput:
+      type: object
+      required:
+      - EventStream
+      properties:
+        EventStream:
+          type: object
+          description: The event stream that the consumer receives from the shard.
+          properties:
+            SubscribeToShardEvent:
+              $ref: '#/components/schemas/SubscribeToShardEvent'
+    ConsumerDescription:
+      type: object
+      description: Full description of a registered stream consumer.
+      required:
+      - ConsumerName
+      - ConsumerARN
+      - ConsumerStatus
+      - ConsumerCreationTimestamp
+      - StreamARN
+      properties:
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ConsumerStatus:
+          $ref: '#/components/schemas/ConsumerStatus'
+        ConsumerCreationTimestamp:
+          type: number
+          format: double
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    ChildShard:
+      type: object
+      description: A child shard resulting from a shard split or merge.
+      required:
+      - ShardId
+      - ParentShards
+      - HashKeyRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardId'
+          description: The list of parent shard IDs.
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+    RegisterStreamConsumerOutput:
+      type: object
+      required:
+      - Consumer
+      properties:
+        Consumer:
+          $ref: '#/components/schemas/Consumer'
+    ListStreamConsumersInput:
+      type: object
+      required:
+      - StreamARN
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        NextToken:
+          type: string
+        MaxResults:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        StreamCreationTimestamp:
+          type: number
+          format: double
+    SubscribeToShardEvent:
+      type: object
+      description: An event pushed over the HTTP/2 connection to the consumer. Contains the data records from the shard along with metadata.
+      required:
+      - Records
+      - ContinuationSequenceNumber
+      - MillisBehindLatest
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+          description: The data records from the shard.
+        ContinuationSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: The number of milliseconds the read records are from the tip of the stream, indicating how far behind current time the consumer is.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: The list of the child shards of the current shard, returned only at the end of the current shard.
+    ShardIteratorType:
+      type: string
+      enum:
+      - AT_SEQUENCE_NUMBER
+      - AFTER_SEQUENCE_NUMBER
+      - TRIM_HORIZON
+      - LATEST
+      - AT_TIMESTAMP
+      description: Determines how the shard iterator is used to start reading data records from the shard.
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    DescribeStreamConsumerOutput:
+      type: object
+      required:
+      - ConsumerDescription
+      properties:
+        ConsumerDescription:
+          $ref: '#/components/schemas/ConsumerDescription'
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+    RegisterStreamConsumerInput:
+      type: object
+      required:
+      - StreamARN
+      - ConsumerName
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+          pattern: '[a-zA-Z0-9_.-]+'
+          description: For a given Kinesis data stream, each consumer must have a unique name. However, consumer names do not have to be unique across data streams.
+    ConsumerStatus:
+      type: string
+      enum:
+      - CREATING
+      - DELETING
+      - ACTIVE
+      description: The current status of the registered stream consumer.
+    ListStreamConsumersOutput:
+      type: object
+      properties:
+        Consumers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consumer'
+          description: The consumers registered to the data stream.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+    SubscribeToShardInput:
+      type: object
+      required:
+      - ConsumerARN
+      - ShardId
+      - StartingPosition
+      properties:
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        StartingPosition:
+          $ref: '#/components/schemas/StartingPosition'
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    Consumer:
+      type: object
+      description: An object that represents the details of the consumer you registered.
+      required:
+      - ConsumerName
+      - ConsumerARN
+      - ConsumerStatus
+      - ConsumerCreationTimestamp
+      properties:
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+          pattern: '[a-zA-Z0-9_.-]+'
+          description: The name of the consumer.
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ConsumerStatus:
+          $ref: '#/components/schemas/ConsumerStatus'
+        ConsumerCreationTimestamp:
+          type: number
+          format: double
+          description: Timestamp when the consumer was created.
+    ConsumerARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: ^(arn):aws.*:kinesis:.*:\d{12}:.*stream\/[a-zA-Z0-9_.-]+\/consumer\/[a-zA-Z0-9_.-]+:[0-9]+
+      description: The ARN of the registered stream consumer.
+    PartitionKey:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: Determines which shard in the stream the data record is assigned to. Unicode string with a maximum length of 256 characters.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    DescribeStreamConsumerInput:
+      type: object
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    Record:
+      type: object
+      description: The unit of data of the Kinesis data stream.
+      required:
+      - SequenceNumber
+      - Data
+      - PartitionKey
+      properties:
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        ApproximateArrivalTimestamp:
+          type: number
+          format: double
+          description: The approximate time that the record was inserted into the stream.
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob. The data in the blob is both opaque and immutable to Kinesis Data Streams, which does not inspect, interpret, or change the data in the blob in any way. Base64-encoded when serialized.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    StartingPosition:
+      type: object
+      description: The starting position in the data stream from which to start streaming.
+      required:
+      - Type
+      properties:
+        Type:
+          $ref: '#/components/schemas/ShardIteratorType'
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        Timestamp:
+          type: number
+          format: double
+          description: The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP.
+    DeregisterStreamConsumerInput:
+      type: object
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+  parameters:
+    X-Amz-Target-DeregisterStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DeregisterStreamConsumer
+    X-Amz-Target-RegisterStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.RegisterStreamConsumer
+    X-Amz-Target-SubscribeToShard:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.SubscribeToShard
+    X-Amz-Target-ListStreamConsumers:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.ListStreamConsumers
+    X-Amz-Target-DescribeStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DescribeStreamConsumer
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/

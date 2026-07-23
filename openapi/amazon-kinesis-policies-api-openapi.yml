@@ -1,0 +1,206 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams Account Policies API
+  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+servers:
+- url: https://kinesis.{region}.amazonaws.com
+  description: Amazon Kinesis Data Streams regional endpoint
+  variables:
+    region:
+      default: us-east-1
+      description: AWS region
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - eu-west-1
+      - eu-west-2
+      - eu-west-3
+      - eu-central-1
+      - eu-north-1
+      - ap-northeast-1
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-south-1
+      - sa-east-1
+      - ca-central-1
+security:
+- aws_sigv4: []
+tags:
+- name: Policies
+  description: Operations for managing resource-based policies on streams.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.PutResourcePolicy:
+    post:
+      operationId: PutResourcePolicy
+      summary: Amazon Kinesis Attach a resource policy to a stream
+      description: Attaches a resource-based policy to a data stream or registered consumer. If you are using an identity other than the root user of the AWS account that owns the resource, the calling identity must have the PutResourcePolicy permissions on the specified Kinesis Data Streams resource and belong to the owner's account in order to use this API.
+      tags:
+      - Policies
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-PutResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy attached successfully.
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetResourcePolicy:
+    post:
+      operationId: GetResourcePolicy
+      summary: Amazon Kinesis Retrieve a resource policy
+      description: Returns a policy attached to the specified data stream or consumer.
+      tags:
+      - Policies
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-GetResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetResourcePolicyOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DeleteResourcePolicy:
+    post:
+      operationId: DeleteResourcePolicy
+      summary: Amazon Kinesis Delete a resource policy
+      description: Deletes a resource policy attached to the specified data stream or consumer. Deleting a resource policy reverts the resource to the default policy of the account owner.
+      tags:
+      - Policies
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-DeleteResourcePolicy'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DeleteResourcePolicyInput'
+      responses:
+        '200':
+          description: Resource policy deleted successfully.
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    DeleteResourcePolicyInput:
+      type: object
+      required:
+      - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
+    GetResourcePolicyOutput:
+      type: object
+      required:
+      - Policy
+      properties:
+        Policy:
+          type: string
+          description: Details of the resource policy as a JSON string.
+    GetResourcePolicyInput:
+      type: object
+      required:
+      - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
+    PutResourcePolicyInput:
+      type: object
+      required:
+      - ResourceARN
+      - Policy
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The Amazon Resource Name (ARN) of the data stream or consumer.
+        Policy:
+          type: string
+          description: Details of the resource policy as a JSON string. The resource policy must include both the identity policy and the resource policy.
+  parameters:
+    X-Amz-Target-GetResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.GetResourcePolicy
+    X-Amz-Target-PutResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.PutResourcePolicy
+    X-Amz-Target-DeleteResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DeleteResourcePolicy
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/

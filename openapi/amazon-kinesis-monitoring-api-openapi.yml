@@ -1,0 +1,201 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams Account Monitoring API
+  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+servers:
+- url: https://kinesis.{region}.amazonaws.com
+  description: Amazon Kinesis Data Streams regional endpoint
+  variables:
+    region:
+      default: us-east-1
+      description: AWS region
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - eu-west-1
+      - eu-west-2
+      - eu-west-3
+      - eu-central-1
+      - eu-north-1
+      - ap-northeast-1
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-south-1
+      - sa-east-1
+      - ca-central-1
+security:
+- aws_sigv4: []
+tags:
+- name: Monitoring
+  description: Operations for enabling and disabling enhanced shard-level monitoring.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.EnableEnhancedMonitoring:
+    post:
+      operationId: EnableEnhancedMonitoring
+      summary: Amazon Kinesis Enable enhanced shard-level monitoring
+      description: Enables enhanced Kinesis data stream monitoring for shard-level metrics.
+      tags:
+      - Monitoring
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-EnableEnhancedMonitoring'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/EnableEnhancedMonitoringInput'
+      responses:
+        '200':
+          description: Enhanced monitoring enabled.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/EnhancedMonitoringOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.DisableEnhancedMonitoring:
+    post:
+      operationId: DisableEnhancedMonitoring
+      summary: Amazon Kinesis Disable enhanced shard-level monitoring
+      description: Disables enhanced Kinesis data stream monitoring for shard-level metrics.
+      tags:
+      - Monitoring
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-DisableEnhancedMonitoring'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/DisableEnhancedMonitoringInput'
+      responses:
+        '200':
+          description: Enhanced monitoring disabled.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/EnhancedMonitoringOutput'
+        '400':
+          description: Invalid argument or limit exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  parameters:
+    X-Amz-Target-EnableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.EnableEnhancedMonitoring
+    X-Amz-Target-DisableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DisableEnhancedMonitoring
+  schemas:
+    MetricsName:
+      type: string
+      enum:
+      - IncomingBytes
+      - IncomingRecords
+      - OutgoingBytes
+      - OutgoingRecords
+      - WriteProvisionedThroughputExceeded
+      - ReadProvisionedThroughputExceeded
+      - IteratorAgeMilliseconds
+      - ALL
+      description: The name of the shard-level metric.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    EnhancedMonitoringOutput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        CurrentShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+        DesiredShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    EnableEnhancedMonitoringInput:
+      type: object
+      required:
+      - ShardLevelMetrics
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    DisableEnhancedMonitoringInput:
+      type: object
+      required:
+      - ShardLevelMetrics
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/

@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams Account Encryption API
+  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+servers:
+- url: https://kinesis.{region}.amazonaws.com
+  description: Amazon Kinesis Data Streams regional endpoint
+  variables:
+    region:
+      default: us-east-1
+      description: AWS region
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - eu-west-1
+      - eu-west-2
+      - eu-west-3
+      - eu-central-1
+      - eu-north-1
+      - ap-northeast-1
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-south-1
+      - sa-east-1
+      - ca-central-1
+security:
+- aws_sigv4: []
+tags:
+- name: Encryption
+  description: Operations for starting and stopping server-side encryption on a stream.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.StartStreamEncryption:
+    post:
+      operationId: StartStreamEncryption
+      summary: Amazon Kinesis Enable server-side encryption for a stream
+      description: Enables or updates server-side encryption using an AWS KMS key for a specified stream. When invoking this API, you must use either the StreamARN or the StreamName parameter, or both.
+      tags:
+      - Encryption
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-StartStreamEncryption'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/StartStreamEncryptionInput'
+      responses:
+        '200':
+          description: Stream encryption initiated.
+        '400':
+          description: Invalid argument or KMS error.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.StopStreamEncryption:
+    post:
+      operationId: StopStreamEncryption
+      summary: Amazon Kinesis Disable server-side encryption for a stream
+      description: Disables server-side encryption for a specified stream. When invoking this API, you must use either the StreamARN or the StreamName parameter, or both.
+      tags:
+      - Encryption
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-StopStreamEncryption'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/StopStreamEncryptionInput'
+      responses:
+        '200':
+          description: Stream encryption stopped.
+        '400':
+          description: Invalid argument or KMS error.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  parameters:
+    X-Amz-Target-StopStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.StopStreamEncryption
+    X-Amz-Target-StartStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.StartStreamEncryption
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StopStreamEncryptionInput:
+      type: object
+      required:
+      - EncryptionType
+      - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+    StartStreamEncryptionInput:
+      type: object
+      required:
+      - EncryptionType
+      - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The GUID for the customer-managed AWS KMS key to use for encryption. You can specify the key ID, key ARN, alias name, or alias ARN.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/

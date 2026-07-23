@@ -1,0 +1,498 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis Data Streams Account Records API
+  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
+  version: '2013-12-02'
+  contact:
+    name: Amazon Web Services
+    url: https://aws.amazon.com/kinesis/data-streams/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  x-logo:
+    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+servers:
+- url: https://kinesis.{region}.amazonaws.com
+  description: Amazon Kinesis Data Streams regional endpoint
+  variables:
+    region:
+      default: us-east-1
+      description: AWS region
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-1
+      - us-west-2
+      - eu-west-1
+      - eu-west-2
+      - eu-west-3
+      - eu-central-1
+      - eu-north-1
+      - ap-northeast-1
+      - ap-northeast-2
+      - ap-southeast-1
+      - ap-southeast-2
+      - ap-south-1
+      - sa-east-1
+      - ca-central-1
+security:
+- aws_sigv4: []
+tags:
+- name: Records
+  description: Operations for putting and getting data records to and from a stream.
+paths:
+  /#X-Amz-Target=Kinesis_20131202.PutRecord:
+    post:
+      operationId: PutRecord
+      summary: Amazon Kinesis Write a single data record to a stream
+      description: Writes a single data record into an Amazon Kinesis data stream. You must specify the name or ARN of the stream that captures, stores, and transports the data, a partition key, and the data blob itself. The partition key is used by Kinesis Data Streams to distribute data across shards. Kinesis Data Streams segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine the shard to which a given data record belongs.
+      tags:
+      - Records
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-PutRecord'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutRecordInput'
+      responses:
+        '200':
+          description: Record written successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/PutRecordOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.PutRecords:
+    post:
+      operationId: PutRecords
+      summary: Amazon Kinesis Write multiple data records to a stream in a single call
+      description: Writes multiple data records into a Kinesis data stream in a single call (also referred to as a PutRecords request). Use this operation to send data into the stream for data ingestion and processing. Each PutRecords request can support up to 500 records. Each record in the request can be as large as 1 MiB, up to a limit of 5 MiB for the entire request, including partition keys.
+      tags:
+      - Records
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-PutRecords'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/PutRecordsInput'
+      responses:
+        '200':
+          description: Records written (check individual FailedRecordCount).
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/PutRecordsOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetShardIterator:
+    post:
+      operationId: GetShardIterator
+      summary: Amazon Kinesis Get an iterator for reading records from a shard
+      description: Gets an Amazon Kinesis shard iterator. A shard iterator expires 5 minutes after it is returned to the requester. A shard iterator specifies the shard position from which to start reading data records sequentially. The position is specified using the sequence number of a data record in a shard.
+      tags:
+      - Records
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-GetShardIterator'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetShardIteratorInput'
+      responses:
+        '200':
+          description: Shard iterator returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetShardIteratorOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /#X-Amz-Target=Kinesis_20131202.GetRecords:
+    post:
+      operationId: GetRecords
+      summary: Amazon Kinesis Get data records from a shard
+      description: Gets data records from a Kinesis data stream's shard. Specify a shard iterator using the ShardIterator parameter. The shard iterator specifies the position in the shard from which you want to start reading data records sequentially. Each call to GetRecords can return up to 10 MiB of data and up to 10,000 records. Each shard can support up to 5 transactions per second for reads, up to a maximum total data read rate of 2 MiB per second.
+      tags:
+      - Records
+      parameters:
+      - $ref: '#/components/parameters/X-Amz-Target-GetRecords'
+      requestBody:
+        required: true
+        content:
+          application/x-amz-json-1.1:
+            schema:
+              $ref: '#/components/schemas/GetRecordsInput'
+      responses:
+        '200':
+          description: Records returned successfully.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/GetRecordsOutput'
+        '400':
+          description: Invalid argument or provisioned throughput exceeded.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/x-amz-json-1.1:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    GetShardIteratorInput:
+      type: object
+      required:
+      - ShardId
+      - ShardIteratorType
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ShardIteratorType:
+          $ref: '#/components/schemas/ShardIteratorType'
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        Timestamp:
+          type: number
+          format: double
+          description: The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP.
+    PutRecordRequestEntry:
+      type: object
+      description: Represents a record entry for a PutRecords request.
+      required:
+      - Data
+      - PartitionKey
+      properties:
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob to put into the record.
+        ExplicitHashKey:
+          type: string
+          pattern: 0|([1-9]\d{0,38})
+          description: The hash value used to explicitly determine the shard.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+    GetShardIteratorOutput:
+      type: object
+      properties:
+        ShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: The position in the shard from which to start reading data records sequentially. Expires after 5 minutes.
+    ChildShard:
+      type: object
+      description: A child shard resulting from a shard split or merge.
+      required:
+      - ShardId
+      - ParentShards
+      - HashKeyRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardId'
+          description: The list of parent shard IDs.
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    ShardIteratorType:
+      type: string
+      enum:
+      - AT_SEQUENCE_NUMBER
+      - AFTER_SEQUENCE_NUMBER
+      - TRIM_HORIZON
+      - LATEST
+      - AT_TIMESTAMP
+      description: Determines how the shard iterator is used to start reading data records from the shard.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+    PutRecordsInput:
+      type: object
+      required:
+      - Records
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Records:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: '#/components/schemas/PutRecordRequestEntry'
+          description: The records to write to the stream.
+    PutRecordsResultEntry:
+      type: object
+      description: Represents the result of an individual record in a PutRecords response.
+      properties:
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ErrorCode:
+          type: string
+          description: The error code for an individual record result.
+        ErrorMessage:
+          type: string
+          description: The error message for an individual record result.
+    GetRecordsInput:
+      type: object
+      required:
+      - ShardIterator
+      properties:
+        ShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: The position in the shard from which to start reading data records.
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of records to return. Default is 10,000.
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    PutRecordInput:
+      type: object
+      required:
+      - Data
+      - PartitionKey
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob to put into the record. Base64-encoded.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+        ExplicitHashKey:
+          type: string
+          pattern: 0|([1-9]\d{0,38})
+          description: The hash value used to explicitly determine the shard.
+        SequenceNumberForOrdering:
+          $ref: '#/components/schemas/SequenceNumber'
+    PutRecordOutput:
+      type: object
+      required:
+      - ShardId
+      - SequenceNumber
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    PutRecordsOutput:
+      type: object
+      required:
+      - Records
+      properties:
+        FailedRecordCount:
+          type: integer
+          minimum: 0
+          description: The number of records that failed.
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PutRecordsResultEntry'
+          description: Result for each record in the request.
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    PartitionKey:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: Determines which shard in the stream the data record is assigned to. Unicode string with a maximum length of 256 characters.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    GetRecordsOutput:
+      type: object
+      required:
+      - Records
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+          description: The data records retrieved from the shard.
+        NextShardIterator:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: The next position in the shard to start reading. Null if the shard has been closed.
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: The number of milliseconds the GetRecords response is from the tip of the stream. 0 indicates the consumer is caught up.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: The list of the current shard's child shards, returned when the end of the current shard is reached.
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    Record:
+      type: object
+      description: The unit of data of the Kinesis data stream.
+      required:
+      - SequenceNumber
+      - Data
+      - PartitionKey
+      properties:
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        ApproximateArrivalTimestamp:
+          type: number
+          format: double
+          description: The approximate time that the record was inserted into the stream.
+        Data:
+          type: string
+          format: byte
+          minLength: 0
+          maxLength: 1048576
+          description: The data blob. The data in the blob is both opaque and immutable to Kinesis Data Streams, which does not inspect, interpret, or change the data in the blob in any way. Base64-encoded when serialized.
+        PartitionKey:
+          $ref: '#/components/schemas/PartitionKey'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+  parameters:
+    X-Amz-Target-GetShardIterator:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.GetShardIterator
+    X-Amz-Target-PutRecord:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.PutRecord
+    X-Amz-Target-PutRecords:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.PutRecords
+    X-Amz-Target-GetRecords:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.GetRecords
+  securitySchemes:
+    aws_sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+externalDocs:
+  description: Amazon Kinesis Data Streams API Reference
+  url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
