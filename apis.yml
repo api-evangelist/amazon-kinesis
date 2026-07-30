@@ -3,7 +3,20 @@ description: >-
   Amazon Kinesis makes it easy to collect, process, and analyze real-time streaming data so you can get timely insights
   and react quickly to new information. Amazon Kinesis offers key capabilities to cost-effectively process streaming
   data at any scale, along with the flexibility to choose the tools that best suit the requirements of your application.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amazon-kinesis.png
 url: https://raw.githubusercontent.com/api-search/amazon-web-services/main/apis/kinesis.yml
 created: 2024-01-01T00:00:00.000Z
 modified: '2026-05-19'
@@ -15,224 +28,905 @@ tags:
   - Real-Time
   - Streaming
 apis:
-  - name: Amazon Kinesis Data Streams
-    description: >-
-      Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can
-      continuously capture gigabytes of data per second from hundreds of thousands of sources such as website
-      clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking
-      events.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://aws.amazon.com/kinesis/data-streams/
-    baseURL: https://kinesis.amazonaws.com
-    tags:
-      - Data Ingestion
-      - Real-Time
-      - Streams
-    properties:
-      - type: Documentation
-        url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
-      - type: OpenAPI
-        url: openapi/amazon-kinesis-data-streams-openapi.yml
-      - type: AsyncAPI
-        url: asyncapi/amazon-kinesis-streams-asyncapi.yml
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-      - type: OpenAPI (Third-Party)
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
-      - type: Pricing
-        url: https://aws.amazon.com/kinesis/data-streams/pricing/
-      - type: GettingStarted
-        url: https://aws.amazon.com/kinesis/data-streams/getting-started/
-      - type: Documentation
-        url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
-      - type: Features
-        url: https://aws.amazon.com/kinesis/data-streams/features/
-      - type: FAQ
-        url: https://aws.amazon.com/kinesis/data-streams/faqs/
-      - type: APIReference
-        url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
-      - type: RateLimits
-        url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-  - name: Amazon Data Firehose
-    description: >-
-      Amazon Data Firehose (formerly Amazon Kinesis Data Firehose) is the easiest way to reliably load streaming data
-      into data lakes, data stores, and analytics services. It can capture, transform, and deliver streaming data to
-      destinations like Amazon S3, Amazon Redshift, Amazon OpenSearch Service, Snowflake, Splunk, and more.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://aws.amazon.com/kinesis/data-firehose/
-    baseURL: https://firehose.amazonaws.com
-    tags:
-      - Data Loading
-      - ETL
-      - Streaming
-    properties:
-      - type: Documentation
-        url: https://docs.aws.amazon.com/firehose/latest/APIReference/
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/firehose/2015-08-04/openapi.yaml
-      - type: Pricing
-        url: https://aws.amazon.com/kinesis/data-firehose/pricing/
-      - type: GettingStarted
-        url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
-      - type: Documentation
-        url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
-      - type: Features
-        url: https://aws.amazon.com/kinesis/data-firehose/features/
-      - type: FAQ
-        url: https://aws.amazon.com/firehose/faqs/
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-  - name: Amazon Managed Service for Apache Flink
-    description: >-
-      Amazon Managed Service for Apache Flink (formerly Amazon Kinesis Data Analytics) is a fully managed service for
-      processing and analyzing streaming data in real time using Apache Flink. You can build applications using Java,
-      Python, Scala, or SQL to transform and analyze streaming data with sub-second latencies.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://aws.amazon.com/managed-service-apache-flink/
-    baseURL: https://kinesisanalytics.amazonaws.com
-    tags:
-      - Analytics
-      - Apache Flink
-      - SQL
-      - Stream Processing
-    properties:
-      - type: Documentation
-        url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesisanalyticsv2/2018-05-23/openapi.yaml
-      - type: Pricing
-        url: https://aws.amazon.com/managed-service-apache-flink/pricing/
-      - type: GettingStarted
-        url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
-      - type: Documentation
-        url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
-      - type: Features
-        url: https://aws.amazon.com/managed-service-apache-flink/features/
-      - type: FAQ
-        url: https://aws.amazon.com/managed-service-apache-flink/faqs/
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-  - name: Amazon Kinesis Video Streams
-    description: >-
-      Amazon Kinesis Video Streams makes it easy to securely stream video from connected devices to AWS for analytics,
-      machine learning, playback, and other processing. It automatically provisions and elastically scales
-      infrastructure needed to ingest streaming video data from millions of devices.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://aws.amazon.com/kinesis/video-streams/
-    baseURL: https://kinesisvideo.amazonaws.com
-    tags:
-      - IoT
-      - Machine Learning
-      - Streaming
-      - Video
-    properties:
-      - type: Documentation
-        url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesisvideo/2017-09-30/openapi.yaml
-      - type: Pricing
-        url: https://aws.amazon.com/kinesis/video-streams/pricing/
-      - type: GettingStarted
-        url: https://aws.amazon.com/kinesis/video-streams/getting-started/
-      - type: APIReference
-        url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
-      - type: Features
-        url: https://aws.amazon.com/kinesis/video-streams/features/
-      - type: FAQ
-        url: https://aws.amazon.com/kinesis/video-streams/faqs/
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-  - name: Amazon Kinesis Video Streams Media
-    description: >-
-      The Amazon Kinesis Video Streams Media API provides operations for reading and writing media data to and from a
-      Kinesis video stream, enabling real-time media ingestion and consumption.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
-    baseURL: https://kinesisvideo.amazonaws.com
-    tags:
-      - Media
-      - Real-Time
-      - Streaming
-      - Video
-    properties:
-      - type: Documentation
-        url: >-
-          https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis-video-media/2017-09-30/openapi.yaml
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-  - name: Amazon Kinesis Video Streams Archived Media
-    description: >-
-      The Amazon Kinesis Video Streams Archived Media API provides operations for accessing archived video data from
-      Kinesis video streams, including retrieving clips, HLS and DASH streaming session URLs, images, and fragment
-      lists.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: >-
+- aid: amazon-kinesis:amazon-kinesis-account-api
+  name: Amazon Kinesis Account API
+  description: Operations for describing and updating account-level settings and limits.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-account-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
       https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
-    baseURL: https://kinesisvideo.amazonaws.com
-    tags:
-      - Archived Media
-      - DASH
-      - HLS
-      - Playback
-      - Video
-    properties:
-      - type: Documentation
-        url: >-
-          https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis-video-archived-media/2017-09-30/openapi.yaml
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
-  - name: Amazon Kinesis Video Signaling Channels
-    description: >-
-      The Amazon Kinesis Video Signaling Channels API facilitates peer-to-peer WebRTC communication by enabling
-      applications to securely discover each other and exchange connection offers and answers through signaling channels
-      for real-time media streaming.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
-    baseURL: https://kinesisvideo.amazonaws.com
-    tags:
-      - Real-Time
-      - Signaling
-      - Video
-      - WebRTC
-    properties:
-      - type: Documentation
-        url: https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
-      - type: OpenAPI
-        url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis-video-signaling/2019-12-04/openapi.yaml
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-stream-schema.json
-      - type: JSONSchema
-        url: json-schema/amazon-kinesis-record-schema.json
-      - type: JSONLD
-        url: json-ld/amazon-kinesis-context.jsonld
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-consumers-api
+  name: Amazon Kinesis Consumers API
+  description: >-
+    Operations for registering, describing, listing, and deregistering enhanced fan-out consumers.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Consumers
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-consumers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-encryption-api
+  name: Amazon Kinesis Encryption API
+  description: Operations for starting and stopping server-side encryption on a stream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Encryption
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-encryption-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-monitoring-api
+  name: Amazon Kinesis Monitoring API
+  description: Operations for enabling and disabling enhanced shard-level monitoring.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-policies-api
+  name: Amazon Kinesis Policies API
+  description: Operations for managing resource-based policies on streams.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-policies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-records-api
+  name: Amazon Kinesis Records API
+  description: Operations for putting and getting data records to and from a stream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Records
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-records-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-shards-api
+  name: Amazon Kinesis Shards API
+  description: Operations for listing, splitting, merging, and managing shards within a stream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Shards
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-shards-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-streams-api
+  name: Amazon Kinesis Streams API
+  description: Operations for creating, describing, listing, and managing Kinesis data streams.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - Streams
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-streams-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api
+  name: 'Amazon Kinesis #X Amz Target=Kinesis 20131202.AddTagsToStream API'
+  description: >-
+    The #X Amz Target=Kinesis 20131202.AddTagsToStream API from Amazon Kinesis — 1 operation(s) for #x
+    amz target=kinesis 20131202.addtagstostream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - '#X Amz Target=Kinesis 20131202.AddTagsToStream'
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api
+  name: 'Amazon Kinesis #X Amz Target=Kinesis 20131202.ListTagsForStream API'
+  description: >-
+    The #X Amz Target=Kinesis 20131202.ListTagsForStream API from Amazon Kinesis — 1 operation(s) for
+    #x amz target=kinesis 20131202.listtagsforstream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - '#X Amz Target=Kinesis 20131202.ListTagsForStream'
+  properties:
+  - type: OpenAPI
+    url: openapi/amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
+- aid: amazon-kinesis:amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api
+  name: 'Amazon Kinesis #X Amz Target=Kinesis 20131202.RemoveTagsFromStream API'
+  description: >-
+    The #X Amz Target=Kinesis 20131202.RemoveTagsFromStream API from Amazon Kinesis — 1 operation(s) for
+    #x amz target=kinesis 20131202.removetagsfromstream.
+  humanURL: https://aws.amazon.com/kinesis/data-streams/
+  baseURL: https://kinesis.amazonaws.com
+  tags:
+  - '#X Amz Target=Kinesis 20131202.RemoveTagsFromStream'
+  properties:
+  - type: OpenAPI
+    url: >-
+      openapi/amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: AsyncAPI
+    url: asyncapi/amazon-kinesis-streams-asyncapi.yml
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-record-schema.json
+  - type: JSONLD
+    url: json-ld/amazon-kinesis-context.jsonld
+  - type: OpenAPI (Third-Party)
+    url: https://api.apis.guru/v2/specs/amazonaws.com/kinesis/2013-12-02/openapi.yaml
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-streams/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/streams/latest/dev/introduction.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/data-streams/faqs/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+  - type: RateLimits
+    url: https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+  - type: JSONSchema
+    url: json-schema/amazon-kinesis-stream-schema.json
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/APIReference/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/data-firehose/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/data-firehose/getting-started/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/data-firehose/features/
+  - type: FAQ
+    url: https://aws.amazon.com/firehose/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/apiv2/Welcome.html
+  - type: Pricing
+    url: https://aws.amazon.com/managed-service-apache-flink/pricing/
+  - type: GettingStarted
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/getting-started.html
+  - type: Documentation
+    url: https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+  - type: Features
+    url: https://aws.amazon.com/managed-service-apache-flink/features/
+  - type: FAQ
+    url: https://aws.amazon.com/managed-service-apache-flink/faqs/
+  - type: Documentation
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/
+  - type: Pricing
+    url: https://aws.amazon.com/kinesis/video-streams/pricing/
+  - type: GettingStarted
+    url: https://aws.amazon.com/kinesis/video-streams/getting-started/
+  - type: APIReference
+    url: https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Reference.html
+  - type: Features
+    url: https://aws.amazon.com/kinesis/video-streams/features/
+  - type: FAQ
+    url: https://aws.amazon.com/kinesis/video-streams/faqs/
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_Operations_Amazon_Kinesis_Video_Streams_Archived_Media.html
+  - type: Documentation
+    url: >-
+      https://docs.aws.amazon.com/kinesisvideostreams-webrtc-dg/latest/devguide/what-is-kvswebrtc.html
 common:
   - type: AgenticAccess
     url: agentic-access/amazon-kinesis-agentic-access.yml
