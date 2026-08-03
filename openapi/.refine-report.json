@@ -1,0 +1,34 @@
+{
+  "provider": "amazon-kinesis",
+  "sources": [
+    "amazon-kinesis-account-api-openapi.yml",
+    "amazon-kinesis-consumers-api-openapi.yml",
+    "amazon-kinesis-encryption-api-openapi.yml",
+    "amazon-kinesis-monitoring-api-openapi.yml",
+    "amazon-kinesis-policies-api-openapi.yml",
+    "amazon-kinesis-records-api-openapi.yml",
+    "amazon-kinesis-shards-api-openapi.yml",
+    "amazon-kinesis-streams-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml"
+  ],
+  "outputs": [
+    "amazon-kinesis-account-api-openapi.yml",
+    "amazon-kinesis-consumers-api-openapi.yml",
+    "amazon-kinesis-encryption-api-openapi.yml",
+    "amazon-kinesis-monitoring-api-openapi.yml",
+    "amazon-kinesis-policies-api-openapi.yml",
+    "amazon-kinesis-records-api-openapi.yml",
+    "amazon-kinesis-shards-api-openapi.yml",
+    "amazon-kinesis-streams-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

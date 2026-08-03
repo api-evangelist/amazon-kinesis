@@ -1,0 +1,243 @@
+openapi: 3.1.0
+info:
+  title: Amazon Kinesis API
+  description: The Amazon Kinesis API provides programmatic access to manage Kinesis resources.
+  version: '2024-01-01'
+  contact:
+    name: AWS Support
+    url: https://aws.amazon.com/premiumsupport/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  x-logo:
+    url: https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png
+servers:
+- url: https://kinesis.us-east-1.amazonaws.com
+  description: Amazon Kinesis endpoint
+security:
+- sigv4: []
+tags:
+- name: Streams
+  description: Kinesis data stream management
+paths:
+  /streams:
+    post:
+      operationId: CreateStream
+      summary: Amazon Kinesis Create Stream
+      description: Creates a Kinesis data stream.
+      tags:
+      - Streams
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    get:
+      operationId: ListStreams
+      summary: Amazon Kinesis List Streams
+      description: Lists your Kinesis data streams.
+      tags:
+      - Streams
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /streams/{StreamName}/summary:
+    get:
+      operationId: DescribeStreamSummary
+      summary: Amazon Kinesis Describe Stream Summary
+      description: Provides a summarized description of the specified Kinesis data stream.
+      tags:
+      - Streams
+      parameters:
+      - name: StreamName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the stream.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /streams/{StreamName}:
+    delete:
+      operationId: DeleteStream
+      summary: Amazon Kinesis Delete Stream
+      description: Deletes a Kinesis data stream and all its shards and data.
+      tags:
+      - Streams
+      parameters:
+      - name: StreamName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the stream.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /streams/{StreamName}/records:
+    post:
+      operationId: PutRecord
+      summary: Amazon Kinesis Put Record
+      description: Writes a single data record into an Amazon Kinesis data stream.
+      tags:
+      - Streams
+      parameters:
+      - name: StreamName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The stream name.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    get:
+      operationId: GetRecords
+      summary: Amazon Kinesis Get Records
+      description: Gets data records from a Kinesis data stream shard.
+      tags:
+      - Streams
+      parameters:
+      - name: StreamName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The stream name.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /streams/{StreamName}/records/batch:
+    post:
+      operationId: PutRecords
+      summary: Amazon Kinesis Put Records
+      description: Writes multiple data records into a Kinesis data stream in a single call.
+      tags:
+      - Streams
+      parameters:
+      - name: StreamName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The stream name.
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '403':
+          description: Access denied
+        '500':
+          description: Internal server error
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  securitySchemes:
+    sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication
+  schemas:
+    Stream:
+      type: object
+      description: An Amazon Kinesis data stream.
+      properties:
+        StreamName:
+          type: string
+          description: The name of the stream.
+          example: my-data-stream
+        StreamARN:
+          type: string
+          description: The Amazon Resource Name (ARN) for the stream.
+        StreamStatus:
+          type: string
+          description: The current status.
+          example: ACTIVE
+          enum:
+          - CREATING
+          - DELETING
+          - ACTIVE
+          - UPDATING
+        RetentionPeriodHours:
+          type: integer
+          description: The current retention period, in hours.
+          example: 24
+        StreamCreationTimestamp:
+          type: string
+          description: The approximate time the stream was created.
+          format: date-time
+    Record:
+      type: object
+      description: A data record in an Amazon Kinesis data stream.
+      properties:
+        SequenceNumber:
+          type: string
+          description: The unique identifier of the record in the shard.
+          example: seq-000000000000
+        ApproximateArrivalTimestamp:
+          type: string
+          description: The approximate time the record was inserted.
+          format: date-time
+        Data:
+          type: string
+          description: The data blob (base64-encoded).
+        PartitionKey:
+          type: string
+          description: Identifies which shard the data record belongs to.
+          example: partition-1
