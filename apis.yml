@@ -20,7 +20,7 @@ image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amazon-kin
 url: https://raw.githubusercontent.com/api-search/amazon-web-services/main/apis/kinesis.yml
 created: 2024-01-01T00:00:00.000Z
 modified: '2026-05-19'
-specificationVersion: '0.18'
+specificationVersion: '0.23'
 tags:
   - Analytics
   - Big Data
