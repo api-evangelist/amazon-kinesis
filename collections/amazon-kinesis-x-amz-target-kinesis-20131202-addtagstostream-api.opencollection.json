@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis Data Streams Account #X Amz Target=Kinesis 20131202.AddTagsToStream API",
+    "version": "2013-12-02"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "#X Amz Target=Kinesis 20131202.AddTagsToStream",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis Add or update tags for a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.AddTagsToStream",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds or updates tags for the specified Kinesis data stream. You can assign up to 50 tags to a data stream."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

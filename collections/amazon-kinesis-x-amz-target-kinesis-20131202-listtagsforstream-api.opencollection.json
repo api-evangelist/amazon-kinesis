@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis Data Streams Account #X Amz Target=Kinesis 20131202.ListTagsForStream API",
+    "version": "2013-12-02"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "#X Amz Target=Kinesis 20131202.ListTagsForStream",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis List tags for a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.ListTagsForStream",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists the tags for the specified Kinesis data stream."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

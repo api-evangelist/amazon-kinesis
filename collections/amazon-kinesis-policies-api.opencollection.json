@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis Data Streams Account Policies API",
+    "version": "2013-12-02"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis Attach a resource policy to a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.PutResourcePolicy",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Attaches a resource-based policy to a data stream or registered consumer. If you are using an identity other than the root user of the AWS account that owns the resource, the calling identity must have the PutResourcePolicy permissions on the specified Kinesis Data Streams resource and belong to the owner's account in order to use this API."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Retrieve a resource policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.GetResourcePolicy",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a policy attached to the specified data stream or consumer."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Delete a resource policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.DeleteResourcePolicy",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a resource policy attached to the specified data stream or consumer. Deleting a resource policy reverts the resource to the default policy of the account owner."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

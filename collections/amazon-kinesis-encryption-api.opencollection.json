@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis Data Streams Account Encryption API",
+    "version": "2013-12-02"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Encryption",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis Enable server-side encryption for a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.StartStreamEncryption",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enables or updates server-side encryption using an AWS KMS key for a specified stream. When invoking this API, you must use either the StreamARN or the StreamName parameter, or both."
+        },
+        {
+          "info": {
+            "name": "Amazon Kinesis Disable server-side encryption for a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.StopStreamEncryption",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Disables server-side encryption for a specified stream. When invoking this API, you must use either the StreamARN or the StreamName parameter, or both."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amazon Kinesis Data Streams Account #X Amz Target=Kinesis 20131202.RemoveTagsFromStream API",
+    "version": "2013-12-02"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "#X Amz Target=Kinesis 20131202.RemoveTagsFromStream",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Amazon Kinesis Remove tags from a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://kinesis.{region}.amazonaws.com/#X-Amz-Target=Kinesis_20131202.RemoveTagsFromStream",
+            "headers": [
+              {
+                "name": "X-Amz-Target",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes tags from the specified Kinesis data stream. Removed tags are deleted and cannot be recovered after this operation successfully completes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
