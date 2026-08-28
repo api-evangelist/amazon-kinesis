@@ -12,8 +12,8 @@ info:
     and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: kinesisDataStreamsApi
-  url: ../openapi/amazon-kinesis-data-streams-openapi.yml
+- name: consumersApi
+  url: ../openapi/amazon-kinesis-consumers-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: register-consumer-and-confirm

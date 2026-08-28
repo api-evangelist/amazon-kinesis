@@ -12,8 +12,8 @@ info:
     and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: kinesisDataStreamsApi
-  url: ../openapi/amazon-kinesis-data-streams-openapi.yml
+- name: recordsApi
+  url: ../openapi/amazon-kinesis-records-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: put-records-and-read-back
