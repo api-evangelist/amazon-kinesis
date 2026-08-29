@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Streams Account Shards API
+  title: Amazon Kinesis Data Streams Shards API
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -171,35 +171,30 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    SequenceNumberRange:
+      type: object
+      description: The range of possible sequence numbers for the shard.
+      required:
+      - StartingSequenceNumber
+      properties:
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EndingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
     ScalingType:
       type: string
       enum:
       - UNIFORM_SCALING
       description: The scaling type for the UpdateShardCount operation.
-    UpdateShardCountOutput:
-      type: object
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        CurrentShardCount:
-          type: integer
-          description: The current number of shards.
-        TargetShardCount:
-          type: integer
-          description: The updated number of shards.
-    ListShardsOutput:
-      type: object
-      properties:
-        Shards:
-          type: array
-          items:
-            $ref: '#/components/schemas/Shard'
-          description: An array of JSON objects representing shards.
-        NextToken:
-          type: string
-          description: Pagination token for the next call.
     UpdateShardCountInput:
       type: object
       required:
@@ -216,107 +211,6 @@ components:
           description: The new number of shards.
         ScalingType:
           $ref: '#/components/schemas/ScalingType'
-    SplitShardInput:
-      type: object
-      required:
-      - ShardToSplit
-      - NewStartingHashKey
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        ShardToSplit:
-          $ref: '#/components/schemas/ShardId'
-        NewStartingHashKey:
-          type: string
-          description: A hash key value for the starting hash key of one of the child shards created by the split.
-    SequenceNumberRange:
-      type: object
-      description: The range of possible sequence numbers for the shard.
-      required:
-      - StartingSequenceNumber
-      properties:
-        StartingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        EndingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-    SequenceNumber:
-      type: string
-      pattern: 0|([1-9]\d{0,128})
-      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
-    MergeShardsInput:
-      type: object
-      required:
-      - ShardToMerge
-      - AdjacentShardToMerge
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        ShardToMerge:
-          $ref: '#/components/schemas/ShardId'
-        AdjacentShardToMerge:
-          $ref: '#/components/schemas/ShardId'
-    StreamARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    Shard:
-      type: object
-      description: A uniquely identified group of data records in a Kinesis data stream.
-      required:
-      - ShardId
-      - HashKeyRange
-      - SequenceNumberRange
-      properties:
-        ShardId:
-          $ref: '#/components/schemas/ShardId'
-        ParentShardId:
-          $ref: '#/components/schemas/ShardId'
-        AdjacentParentShardId:
-          $ref: '#/components/schemas/ShardId'
-        HashKeyRange:
-          $ref: '#/components/schemas/HashKeyRange'
-        SequenceNumberRange:
-          $ref: '#/components/schemas/SequenceNumberRange'
-    HashKeyRange:
-      type: object
-      description: The range of possible hash key values for the shard.
-      required:
-      - StartingHashKey
-      - EndingHashKey
-      properties:
-        StartingHashKey:
-          type: string
-          description: The starting hash key of the hash key range.
-        EndingHashKey:
-          type: string
-          description: The ending hash key of the hash key range.
-    ShardId:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The unique identifier of the shard within the stream.
     ListShardsInput:
       type: object
       properties:
@@ -352,15 +246,121 @@ components:
             Timestamp:
               type: number
               format: double
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    MergeShardsInput:
+      type: object
+      required:
+      - ShardToMerge
+      - AdjacentShardToMerge
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardToMerge:
+          $ref: '#/components/schemas/ShardId'
+        AdjacentShardToMerge:
+          $ref: '#/components/schemas/ShardId'
+    ListShardsOutput:
+      type: object
+      properties:
+        Shards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shard'
+          description: An array of JSON objects representing shards.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+    UpdateShardCountOutput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        CurrentShardCount:
+          type: integer
+          description: The current number of shards.
+        TargetShardCount:
+          type: integer
+          description: The updated number of shards.
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    SplitShardInput:
+      type: object
+      required:
+      - ShardToSplit
+      - NewStartingHashKey
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardToSplit:
+          $ref: '#/components/schemas/ShardId'
+        NewStartingHashKey:
+          type: string
+          description: A hash key value for the starting hash key of one of the child shards created by the split.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    Shard:
+      type: object
+      description: A uniquely identified group of data records in a Kinesis data stream.
+      required:
+      - ShardId
+      - HashKeyRange
+      - SequenceNumberRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        AdjacentParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+        SequenceNumberRange:
+          $ref: '#/components/schemas/SequenceNumberRange'
   parameters:
-    X-Amz-Target-MergeShards:
+    X-Amz-Target-ListShards:
       name: X-Amz-Target
       in: header
       required: true
       schema:
         type: string
         enum:
-        - Kinesis_20131202.MergeShards
+        - Kinesis_20131202.ListShards
     X-Amz-Target-SplitShard:
       name: X-Amz-Target
       in: header
@@ -377,14 +377,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.UpdateShardCount
-    X-Amz-Target-ListShards:
+    X-Amz-Target-MergeShards:
       name: X-Amz-Target
       in: header
       required: true
       schema:
         type: string
         enum:
-        - Kinesis_20131202.ListShards
+        - Kinesis_20131202.MergeShards
   securitySchemes:
     aws_sigv4:
       type: apiKey

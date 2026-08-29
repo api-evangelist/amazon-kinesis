@@ -1,19 +1,13 @@
 {
   "provider": "amazon-kinesis",
   "sources": [
-    "amazon-kinesis-account-api-openapi.yml",
-    "amazon-kinesis-consumers-api-openapi.yml",
-    "amazon-kinesis-encryption-api-openapi.yml",
-    "amazon-kinesis-monitoring-api-openapi.yml",
-    "amazon-kinesis-policies-api-openapi.yml",
-    "amazon-kinesis-records-api-openapi.yml",
-    "amazon-kinesis-shards-api-openapi.yml",
-    "amazon-kinesis-streams-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml"
+    "_original/amazon-kinesis-data-streams-openapi.yml",
+    "_original/amazon-kinesis-openapi.yml"
   ],
   "outputs": [
+    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml",
     "amazon-kinesis-account-api-openapi.yml",
     "amazon-kinesis-consumers-api-openapi.yml",
     "amazon-kinesis-encryption-api-openapi.yml",
@@ -21,14 +15,34 @@
     "amazon-kinesis-policies-api-openapi.yml",
     "amazon-kinesis-records-api-openapi.yml",
     "amazon-kinesis-shards-api-openapi.yml",
-    "amazon-kinesis-streams-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml",
-    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml"
+    "amazon-kinesis-streams-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "amazon-kinesis-data-streams-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "amazon-kinesis-data-streams-openapi.yml: tagged paths POST /#X-Amz-Target=Kinesis_20131202.AddTagsToStream -> #X Amz Target=Kinesis 20131202.AddTagsToStream",
+    "amazon-kinesis-data-streams-openapi.yml: tagged paths POST /#X-Amz-Target=Kinesis_20131202.ListTagsForStream -> #X Amz Target=Kinesis 20131202.ListTagsForStream",
+    "amazon-kinesis-data-streams-openapi.yml: tagged paths POST /#X-Amz-Target=Kinesis_20131202.RemoveTagsFromStream -> #X Amz Target=Kinesis 20131202.RemoveTagsFromStream",
+    "amazon-kinesis-data-streams-openapi.yml: declared missing tag: #X Amz Target=Kinesis 20131202.AddTagsToStream",
+    "amazon-kinesis-data-streams-openapi.yml: declared missing tag: #X Amz Target=Kinesis 20131202.ListTagsForStream",
+    "amazon-kinesis-data-streams-openapi.yml: declared missing tag: #X Amz Target=Kinesis 20131202.RemoveTagsFromStream",
+    "amazon-kinesis-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'Streams' spans 2 source specs (amazon-kinesis-data-streams-openapi.yml, amazon-kinesis-openapi.yml): per-path servers applied"
+  ],
+  "skipped": [
+    "amazon-kinesis-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-consumers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-encryption-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-monitoring-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-policies-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-records-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-shards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-streams-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-addtagstostream-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-listtagsforstream-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amazon-kinesis-x-amz-target-kinesis-20131202-removetagsfromstream-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

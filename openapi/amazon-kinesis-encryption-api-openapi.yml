@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Streams Account Encryption API
+  title: Amazon Kinesis Data Streams Encryption API
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -90,23 +90,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  parameters:
-    X-Amz-Target-StopStreamEncryption:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.StopStreamEncryption
-    X-Amz-Target-StartStreamEncryption:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.StartStreamEncryption
   schemas:
     ErrorResponse:
       type: object
@@ -117,22 +100,12 @@ components:
         message:
           type: string
           description: A human-readable description of the error.
-    StopStreamEncryptionInput:
-      type: object
-      required:
-      - EncryptionType
-      - KeyId
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        EncryptionType:
-          $ref: '#/components/schemas/EncryptionType'
-        KeyId:
-          type: string
-          minLength: 1
-          maxLength: 2048
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
     StartStreamEncryptionInput:
       type: object
       required:
@@ -150,24 +123,51 @@ components:
           minLength: 1
           maxLength: 2048
           description: The GUID for the customer-managed AWS KMS key to use for encryption. You can specify the key ID, key ARN, alias name, or alias ARN.
-    StreamARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
     EncryptionType:
       type: string
       enum:
       - NONE
       - KMS
       description: The encryption type used on the record or stream.
-    StreamName:
+    StreamARN:
       type: string
       minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    StopStreamEncryptionInput:
+      type: object
+      required:
+      - EncryptionType
+      - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+  parameters:
+    X-Amz-Target-StartStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.StartStreamEncryption
+    X-Amz-Target-StopStreamEncryption:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.StopStreamEncryption
   securitySchemes:
     aws_sigv4:
       type: apiKey

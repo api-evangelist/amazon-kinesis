@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Streams Account Consumers API
+  title: Amazon Kinesis Data Streams Consumers API
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -209,64 +209,36 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    SubscribeToShardOutput:
+    DescribeStreamConsumerOutput:
       type: object
       required:
-      - EventStream
+      - ConsumerDescription
       properties:
-        EventStream:
-          type: object
-          description: The event stream that the consumer receives from the shard.
-          properties:
-            SubscribeToShardEvent:
-              $ref: '#/components/schemas/SubscribeToShardEvent'
-    ConsumerDescription:
+        ConsumerDescription:
+          $ref: '#/components/schemas/ConsumerDescription'
+    ErrorResponse:
       type: object
-      description: Full description of a registered stream consumer.
-      required:
-      - ConsumerName
-      - ConsumerARN
-      - ConsumerStatus
-      - ConsumerCreationTimestamp
-      - StreamARN
       properties:
-        ConsumerName:
+        __type:
           type: string
-          minLength: 1
-          maxLength: 128
-        ConsumerARN:
-          $ref: '#/components/schemas/ConsumerARN'
-        ConsumerStatus:
-          $ref: '#/components/schemas/ConsumerStatus'
-        ConsumerCreationTimestamp:
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StartingPosition:
+      type: object
+      description: The starting position in the data stream from which to start streaming.
+      required:
+      - Type
+      properties:
+        Type:
+          $ref: '#/components/schemas/ShardIteratorType'
+        SequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        Timestamp:
           type: number
           format: double
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-    ChildShard:
-      type: object
-      description: A child shard resulting from a shard split or merge.
-      required:
-      - ShardId
-      - ParentShards
-      - HashKeyRange
-      properties:
-        ShardId:
-          $ref: '#/components/schemas/ShardId'
-        ParentShards:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShardId'
-          description: The list of parent shard IDs.
-        HashKeyRange:
-          $ref: '#/components/schemas/HashKeyRange'
-    RegisterStreamConsumerOutput:
-      type: object
-      required:
-      - Consumer
-      properties:
-        Consumer:
-          $ref: '#/components/schemas/Consumer'
+          description: The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP.
     ListStreamConsumersInput:
       type: object
       required:
@@ -283,56 +255,6 @@ components:
         StreamCreationTimestamp:
           type: number
           format: double
-    SubscribeToShardEvent:
-      type: object
-      description: An event pushed over the HTTP/2 connection to the consumer. Contains the data records from the shard along with metadata.
-      required:
-      - Records
-      - ContinuationSequenceNumber
-      - MillisBehindLatest
-      properties:
-        Records:
-          type: array
-          items:
-            $ref: '#/components/schemas/Record'
-          description: The data records from the shard.
-        ContinuationSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        MillisBehindLatest:
-          type: integer
-          minimum: 0
-          description: The number of milliseconds the read records are from the tip of the stream, indicating how far behind current time the consumer is.
-        ChildShards:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChildShard'
-          description: The list of the child shards of the current shard, returned only at the end of the current shard.
-    ShardIteratorType:
-      type: string
-      enum:
-      - AT_SEQUENCE_NUMBER
-      - AFTER_SEQUENCE_NUMBER
-      - TRIM_HORIZON
-      - LATEST
-      - AT_TIMESTAMP
-      description: Determines how the shard iterator is used to start reading data records from the shard.
-    EncryptionType:
-      type: string
-      enum:
-      - NONE
-      - KMS
-      description: The encryption type used on the record or stream.
-    DescribeStreamConsumerOutput:
-      type: object
-      required:
-      - ConsumerDescription
-      properties:
-        ConsumerDescription:
-          $ref: '#/components/schemas/ConsumerDescription'
-    SequenceNumber:
-      type: string
-      pattern: 0|([1-9]\d{0,128})
-      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
     RegisterStreamConsumerInput:
       type: object
       required:
@@ -347,43 +269,13 @@ components:
           maxLength: 128
           pattern: '[a-zA-Z0-9_.-]+'
           description: For a given Kinesis data stream, each consumer must have a unique name. However, consumer names do not have to be unique across data streams.
-    ConsumerStatus:
-      type: string
-      enum:
-      - CREATING
-      - DELETING
-      - ACTIVE
-      description: The current status of the registered stream consumer.
-    ListStreamConsumersOutput:
-      type: object
-      properties:
-        Consumers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Consumer'
-          description: The consumers registered to the data stream.
-        NextToken:
-          type: string
-          description: Pagination token for the next call.
-    SubscribeToShardInput:
+    RegisterStreamConsumerOutput:
       type: object
       required:
-      - ConsumerARN
-      - ShardId
-      - StartingPosition
+      - Consumer
       properties:
-        ConsumerARN:
-          $ref: '#/components/schemas/ConsumerARN'
-        ShardId:
-          $ref: '#/components/schemas/ShardId'
-        StartingPosition:
-          $ref: '#/components/schemas/StartingPosition'
-    StreamARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
+        Consumer:
+          $ref: '#/components/schemas/Consumer'
     Consumer:
       type: object
       description: An object that represents the details of the consumer you registered.
@@ -407,50 +299,29 @@ components:
           type: number
           format: double
           description: Timestamp when the consumer was created.
-    ConsumerARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: ^(arn):aws.*:kinesis:.*:\d{12}:.*stream\/[a-zA-Z0-9_.-]+\/consumer\/[a-zA-Z0-9_.-]+:[0-9]+
-      description: The ARN of the registered stream consumer.
-    PartitionKey:
-      type: string
-      minLength: 1
-      maxLength: 256
-      description: Determines which shard in the stream the data record is assigned to. Unicode string with a maximum length of 256 characters.
-    ErrorResponse:
+    ConsumerDescription:
       type: object
+      description: Full description of a registered stream consumer.
+      required:
+      - ConsumerName
+      - ConsumerARN
+      - ConsumerStatus
+      - ConsumerCreationTimestamp
+      - StreamARN
       properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    DescribeStreamConsumerInput:
-      type: object
-      properties:
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
         ConsumerName:
           type: string
           minLength: 1
           maxLength: 128
         ConsumerARN:
           $ref: '#/components/schemas/ConsumerARN'
-    HashKeyRange:
-      type: object
-      description: The range of possible hash key values for the shard.
-      required:
-      - StartingHashKey
-      - EndingHashKey
-      properties:
-        StartingHashKey:
-          type: string
-          description: The starting hash key of the hash key range.
-        EndingHashKey:
-          type: string
-          description: The ending hash key of the hash key range.
+        ConsumerStatus:
+          $ref: '#/components/schemas/ConsumerStatus'
+        ConsumerCreationTimestamp:
+          type: number
+          format: double
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
     Record:
       type: object
       description: The unit of data of the Kinesis data stream.
@@ -475,20 +346,6 @@ components:
           $ref: '#/components/schemas/PartitionKey'
         EncryptionType:
           $ref: '#/components/schemas/EncryptionType'
-    StartingPosition:
-      type: object
-      description: The starting position in the data stream from which to start streaming.
-      required:
-      - Type
-      properties:
-        Type:
-          $ref: '#/components/schemas/ShardIteratorType'
-        SequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        Timestamp:
-          type: number
-          format: double
-          description: The timestamp of the data record from which to start reading. Used with shard iterator type AT_TIMESTAMP.
     DeregisterStreamConsumerInput:
       type: object
       properties:
@@ -500,21 +357,164 @@ components:
           maxLength: 128
         ConsumerARN:
           $ref: '#/components/schemas/ConsumerARN'
+    DescribeStreamConsumerInput:
+      type: object
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ConsumerName:
+          type: string
+          minLength: 1
+          maxLength: 128
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+    ShardIteratorType:
+      type: string
+      enum:
+      - AT_SEQUENCE_NUMBER
+      - AFTER_SEQUENCE_NUMBER
+      - TRIM_HORIZON
+      - LATEST
+      - AT_TIMESTAMP
+      description: Determines how the shard iterator is used to start reading data records from the shard.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
     ShardId:
       type: string
       minLength: 1
       maxLength: 128
       pattern: '[a-zA-Z0-9_.-]+'
       description: The unique identifier of the shard within the stream.
+    SubscribeToShardEvent:
+      type: object
+      description: An event pushed over the HTTP/2 connection to the consumer. Contains the data records from the shard along with metadata.
+      required:
+      - Records
+      - ContinuationSequenceNumber
+      - MillisBehindLatest
+      properties:
+        Records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
+          description: The data records from the shard.
+        ContinuationSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        MillisBehindLatest:
+          type: integer
+          minimum: 0
+          description: The number of milliseconds the read records are from the tip of the stream, indicating how far behind current time the consumer is.
+        ChildShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChildShard'
+          description: The list of the child shards of the current shard, returned only at the end of the current shard.
+    SubscribeToShardOutput:
+      type: object
+      required:
+      - EventStream
+      properties:
+        EventStream:
+          type: object
+          description: The event stream that the consumer receives from the shard.
+          properties:
+            SubscribeToShardEvent:
+              $ref: '#/components/schemas/SubscribeToShardEvent'
+    ConsumerStatus:
+      type: string
+      enum:
+      - CREATING
+      - DELETING
+      - ACTIVE
+      description: The current status of the registered stream consumer.
+    ListStreamConsumersOutput:
+      type: object
+      properties:
+        Consumers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Consumer'
+          description: The consumers registered to the data stream.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+    PartitionKey:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: Determines which shard in the stream the data record is assigned to. Unicode string with a maximum length of 256 characters.
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    ChildShard:
+      type: object
+      description: A child shard resulting from a shard split or merge.
+      required:
+      - ShardId
+      - ParentShards
+      - HashKeyRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShards:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShardId'
+          description: The list of parent shard IDs.
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+    SubscribeToShardInput:
+      type: object
+      required:
+      - ConsumerARN
+      - ShardId
+      - StartingPosition
+      properties:
+        ConsumerARN:
+          $ref: '#/components/schemas/ConsumerARN'
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        StartingPosition:
+          $ref: '#/components/schemas/StartingPosition'
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    ConsumerARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: ^(arn):aws.*:kinesis:.*:\d{12}:.*stream\/[a-zA-Z0-9_.-]+\/consumer\/[a-zA-Z0-9_.-]+:[0-9]+
+      description: The ARN of the registered stream consumer.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
   parameters:
-    X-Amz-Target-DeregisterStreamConsumer:
+    X-Amz-Target-ListStreamConsumers:
       name: X-Amz-Target
       in: header
       required: true
       schema:
         type: string
         enum:
-        - Kinesis_20131202.DeregisterStreamConsumer
+        - Kinesis_20131202.ListStreamConsumers
     X-Amz-Target-RegisterStreamConsumer:
       name: X-Amz-Target
       in: header
@@ -531,14 +531,6 @@ components:
         type: string
         enum:
         - Kinesis_20131202.SubscribeToShard
-    X-Amz-Target-ListStreamConsumers:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.ListStreamConsumers
     X-Amz-Target-DescribeStreamConsumer:
       name: X-Amz-Target
       in: header
@@ -547,6 +539,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DescribeStreamConsumer
+    X-Amz-Target-DeregisterStreamConsumer:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DeregisterStreamConsumer
   securitySchemes:
     aws_sigv4:
       type: apiKey

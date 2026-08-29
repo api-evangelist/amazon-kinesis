@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Streams Account Policies API
+  title: Amazon Kinesis Data Streams Policies API
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -119,6 +119,16 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    GetResourcePolicyInput:
+      type: object
+      required:
+      - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
     ErrorResponse:
       type: object
       properties:
@@ -129,24 +139,6 @@ components:
           type: string
           description: A human-readable description of the error.
     DeleteResourcePolicyInput:
-      type: object
-      required:
-      - ResourceARN
-      properties:
-        ResourceARN:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: The ARN of the data stream or consumer.
-    GetResourcePolicyOutput:
-      type: object
-      required:
-      - Policy
-      properties:
-        Policy:
-          type: string
-          description: Details of the resource policy as a JSON string.
-    GetResourcePolicyInput:
       type: object
       required:
       - ResourceARN
@@ -170,15 +162,15 @@ components:
         Policy:
           type: string
           description: Details of the resource policy as a JSON string. The resource policy must include both the identity policy and the resource policy.
+    GetResourcePolicyOutput:
+      type: object
+      required:
+      - Policy
+      properties:
+        Policy:
+          type: string
+          description: Details of the resource policy as a JSON string.
   parameters:
-    X-Amz-Target-GetResourcePolicy:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.GetResourcePolicy
     X-Amz-Target-PutResourcePolicy:
       name: X-Amz-Target
       in: header
@@ -195,6 +187,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DeleteResourcePolicy
+    X-Amz-Target-GetResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.GetResourcePolicy
   securitySchemes:
     aws_sigv4:
       type: apiKey

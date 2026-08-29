@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Streams Account Monitoring API
+  title: Amazon Kinesis Data Streams Monitoring API
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -99,14 +99,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   parameters:
-    X-Amz-Target-EnableEnhancedMonitoring:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.EnableEnhancedMonitoring
     X-Amz-Target-DisableEnhancedMonitoring:
       name: X-Amz-Target
       in: header
@@ -115,7 +107,30 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DisableEnhancedMonitoring
+    X-Amz-Target-EnableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.EnableEnhancedMonitoring
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
     MetricsName:
       type: string
       enum:
@@ -128,15 +143,19 @@ components:
       - IteratorAgeMilliseconds
       - ALL
       description: The name of the shard-level metric.
-    ErrorResponse:
+    DisableEnhancedMonitoringInput:
       type: object
+      required:
+      - ShardLevelMetrics
       properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
     EnhancedMonitoringOutput:
       type: object
       properties:
@@ -165,31 +184,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MetricsName'
-    DisableEnhancedMonitoringInput:
-      type: object
-      required:
-      - ShardLevelMetrics
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        ShardLevelMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsName'
     StreamARN:
       type: string
       minLength: 1
       maxLength: 2048
       pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
       description: The ARN of the Kinesis data stream.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
   securitySchemes:
     aws_sigv4:
       type: apiKey

@@ -1,16 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Amazon Kinesis Data Account Streams API
-  description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
-  version: '2013-12-02'
-  contact:
-    name: Amazon Web Services
-    url: https://aws.amazon.com/kinesis/data-streams/
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
-  x-logo:
-    url: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  title: Amazon Kinesis Streams API
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Streams across 2 of this provider''s published API definitions: amazon-kinesis-data-streams-openapi.yml, amazon-kinesis-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://kinesis.{region}.amazonaws.com
   description: Amazon Kinesis Data Streams regional endpoint
@@ -35,8 +29,8 @@ servers:
       - ap-south-1
       - sa-east-1
       - ca-central-1
-security:
-- aws_sigv4: []
+- url: https://kinesis.us-east-1.amazonaws.com
+  description: Amazon Kinesis endpoint
 tags:
 - name: Streams
   description: Operations for creating, describing, listing, and managing Kinesis data streams.
@@ -71,6 +65,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.DeleteStream:
     post:
       operationId: DeleteStream
@@ -101,6 +121,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.DescribeStream:
     post:
       operationId: DescribeStream
@@ -135,6 +181,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.DescribeStreamSummary:
     post:
       operationId: DescribeStreamSummary
@@ -169,6 +241,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.ListStreams:
     post:
       operationId: ListStreams
@@ -197,6 +295,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.UpdateStreamMode:
     post:
       operationId: UpdateStreamMode
@@ -227,6 +351,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.IncreaseStreamRetentionPeriod:
     post:
       operationId: IncreaseStreamRetentionPeriod
@@ -251,6 +401,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /#X-Amz-Target=Kinesis_20131202.DecreaseStreamRetentionPeriod:
     post:
       operationId: DecreaseStreamRetentionPeriod
@@ -275,6 +451,32 @@ paths:
             application/x-amz-json-1.1:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - aws_sigv4: []
+    servers:
+    - url: https://kinesis.{region}.amazonaws.com
+      description: Amazon Kinesis Data Streams regional endpoint
+      variables:
+        region:
+          default: us-east-1
+          description: AWS region
+          enum:
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+          - eu-west-1
+          - eu-west-2
+          - eu-west-3
+          - eu-central-1
+          - eu-north-1
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-southeast-1
+          - ap-southeast-2
+          - ap-south-1
+          - sa-east-1
+          - ca-central-1
   /streams:
     post:
       operationId: CreateStream
@@ -294,6 +496,8 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
     get:
       operationId: ListStreams
       summary: Amazon Kinesis List Streams
@@ -312,6 +516,11 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
+    servers:
+    - url: https://kinesis.us-east-1.amazonaws.com
+      description: Amazon Kinesis endpoint
   /streams/{StreamName}/summary:
     get:
       operationId: DescribeStreamSummary
@@ -338,6 +547,11 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
+    servers:
+    - url: https://kinesis.us-east-1.amazonaws.com
+      description: Amazon Kinesis endpoint
   /streams/{StreamName}:
     delete:
       operationId: DeleteStream
@@ -364,6 +578,11 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
+    servers:
+    - url: https://kinesis.us-east-1.amazonaws.com
+      description: Amazon Kinesis endpoint
   /streams/{StreamName}/records:
     post:
       operationId: PutRecord
@@ -390,6 +609,8 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
     get:
       operationId: GetRecords
       summary: Amazon Kinesis Get Records
@@ -415,6 +636,11 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
+    servers:
+    - url: https://kinesis.us-east-1.amazonaws.com
+      description: Amazon Kinesis endpoint
   /streams/{StreamName}/records/batch:
     post:
       operationId: PutRecords
@@ -441,72 +667,22 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+      security:
+      - sigv4: []
+    servers:
+    - url: https://kinesis.us-east-1.amazonaws.com
+      description: Amazon Kinesis endpoint
 components:
   schemas:
-    IncreaseStreamRetentionPeriodInput:
-      type: object
-      required:
-      - RetentionPeriodHours
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        RetentionPeriodHours:
-          type: integer
-          minimum: 24
-          maximum: 8760
-          description: The new retention period of the stream, in hours. Max 8760 (365 days).
-    StreamModeDetails:
-      type: object
-      description: The capacity mode details for the data stream.
-      required:
-      - StreamMode
-      properties:
-        StreamMode:
-          $ref: '#/components/schemas/StreamMode'
-    EnhancedMetrics:
-      type: object
-      description: Enhanced shard-level metric details.
-      properties:
-        ShardLevelMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsName'
-          description: List of shard-level metrics currently enabled.
-    EncryptionType:
-      type: string
-      enum:
-      - NONE
-      - KMS
-      description: The encryption type used on the record or stream.
-    ListStreamsInput:
+    ErrorResponse:
       type: object
       properties:
-        Limit:
-          type: integer
-          minimum: 1
-          maximum: 10000
-          description: The maximum number of streams to list.
-        ExclusiveStartStreamName:
-          $ref: '#/components/schemas/StreamName'
-        NextToken:
+        __type:
           type: string
-          description: Pagination token.
-    SequenceNumberRange:
-      type: object
-      description: The range of possible sequence numbers for the shard.
-      required:
-      - StartingSequenceNumber
-      properties:
-        StartingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        EndingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-    SequenceNumber:
-      type: string
-      pattern: 0|([1-9]\d{0,128})
-      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
     CreateStreamInput:
       type: object
       required:
@@ -526,12 +702,58 @@ components:
             type: string
             maxLength: 256
           description: A set of up to 50 key-value pairs for tagging the stream.
-    StreamMode:
-      type: string
-      enum:
-      - PROVISIONED
-      - ON_DEMAND
-      description: Specifies the capacity mode to which you want to set your data stream. PROVISIONED requires you to set ShardCount; ON_DEMAND automatically manages the number of shards.
+    SequenceNumberRange:
+      type: object
+      description: The range of possible sequence numbers for the shard.
+      required:
+      - StartingSequenceNumber
+      properties:
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EndingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+    ListStreamsOutput:
+      type: object
+      required:
+      - StreamNames
+      - HasMoreStreams
+      properties:
+        StreamNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/StreamName'
+          description: The names of the streams.
+        HasMoreStreams:
+          type: boolean
+          description: If true, there are more streams available to list.
+        NextToken:
+          type: string
+          description: Pagination token for the next call.
+        StreamSummaries:
+          type: array
+          items:
+            type: object
+            properties:
+              StreamName:
+                $ref: '#/components/schemas/StreamName'
+              StreamARN:
+                $ref: '#/components/schemas/StreamARN'
+              StreamStatus:
+                $ref: '#/components/schemas/StreamStatus'
+              StreamModeDetails:
+                $ref: '#/components/schemas/StreamModeDetails'
+              StreamCreationTimestamp:
+                type: number
+                format: double
+          description: Summary information about the streams.
+    StreamModeDetails:
+      type: object
+      description: The capacity mode details for the data stream.
+      required:
+      - StreamMode
+      properties:
+        StreamMode:
+          $ref: '#/components/schemas/StreamMode'
     DescribeStreamInput:
       type: object
       properties:
@@ -546,20 +768,13 @@ components:
           description: The maximum number of shards to return.
         ExclusiveStartShardId:
           $ref: '#/components/schemas/ShardId'
-    DecreaseStreamRetentionPeriodInput:
+    DescribeStreamSummaryInput:
       type: object
-      required:
-      - RetentionPeriodHours
       properties:
         StreamName:
           $ref: '#/components/schemas/StreamName'
         StreamARN:
           $ref: '#/components/schemas/StreamARN'
-        RetentionPeriodHours:
-          type: integer
-          minimum: 24
-          maximum: 8760
-          description: The new retention period of the stream, in hours. Min 24.
     StreamDescriptionSummary:
       type: object
       description: Summary information about a Kinesis data stream.
@@ -603,12 +818,6 @@ components:
           type: integer
           minimum: 0
           description: The number of enhanced fan-out consumers registered with the stream.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
     StreamStatus:
       type: string
       enum:
@@ -624,12 +833,97 @@ components:
       properties:
         StreamDescription:
           $ref: '#/components/schemas/StreamDescription'
-    StreamARN:
+    EnhancedMetrics:
+      type: object
+      description: Enhanced shard-level metric details.
+      properties:
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+          description: List of shard-level metrics currently enabled.
+    DeleteStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EnforceConsumerDeletion:
+          type: boolean
+          description: If true, deletes the stream even if consumers are registered.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+    ShardId:
       type: string
       minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+    IncreaseStreamRetentionPeriodInput:
+      type: object
+      required:
+      - RetentionPeriodHours
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The new retention period of the stream, in hours. Max 8760 (365 days).
+    UpdateStreamModeInput:
+      type: object
+      required:
+      - StreamARN
+      - StreamModeDetails
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    ListStreamsInput:
+      type: object
+      properties:
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of streams to list.
+        ExclusiveStartStreamName:
+          $ref: '#/components/schemas/StreamName'
+        NextToken:
+          type: string
+          description: Pagination token.
+    DescribeStreamSummaryOutput:
+      type: object
+      required:
+      - StreamDescriptionSummary
+      properties:
+        StreamDescriptionSummary:
+          $ref: '#/components/schemas/StreamDescriptionSummary'
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    StreamMode:
+      type: string
+      enum:
+      - PROVISIONED
+      - ON_DEMAND
+      description: Specifies the capacity mode to which you want to set your data stream. PROVISIONED requires you to set ShardCount; ON_DEMAND automatically manages the number of shards.
     StreamDescription:
       type: object
       description: Detailed information about a Kinesis data stream.
@@ -678,13 +972,39 @@ components:
         KeyId:
           type: string
           description: The GUID for the customer-managed AWS KMS key.
-    DescribeStreamSummaryInput:
+    DecreaseStreamRetentionPeriodInput:
       type: object
+      required:
+      - RetentionPeriodHours
       properties:
         StreamName:
           $ref: '#/components/schemas/StreamName'
         StreamARN:
           $ref: '#/components/schemas/StreamARN'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The new retention period of the stream, in hours. Min 24.
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
     MetricsName:
       type: string
       enum:
@@ -697,25 +1017,6 @@ components:
       - IteratorAgeMilliseconds
       - ALL
       description: The name of the shard-level metric.
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    UpdateStreamModeInput:
-      type: object
-      required:
-      - StreamARN
-      - StreamModeDetails
-      properties:
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        StreamModeDetails:
-          $ref: '#/components/schemas/StreamModeDetails'
     Shard:
       type: object
       description: A uniquely identified group of data records in a Kinesis data stream.
@@ -734,77 +1035,15 @@ components:
           $ref: '#/components/schemas/HashKeyRange'
         SequenceNumberRange:
           $ref: '#/components/schemas/SequenceNumberRange'
-    ListStreamsOutput:
-      type: object
-      required:
-      - StreamNames
-      - HasMoreStreams
-      properties:
-        StreamNames:
-          type: array
-          items:
-            $ref: '#/components/schemas/StreamName'
-          description: The names of the streams.
-        HasMoreStreams:
-          type: boolean
-          description: If true, there are more streams available to list.
-        NextToken:
-          type: string
-          description: Pagination token for the next call.
-        StreamSummaries:
-          type: array
-          items:
-            type: object
-            properties:
-              StreamName:
-                $ref: '#/components/schemas/StreamName'
-              StreamARN:
-                $ref: '#/components/schemas/StreamARN'
-              StreamStatus:
-                $ref: '#/components/schemas/StreamStatus'
-              StreamModeDetails:
-                $ref: '#/components/schemas/StreamModeDetails'
-              StreamCreationTimestamp:
-                type: number
-                format: double
-          description: Summary information about the streams.
-    HashKeyRange:
-      type: object
-      description: The range of possible hash key values for the shard.
-      required:
-      - StartingHashKey
-      - EndingHashKey
-      properties:
-        StartingHashKey:
-          type: string
-          description: The starting hash key of the hash key range.
-        EndingHashKey:
-          type: string
-          description: The ending hash key of the hash key range.
-    DescribeStreamSummaryOutput:
-      type: object
-      required:
-      - StreamDescriptionSummary
-      properties:
-        StreamDescriptionSummary:
-          $ref: '#/components/schemas/StreamDescriptionSummary'
-    ShardId:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The unique identifier of the shard within the stream.
-    DeleteStreamInput:
-      type: object
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        EnforceConsumerDeletion:
-          type: boolean
-          description: If true, deletes the stream even if consumers are registered.
   parameters:
+    X-Amz-Target-DecreaseStreamRetentionPeriod:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DecreaseStreamRetentionPeriod
     X-Amz-Target-DescribeStream:
       name: X-Amz-Target
       in: header
@@ -813,6 +1052,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DescribeStream
+    X-Amz-Target-ListStreams:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.ListStreams
     X-Amz-Target-UpdateStreamMode:
       name: X-Amz-Target
       in: header
@@ -821,6 +1068,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.UpdateStreamMode
+    X-Amz-Target-DeleteStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DeleteStream
     X-Amz-Target-CreateStream:
       name: X-Amz-Target
       in: header
@@ -837,30 +1092,6 @@ components:
         type: string
         enum:
         - Kinesis_20131202.IncreaseStreamRetentionPeriod
-    X-Amz-Target-DecreaseStreamRetentionPeriod:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.DecreaseStreamRetentionPeriod
-    X-Amz-Target-ListStreams:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.ListStreams
-    X-Amz-Target-DeleteStream:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.DeleteStream
     X-Amz-Target-DescribeStreamSummary:
       name: X-Amz-Target
       in: header
@@ -875,6 +1106,14 @@ components:
       name: Authorization
       in: header
       description: AWS Signature Version 4 authentication. Requests must be signed with the access key ID and secret access key of an IAM principal.
+    sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: AWS Signature Version 4 authentication
 externalDocs:
   description: Amazon Kinesis Data Streams API Reference
   url: https://docs.aws.amazon.com/kinesis/latest/APIReference/
+x-refined-from:
+- amazon-kinesis-data-streams-openapi.yml
+- amazon-kinesis-openapi.yml
