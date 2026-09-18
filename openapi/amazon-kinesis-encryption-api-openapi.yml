@@ -90,67 +90,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
-    StartStreamEncryptionInput:
-      type: object
-      required:
-      - EncryptionType
-      - KeyId
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        EncryptionType:
-          $ref: '#/components/schemas/EncryptionType'
-        KeyId:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: The GUID for the customer-managed AWS KMS key to use for encryption. You can specify the key ID, key ARN, alias name, or alias ARN.
-    EncryptionType:
-      type: string
-      enum:
-      - NONE
-      - KMS
-      description: The encryption type used on the record or stream.
-    StreamARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
-    StopStreamEncryptionInput:
-      type: object
-      required:
-      - EncryptionType
-      - KeyId
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        EncryptionType:
-          $ref: '#/components/schemas/EncryptionType'
-        KeyId:
-          type: string
-          minLength: 1
-          maxLength: 2048
   parameters:
     X-Amz-Target-StartStreamEncryption:
       name: X-Amz-Target
@@ -168,6 +107,67 @@ components:
         type: string
         enum:
         - Kinesis_20131202.StopStreamEncryption
+  schemas:
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    StopStreamEncryptionInput:
+      type: object
+      required:
+      - EncryptionType
+      - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    StartStreamEncryptionInput:
+      type: object
+      required:
+      - EncryptionType
+      - KeyId
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EncryptionType:
+          $ref: '#/components/schemas/EncryptionType'
+        KeyId:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The GUID for the customer-managed AWS KMS key to use for encryption. You can specify the key ID, key ARN, alias name, or alias ARN.
   securitySchemes:
     aws_sigv4:
       type: apiKey

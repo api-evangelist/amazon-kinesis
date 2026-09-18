@@ -170,47 +170,50 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  parameters:
+    X-Amz-Target-UpdateShardCount:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.UpdateShardCount
+    X-Amz-Target-SplitShard:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.SplitShard
+    X-Amz-Target-ListShards:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.ListShards
+    X-Amz-Target-MergeShards:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.MergeShards
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    SequenceNumberRange:
-      type: object
-      description: The range of possible sequence numbers for the shard.
-      required:
-      - StartingSequenceNumber
-      properties:
-        StartingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        EndingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-    ScalingType:
+    StreamName:
       type: string
-      enum:
-      - UNIFORM_SCALING
-      description: The scaling type for the UpdateShardCount operation.
-    UpdateShardCountInput:
-      type: object
-      required:
-      - TargetShardCount
-      - ScalingType
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        TargetShardCount:
-          type: integer
-          minimum: 1
-          description: The new number of shards.
-        ScalingType:
-          $ref: '#/components/schemas/ScalingType'
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
     ListShardsInput:
       type: object
       properties:
@@ -246,22 +249,19 @@ components:
             Timestamp:
               type: number
               format: double
-    ShardId:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The unique identifier of the shard within the stream.
-    SequenceNumber:
-      type: string
-      pattern: 0|([1-9]\d{0,128})
-      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
+          type: string
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
     MergeShardsInput:
       type: object
       required:
@@ -276,6 +276,46 @@ components:
           $ref: '#/components/schemas/ShardId'
         AdjacentShardToMerge:
           $ref: '#/components/schemas/ShardId'
+    ScalingType:
+      type: string
+      enum:
+      - UNIFORM_SCALING
+      description: The scaling type for the UpdateShardCount operation.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    UpdateShardCountInput:
+      type: object
+      required:
+      - TargetShardCount
+      - ScalingType
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        TargetShardCount:
+          type: integer
+          minimum: 1
+          description: The new number of shards.
+        ScalingType:
+          $ref: '#/components/schemas/ScalingType'
+    SequenceNumberRange:
+      type: object
+      description: The range of possible sequence numbers for the shard.
+      required:
+      - StartingSequenceNumber
+      properties:
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EndingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
     ListShardsOutput:
       type: object
       properties:
@@ -287,32 +327,6 @@ components:
         NextToken:
           type: string
           description: Pagination token for the next call.
-    UpdateShardCountOutput:
-      type: object
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        CurrentShardCount:
-          type: integer
-          description: The current number of shards.
-        TargetShardCount:
-          type: integer
-          description: The updated number of shards.
-    HashKeyRange:
-      type: object
-      description: The range of possible hash key values for the shard.
-      required:
-      - StartingHashKey
-      - EndingHashKey
-      properties:
-        StartingHashKey:
-          type: string
-          description: The starting hash key of the hash key range.
-        EndingHashKey:
-          type: string
-          description: The ending hash key of the hash key range.
     SplitShardInput:
       type: object
       required:
@@ -328,12 +342,6 @@ components:
         NewStartingHashKey:
           type: string
           description: A hash key value for the starting hash key of one of the child shards created by the split.
-    StreamARN:
-      type: string
-      minLength: 1
-      maxLength: 2048
-      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
-      description: The ARN of the Kinesis data stream.
     Shard:
       type: object
       description: A uniquely identified group of data records in a Kinesis data stream.
@@ -352,39 +360,31 @@ components:
           $ref: '#/components/schemas/HashKeyRange'
         SequenceNumberRange:
           $ref: '#/components/schemas/SequenceNumberRange'
-  parameters:
-    X-Amz-Target-ListShards:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.ListShards
-    X-Amz-Target-SplitShard:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.SplitShard
-    X-Amz-Target-UpdateShardCount:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.UpdateShardCount
-    X-Amz-Target-MergeShards:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.MergeShards
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+    StreamARN:
+      type: string
+      minLength: 1
+      maxLength: 2048
+      pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
+      description: The ARN of the Kinesis data stream.
+    UpdateShardCountOutput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        CurrentShardCount:
+          type: integer
+          description: The current number of shards.
+        TargetShardCount:
+          type: integer
+          description: The updated number of shards.
   securitySchemes:
     aws_sigv4:
       type: apiKey

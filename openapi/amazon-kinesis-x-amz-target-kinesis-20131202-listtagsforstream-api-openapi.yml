@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: 'Amazon Kinesis Data Streams #X Amz Target=Kinesis 20131202.ListTagsForStream API'
+  title: 'Amazon Kinesis Data Streams #X Amz Target=Kinesis…'
   description: Amazon Kinesis Data Streams is a massively scalable and durable real-time data streaming service. It can continuously capture gigabytes of data per second from hundreds of thousands of sources such as website clickstreams, database event streams, financial transactions, social media feeds, IT logs, and location-tracking events. The Kinesis Data Streams API uses a JSON protocol over HTTP with the X-Amz-Target header to specify the action.
   version: '2013-12-02'
   contact:
@@ -69,22 +69,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
+  parameters:
+    X-Amz-Target-ListTagsForStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.ListTagsForStream
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
     ListTagsForStreamInput:
       type: object
       properties:
@@ -100,6 +94,35 @@ components:
           type: integer
           minimum: 1
           maximum: 50
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    ListTagsForStreamOutput:
+      type: object
+      required:
+      - Tags
+      - HasMoreTags
+      properties:
+        Tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+          description: A list of tags associated with the stream.
+        HasMoreTags:
+          type: boolean
+          description: If true, more tags are available.
     Tag:
       type: object
       description: Metadata assigned to the stream or resource.
@@ -122,29 +145,6 @@ components:
       maxLength: 2048
       pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
       description: The ARN of the Kinesis data stream.
-    ListTagsForStreamOutput:
-      type: object
-      required:
-      - Tags
-      - HasMoreTags
-      properties:
-        Tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tag'
-          description: A list of tags associated with the stream.
-        HasMoreTags:
-          type: boolean
-          description: If true, more tags are available.
-  parameters:
-    X-Amz-Target-ListTagsForStream:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.ListTagsForStream
   securitySchemes:
     aws_sigv4:
       type: apiKey

@@ -119,25 +119,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    GetResourcePolicyInput:
-      type: object
-      required:
-      - ResourceARN
-      properties:
-        ResourceARN:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: The ARN of the data stream or consumer.
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
     DeleteResourcePolicyInput:
       type: object
       required:
@@ -162,6 +143,16 @@ components:
         Policy:
           type: string
           description: Details of the resource policy as a JSON string. The resource policy must include both the identity policy and the resource policy.
+    GetResourcePolicyInput:
+      type: object
+      required:
+      - ResourceARN
+      properties:
+        ResourceARN:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: The ARN of the data stream or consumer.
     GetResourcePolicyOutput:
       type: object
       required:
@@ -170,7 +161,24 @@ components:
         Policy:
           type: string
           description: Details of the resource policy as a JSON string.
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
   parameters:
+    X-Amz-Target-GetResourcePolicy:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.GetResourcePolicy
     X-Amz-Target-PutResourcePolicy:
       name: X-Amz-Target
       in: header
@@ -187,14 +195,6 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DeleteResourcePolicy
-    X-Amz-Target-GetResourcePolicy:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.GetResourcePolicy
   securitySchemes:
     aws_sigv4:
       type: apiKey

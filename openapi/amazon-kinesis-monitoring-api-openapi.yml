@@ -98,64 +98,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  parameters:
-    X-Amz-Target-DisableEnhancedMonitoring:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.DisableEnhancedMonitoring
-    X-Amz-Target-EnableEnhancedMonitoring:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.EnableEnhancedMonitoring
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
-    MetricsName:
-      type: string
-      enum:
-      - IncomingBytes
-      - IncomingRecords
-      - OutgoingBytes
-      - OutgoingRecords
-      - WriteProvisionedThroughputExceeded
-      - ReadProvisionedThroughputExceeded
-      - IteratorAgeMilliseconds
-      - ALL
-      description: The name of the shard-level metric.
-    DisableEnhancedMonitoringInput:
-      type: object
-      required:
-      - ShardLevelMetrics
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        ShardLevelMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsName'
     EnhancedMonitoringOutput:
       type: object
       properties:
@@ -171,6 +114,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MetricsName'
+    DisableEnhancedMonitoringInput:
+      type: object
+      required:
+      - ShardLevelMetrics
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+    ErrorResponse:
+      type: object
+      properties:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
     EnableEnhancedMonitoringInput:
       type: object
       required:
@@ -190,6 +161,35 @@ components:
       maxLength: 2048
       pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
       description: The ARN of the Kinesis data stream.
+    MetricsName:
+      type: string
+      enum:
+      - IncomingBytes
+      - IncomingRecords
+      - OutgoingBytes
+      - OutgoingRecords
+      - WriteProvisionedThroughputExceeded
+      - ReadProvisionedThroughputExceeded
+      - IteratorAgeMilliseconds
+      - ALL
+      description: The name of the shard-level metric.
+  parameters:
+    X-Amz-Target-EnableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.EnableEnhancedMonitoring
+    X-Amz-Target-DisableEnhancedMonitoring:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DisableEnhancedMonitoring
   securitySchemes:
     aws_sigv4:
       type: apiKey

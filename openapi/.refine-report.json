@@ -30,7 +30,8 @@
     "amazon-kinesis-data-streams-openapi.yml: declared missing tag: #X Amz Target=Kinesis 20131202.ListTagsForStream",
     "amazon-kinesis-data-streams-openapi.yml: declared missing tag: #X Amz Target=Kinesis 20131202.RemoveTagsFromStream",
     "amazon-kinesis-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "tag 'Streams' spans 2 source specs (amazon-kinesis-data-streams-openapi.yml, amazon-kinesis-openapi.yml): per-path servers applied"
+    "tag 'Streams' spans 2 source specs (amazon-kinesis-data-streams-openapi.yml, amazon-kinesis-openapi.yml): per-path servers applied",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "amazon-kinesis-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",

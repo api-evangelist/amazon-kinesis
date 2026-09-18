@@ -674,15 +674,69 @@ paths:
       description: Amazon Kinesis endpoint
 components:
   schemas:
-    ErrorResponse:
+    IncreaseStreamRetentionPeriodInput:
+      type: object
+      required:
+      - RetentionPeriodHours
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        RetentionPeriodHours:
+          type: integer
+          minimum: 24
+          maximum: 8760
+          description: The new retention period of the stream, in hours. Max 8760 (365 days).
+    UpdateStreamModeInput:
+      type: object
+      required:
+      - StreamARN
+      - StreamModeDetails
+      properties:
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        StreamModeDetails:
+          $ref: '#/components/schemas/StreamModeDetails'
+    StreamName:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The name of the Kinesis data stream.
+    StreamStatus:
+      type: string
+      enum:
+      - CREATING
+      - DELETING
+      - ACTIVE
+      - UPDATING
+      description: The current status of the data stream.
+    SequenceNumber:
+      type: string
+      pattern: 0|([1-9]\d{0,128})
+      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
+    DescribeStreamSummaryInput:
       type: object
       properties:
-        __type:
-          type: string
-          description: The error type identifier.
-        message:
-          type: string
-          description: A human-readable description of the error.
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+    DescribeStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of shards to return.
+        ExclusiveStartShardId:
+          $ref: '#/components/schemas/ShardId'
     CreateStreamInput:
       type: object
       required:
@@ -702,79 +756,26 @@ components:
             type: string
             maxLength: 256
           description: A set of up to 50 key-value pairs for tagging the stream.
-    SequenceNumberRange:
-      type: object
-      description: The range of possible sequence numbers for the shard.
-      required:
-      - StartingSequenceNumber
-      properties:
-        StartingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-        EndingSequenceNumber:
-          $ref: '#/components/schemas/SequenceNumber'
-    ListStreamsOutput:
+    DescribeStreamOutput:
       type: object
       required:
-      - StreamNames
-      - HasMoreStreams
+      - StreamDescription
       properties:
-        StreamNames:
-          type: array
-          items:
-            $ref: '#/components/schemas/StreamName'
-          description: The names of the streams.
-        HasMoreStreams:
-          type: boolean
-          description: If true, there are more streams available to list.
-        NextToken:
+        StreamDescription:
+          $ref: '#/components/schemas/StreamDescription'
+    HashKeyRange:
+      type: object
+      description: The range of possible hash key values for the shard.
+      required:
+      - StartingHashKey
+      - EndingHashKey
+      properties:
+        StartingHashKey:
           type: string
-          description: Pagination token for the next call.
-        StreamSummaries:
-          type: array
-          items:
-            type: object
-            properties:
-              StreamName:
-                $ref: '#/components/schemas/StreamName'
-              StreamARN:
-                $ref: '#/components/schemas/StreamARN'
-              StreamStatus:
-                $ref: '#/components/schemas/StreamStatus'
-              StreamModeDetails:
-                $ref: '#/components/schemas/StreamModeDetails'
-              StreamCreationTimestamp:
-                type: number
-                format: double
-          description: Summary information about the streams.
-    StreamModeDetails:
-      type: object
-      description: The capacity mode details for the data stream.
-      required:
-      - StreamMode
-      properties:
-        StreamMode:
-          $ref: '#/components/schemas/StreamMode'
-    DescribeStreamInput:
-      type: object
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        Limit:
-          type: integer
-          minimum: 1
-          maximum: 10000
-          description: The maximum number of shards to return.
-        ExclusiveStartShardId:
-          $ref: '#/components/schemas/ShardId'
-    DescribeStreamSummaryInput:
-      type: object
-      properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
+          description: The starting hash key of the hash key range.
+        EndingHashKey:
+          type: string
+          description: The ending hash key of the hash key range.
     StreamDescriptionSummary:
       type: object
       description: Summary information about a Kinesis data stream.
@@ -818,51 +819,16 @@ components:
           type: integer
           minimum: 0
           description: The number of enhanced fan-out consumers registered with the stream.
-    StreamStatus:
-      type: string
-      enum:
-      - CREATING
-      - DELETING
-      - ACTIVE
-      - UPDATING
-      description: The current status of the data stream.
-    DescribeStreamOutput:
-      type: object
-      required:
-      - StreamDescription
-      properties:
-        StreamDescription:
-          $ref: '#/components/schemas/StreamDescription'
-    EnhancedMetrics:
-      type: object
-      description: Enhanced shard-level metric details.
-      properties:
-        ShardLevelMetrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/MetricsName'
-          description: List of shard-level metrics currently enabled.
-    DeleteStreamInput:
+    ErrorResponse:
       type: object
       properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        EnforceConsumerDeletion:
-          type: boolean
-          description: If true, deletes the stream even if consumers are registered.
-    SequenceNumber:
-      type: string
-      pattern: 0|([1-9]\d{0,128})
-      description: The sequence number assigned to a data record. Sequence numbers increase over time within a shard.
-    ShardId:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The unique identifier of the shard within the stream.
-    IncreaseStreamRetentionPeriodInput:
+        __type:
+          type: string
+          description: The error type identifier.
+        message:
+          type: string
+          description: A human-readable description of the error.
+    DecreaseStreamRetentionPeriodInput:
       type: object
       required:
       - RetentionPeriodHours
@@ -875,36 +841,41 @@ components:
           type: integer
           minimum: 24
           maximum: 8760
-          description: The new retention period of the stream, in hours. Max 8760 (365 days).
-    UpdateStreamModeInput:
+          description: The new retention period of the stream, in hours. Min 24.
+    ListStreamsOutput:
       type: object
       required:
-      - StreamARN
-      - StreamModeDetails
+      - StreamNames
+      - HasMoreStreams
       properties:
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        StreamModeDetails:
-          $ref: '#/components/schemas/StreamModeDetails'
-    StreamName:
-      type: string
-      minLength: 1
-      maxLength: 128
-      pattern: '[a-zA-Z0-9_.-]+'
-      description: The name of the Kinesis data stream.
-    ListStreamsInput:
-      type: object
-      properties:
-        Limit:
-          type: integer
-          minimum: 1
-          maximum: 10000
-          description: The maximum number of streams to list.
-        ExclusiveStartStreamName:
-          $ref: '#/components/schemas/StreamName'
+        StreamNames:
+          type: array
+          items:
+            $ref: '#/components/schemas/StreamName'
+          description: The names of the streams.
+        HasMoreStreams:
+          type: boolean
+          description: If true, there are more streams available to list.
         NextToken:
           type: string
-          description: Pagination token.
+          description: Pagination token for the next call.
+        StreamSummaries:
+          type: array
+          items:
+            type: object
+            properties:
+              StreamName:
+                $ref: '#/components/schemas/StreamName'
+              StreamARN:
+                $ref: '#/components/schemas/StreamARN'
+              StreamStatus:
+                $ref: '#/components/schemas/StreamStatus'
+              StreamModeDetails:
+                $ref: '#/components/schemas/StreamModeDetails'
+              StreamCreationTimestamp:
+                type: number
+                format: double
+          description: Summary information about the streams.
     DescribeStreamSummaryOutput:
       type: object
       required:
@@ -912,18 +883,76 @@ components:
       properties:
         StreamDescriptionSummary:
           $ref: '#/components/schemas/StreamDescriptionSummary'
-    EncryptionType:
+    MetricsName:
       type: string
       enum:
-      - NONE
-      - KMS
-      description: The encryption type used on the record or stream.
+      - IncomingBytes
+      - IncomingRecords
+      - OutgoingBytes
+      - OutgoingRecords
+      - WriteProvisionedThroughputExceeded
+      - ReadProvisionedThroughputExceeded
+      - IteratorAgeMilliseconds
+      - ALL
+      description: The name of the shard-level metric.
+    DeleteStreamInput:
+      type: object
+      properties:
+        StreamName:
+          $ref: '#/components/schemas/StreamName'
+        StreamARN:
+          $ref: '#/components/schemas/StreamARN'
+        EnforceConsumerDeletion:
+          type: boolean
+          description: If true, deletes the stream even if consumers are registered.
+    SequenceNumberRange:
+      type: object
+      description: The range of possible sequence numbers for the shard.
+      required:
+      - StartingSequenceNumber
+      properties:
+        StartingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
+        EndingSequenceNumber:
+          $ref: '#/components/schemas/SequenceNumber'
     StreamMode:
       type: string
       enum:
       - PROVISIONED
       - ON_DEMAND
       description: Specifies the capacity mode to which you want to set your data stream. PROVISIONED requires you to set ShardCount; ON_DEMAND automatically manages the number of shards.
+    StreamModeDetails:
+      type: object
+      description: The capacity mode details for the data stream.
+      required:
+      - StreamMode
+      properties:
+        StreamMode:
+          $ref: '#/components/schemas/StreamMode'
+    Shard:
+      type: object
+      description: A uniquely identified group of data records in a Kinesis data stream.
+      required:
+      - ShardId
+      - HashKeyRange
+      - SequenceNumberRange
+      properties:
+        ShardId:
+          $ref: '#/components/schemas/ShardId'
+        ParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        AdjacentParentShardId:
+          $ref: '#/components/schemas/ShardId'
+        HashKeyRange:
+          $ref: '#/components/schemas/HashKeyRange'
+        SequenceNumberRange:
+          $ref: '#/components/schemas/SequenceNumberRange'
+    EncryptionType:
+      type: string
+      enum:
+      - NONE
+      - KMS
+      description: The encryption type used on the record or stream.
     StreamDescription:
       type: object
       description: Detailed information about a Kinesis data stream.
@@ -972,86 +1001,41 @@ components:
         KeyId:
           type: string
           description: The GUID for the customer-managed AWS KMS key.
-    DecreaseStreamRetentionPeriodInput:
+    ShardId:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '[a-zA-Z0-9_.-]+'
+      description: The unique identifier of the shard within the stream.
+    EnhancedMetrics:
       type: object
-      required:
-      - RetentionPeriodHours
+      description: Enhanced shard-level metric details.
       properties:
-        StreamName:
-          $ref: '#/components/schemas/StreamName'
-        StreamARN:
-          $ref: '#/components/schemas/StreamARN'
-        RetentionPeriodHours:
-          type: integer
-          minimum: 24
-          maximum: 8760
-          description: The new retention period of the stream, in hours. Min 24.
-    HashKeyRange:
-      type: object
-      description: The range of possible hash key values for the shard.
-      required:
-      - StartingHashKey
-      - EndingHashKey
-      properties:
-        StartingHashKey:
-          type: string
-          description: The starting hash key of the hash key range.
-        EndingHashKey:
-          type: string
-          description: The ending hash key of the hash key range.
+        ShardLevelMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsName'
+          description: List of shard-level metrics currently enabled.
     StreamARN:
       type: string
       minLength: 1
       maxLength: 2048
       pattern: arn:aws.*:kinesis:.*:\d{12}:stream/\S+
       description: The ARN of the Kinesis data stream.
-    MetricsName:
-      type: string
-      enum:
-      - IncomingBytes
-      - IncomingRecords
-      - OutgoingBytes
-      - OutgoingRecords
-      - WriteProvisionedThroughputExceeded
-      - ReadProvisionedThroughputExceeded
-      - IteratorAgeMilliseconds
-      - ALL
-      description: The name of the shard-level metric.
-    Shard:
+    ListStreamsInput:
       type: object
-      description: A uniquely identified group of data records in a Kinesis data stream.
-      required:
-      - ShardId
-      - HashKeyRange
-      - SequenceNumberRange
       properties:
-        ShardId:
-          $ref: '#/components/schemas/ShardId'
-        ParentShardId:
-          $ref: '#/components/schemas/ShardId'
-        AdjacentParentShardId:
-          $ref: '#/components/schemas/ShardId'
-        HashKeyRange:
-          $ref: '#/components/schemas/HashKeyRange'
-        SequenceNumberRange:
-          $ref: '#/components/schemas/SequenceNumberRange'
+        Limit:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          description: The maximum number of streams to list.
+        ExclusiveStartStreamName:
+          $ref: '#/components/schemas/StreamName'
+        NextToken:
+          type: string
+          description: Pagination token.
   parameters:
-    X-Amz-Target-DecreaseStreamRetentionPeriod:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.DecreaseStreamRetentionPeriod
-    X-Amz-Target-DescribeStream:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.DescribeStream
     X-Amz-Target-ListStreams:
       name: X-Amz-Target
       in: header
@@ -1060,14 +1044,6 @@ components:
         type: string
         enum:
         - Kinesis_20131202.ListStreams
-    X-Amz-Target-UpdateStreamMode:
-      name: X-Amz-Target
-      in: header
-      required: true
-      schema:
-        type: string
-        enum:
-        - Kinesis_20131202.UpdateStreamMode
     X-Amz-Target-DeleteStream:
       name: X-Amz-Target
       in: header
@@ -1092,6 +1068,14 @@ components:
         type: string
         enum:
         - Kinesis_20131202.IncreaseStreamRetentionPeriod
+    X-Amz-Target-UpdateStreamMode:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.UpdateStreamMode
     X-Amz-Target-DescribeStreamSummary:
       name: X-Amz-Target
       in: header
@@ -1100,6 +1084,22 @@ components:
         type: string
         enum:
         - Kinesis_20131202.DescribeStreamSummary
+    X-Amz-Target-DecreaseStreamRetentionPeriod:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DecreaseStreamRetentionPeriod
+    X-Amz-Target-DescribeStream:
+      name: X-Amz-Target
+      in: header
+      required: true
+      schema:
+        type: string
+        enum:
+        - Kinesis_20131202.DescribeStream
   securitySchemes:
     aws_sigv4:
       type: apiKey
